@@ -15,7 +15,7 @@
 </template>
 
     <script>
-    import { RouterLink, RouterView } from 'vue-router';
+    import { RouterLink} from 'vue-router';
 
     export default {
         name: 'HeaderComponent',
@@ -27,12 +27,11 @@
 header {
     width: 100%;
     background-color: var(--oracles-header-gray);
-    padding: 10px;
+    padding: 1vw;
     
     line-height: 1.5;
     position: fixed;
     top: 0;
-    margin-right: 0%;
 }
 
 nav {
