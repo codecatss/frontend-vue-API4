@@ -1,33 +1,54 @@
 <template>
     <div id="wrapper">
         <div id="formContainer">
-            <h1>Login</h1>
+            <h1>Iniciar sessão</h1>
             <form @submit.prevent="login">
                 <label for="email">Email:</label>
                 <input type="email" id="email" v-model="email" required>
                 <label for="password">Password:</label>
                 <input type="password" id="password" v-model="password" required>
-                <button type="submit">Login</button>
+                <button id="btLogin" type="submit">Login</button>
             </form>
+            <button id="cadastrar">Criar conta</button>
         </div>
     </div>
 </template>
 
 <script>
 
-export default {
-    data() {
-        return {
-            email: '',
-            password: ''
-        }
-    },
-    methods: {
-        login() {
-            // implemente a lógica de login aqui
+    export default {
+        
+        data() {
+            return {
+                email: '',
+                password: ''
+            }
+        },
+
+        methods: {
+
+            login() {
+                const credentials = {
+                    email: this.email,
+                    password: this.password
+                };
+
+                    console.log(credentials.email);
+                    console.log(credentials.password);
+
+            },
+            
+            credentialsValidation() {
+                if (this.email === ''
+                        || this.password === '') {
+                    alert('Preencha todos os campos');
+                    return false;
+                }
+                return true;
+            }
         }
     }
-}
+
 </script>
 
 <style>
@@ -42,7 +63,7 @@ export default {
 
         margin-bottom: 4vh;
 
-        background-image: url("../assets/redwood.jpeg"); 
+        background-image: url("../assets/login-bg.jpeg"); 
 
     }
 
@@ -53,7 +74,7 @@ export default {
         background-color: var(--vt-c-white-mute);
         padding: 2rem;
         border-radius: 1rem;
-        width: 40vw;
+        width: 30vw;
     }
 
     h1 {
@@ -103,6 +124,17 @@ export default {
         margin-bottom: 1rem;
     }
 
+    #cadastrar{
+        width: 20vw;
+        height: 2rem;
+        border-radius: 1rem;
+        border-style: none;
+        background-color: var(--vt-c-white-mute);
+        color: var(--vt-c-text-light-2);
+        font-weight: bold;
+        cursor: pointer;
+    }
+
     h1 {
         font-weight: bold;
     }
@@ -115,11 +147,15 @@ export default {
     @media (max-width: 1023px) {
 
         #wrapper {
-        background-image: none;
+        background-image:  url("https://static.oracle.com/cdn/apex/21.1.0/themes/theme_42/1.6/images/rw/textures/texture-13.png");
+        background-size: 70% 50%;
         }
 
         #formContainer {
-            background-color: transparent;
+            width: 65vw;
+            height: 50vh;
+            border-style: solid;
+            border-color: whitesmoke;
         }
 
         form button  {
