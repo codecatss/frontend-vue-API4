@@ -6,7 +6,7 @@ import FooterComponent from './components/Footer.vue'
 
 <template>
   
-  <HeaderComponent/>
+  <HeaderComponent :login="true"/>
   
   <FooterComponent/>
   
