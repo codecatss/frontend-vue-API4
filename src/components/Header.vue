@@ -1,27 +1,35 @@
 <template>
     <header>
-
         <img src="../assets/oracle.svg" alt="Oracle Logo" />
-
         
         <nav>
             <ul>
-                <RouterLink to="/auth">Login</RouterLink>
+                <RouterLink v-if="login" to="/auth">Login</RouterLink>
                 <RouterLink to="/">Home</RouterLink>
                 <RouterLink to="/client/cadastro">Cadastrar cliente</RouterLink>
             </ul>
         </nav>
-
     </header>
 </template>
 
-    <script>
-    import { RouterLink} from 'vue-router';
+
+<script>
+
+    import { RouterLink } from 'vue-router';
 
     export default {
         name: 'HeaderComponent',
+        props: {
+            login: {
+                type: Boolean,
+                required: true
+            }
+        },
+        methods: {
+        }
     };
-    </script>
+
+</script>
 
 
 <style>
