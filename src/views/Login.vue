@@ -1,13 +1,13 @@
 <template>
     <div id="wrapper">
-        <div id="formContainer">
+        <div id="bgForm">
             <h1>Iniciar sessão</h1>
             <form @submit.prevent="login">
                 <label for="email">Email:</label>
                 <input type="email" id="email" v-model="email" required>
                 <label for="password">Password:</label>
                 <input type="password" id="password" v-model="password" required>
-                <button id="btLogin" type="submit">Login</button>
+                <button id="confirm" type="submit">Login</button>
             </form>
             <button id="cadastrar">Criar conta</button>
         </div>
@@ -51,7 +51,9 @@
 
 </script>
 
-<style>
+<style scoped>
+
+    @import '../assets/baseForm.css';
 
     #wrapper {
         min-width: 100vw;
@@ -67,22 +69,6 @@
 
     }
 
-    #formContainer {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        background-color: var(--vt-c-white-mute);
-        padding: 2rem;
-        border-radius: 1rem;
-        width: 30vw;
-    }
-
-    h1 {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-
-    }
     form {
         display: flex;
         flex-direction: column;
@@ -90,38 +76,11 @@
         gap: 1rem;
     }
 
-    form button  {
-        margin-top: 1rem;
-        width: 10vw;
-        height: 2rem;
-        border-radius: 1rem;
-        border-style: none;
-        margin-bottom: 1rem;
-        background-color: var(--singin-green-oracle);
-        color: var(--vt-c-white-mute);
-        font-weight: bold;
-        cursor: pointer;
-    }
-
     form button:hover {
         background-color: var(--singin-green-oracle-hover);
         border-style: solid;
         border-color: var(--singinBorder-oracle);
         
-    }
-
-    form label {
-        font-weight: bold;
-
-    }
-
-    input {
-        width: 20vw;
-        height: 2rem;
-        border-radius: 1rem;
-        border-color: var(--vt-c-text-light-2);
-        border-style: solid;
-        margin-bottom: 1rem;
     }
 
     #cadastrar{
@@ -135,31 +94,11 @@
         cursor: pointer;
     }
 
-    h1 {
-        font-weight: bold;
-    }
-    
-
-    div h1 label {
-        color: var(--vt-c-text-light-2);
-    }
-
     @media (max-width: 1023px) {
 
         #wrapper {
         background-image:  url("https://static.oracle.com/cdn/apex/21.1.0/themes/theme_42/1.6/images/rw/textures/texture-13.png");
         background-size: 70% 50%;
-        }
-
-        #formContainer {
-            width: 65vw;
-            height: 50vh;
-            border-style: solid;
-            border-color: whitesmoke;
-        }
-
-        form button  {
-        width: 40vw;
         }
 
         input {

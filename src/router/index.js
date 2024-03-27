@@ -12,6 +12,11 @@ const router = createRouter({
       path: '/auth',
       name: 'login',
       component: () => import('../views/Login.vue')
+    },
+    {
+      path: '/client/cadastro',
+      name: 'CasCli',
+      component: () => import('../views/CadCli.vue')
     }
   ]
 })

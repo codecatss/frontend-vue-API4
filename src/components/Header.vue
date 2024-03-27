@@ -8,6 +8,7 @@
             <ul>
                 <RouterLink to="/auth">Login</RouterLink>
                 <RouterLink to="/">Home</RouterLink>
+                <RouterLink to="/client/cadastro">Cadastrar cliente</RouterLink>
             </ul>
         </nav>
 
@@ -26,6 +27,7 @@
 <style>
 header {
     width: 100%;
+    height: 10vh;
     background-color: var(--oracles-header-gray);
     padding: 1vw;
     
