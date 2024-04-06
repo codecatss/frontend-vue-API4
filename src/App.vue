@@ -2,13 +2,13 @@
 import { RouterLink, RouterView } from 'vue-router'
 import HeaderComponent from './components/Header.vue'
 import FooterComponent from './components/Footer.vue'
+import importComp from './components/import.vue'
 </script>
 
 <template>
   
-  <HeaderComponent :login="true"/>
-  
-  <FooterComponent/>
+
+  <importComp/>
   
   <RouterView/>
 
