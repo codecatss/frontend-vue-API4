@@ -1,4 +1,5 @@
 <script setup>
+import ProgressCard from '@/components/ProgressCard.vue'
 import AnalyticsCongratulations from '@/views/dashboard/AnalyticsCongratulations.vue'
 import AnalyticsFinanceTabs from '@/views/dashboard/AnalyticsFinanceTab.vue'
 import AnalyticsOrderStatistics from '@/views/dashboard/AnalyticsOrderStatistics.vue'
@@ -62,7 +63,8 @@ import wallet from '@images/cards/wallet-info.png'
       sm="6"
       order="3"
     >
-      <AnalyticsFinanceTabs />
+      <ProgressCard />
+      <ProgressCard class="mt-3"/>
     </VCol>
 
     <!-- 👉 Transactions -->
