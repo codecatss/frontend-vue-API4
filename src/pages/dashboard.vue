@@ -70,11 +70,11 @@ import wallet from '@images/cards/wallet-info.png'
     <!-- 👉 Transactions -->
     <VCol
       cols="12"
-      md="4"
+      md="8"
       sm="6"
       order="4"
     >
-      <AnalyticsTransactions />
+      <AnalyticsFinanceTabs />
     </VCol>
   </VRow>
 </template>
