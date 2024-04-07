@@ -1,18 +1,20 @@
 <template>
-    <div class="div">
-      <div class="progress-circle">
-        <VueApexCharts
-          type="donut"
-          :height="circleSize"
-          :options="chartOptions"
-          :series="circleSeries"
-        />
-      </div>
-      <div class="div-2">
-        <div class="div-3">Expertises Finalizadas</div>
-        <div class="div-4">9,903</div>
-      </div>
-    </div>
+    <v-card :class="cardClass" class="card-padding">
+      <v-row>
+        <v-col cols="6" class="progress-circle">
+          <VueApexCharts
+            type="donut"
+            :height="circleSize"
+            :options="chartOptions"
+            :series="circleSeries"
+          />
+        </v-col>
+        <v-col cols="6" class="div-2">
+          <v-subheader class="div-3">Expertises Finalizadas</v-subheader>
+          <v-headline class="div-4">9,903</v-headline>
+        </v-col>
+      </v-row>
+    </v-card>
   </template>
   
   <script setup>
@@ -22,13 +24,11 @@
   
   const vuetifyTheme = useTheme()
   
-  const circleSize = 200; // Tamanho do círculo
+  const circleSize = 150; // Tamanho do círculo
   const circlePercentage = 60; // Porcentagem do círculo preenchido
   
   const currentTheme = vuetifyTheme.current.value.colors
   const variableTheme = vuetifyTheme.current.value.variables
-  const disabledTextColor = `rgba(${ hexToRgb(String(currentTheme['on-surface'])) },${ variableTheme['disabled-opacity'] })`
-  const primaryTextColor = `rgba(${ hexToRgb(String(currentTheme['on-surface'])) },${ variableTheme['high-emphasis-opacity'] })`
   
   // Calculando a porcentagem de preenchimento do círculo
   const filledColorPercentage = circlePercentage > 0 ? circlePercentage : 0;
@@ -37,90 +37,106 @@
   // Definindo as séries com a porcentagem de preenchimento
   const circleSeries = [filledColorPercentage, emptyColorPercentage];
   
-  const chartOptions = {
-    chart: {
-      sparkline: { enabled: true },
-      animations: { enabled: false },
-    },
-    stroke: {
-      width: 6,
-      colors: [currentTheme.surface],
-    },
-    legend: { show: false },
-    tooltip: { enabled: false },
-    dataLabels: { enabled: false },
-    labels: ['Progress'],
-    colors: [currentTheme.success, currentTheme.background], 
-    grid: {
-      padding: {
-        top: -7,
-        bottom: 5,
+  const cardClass = computed(() => {
+    return {
+      'theme--light': !vuetifyTheme.dark,
+      'theme--dark': vuetifyTheme.dark
+    }
+  });
+  
+  const disabledTextColor = computed(() => {
+    return `rgba(${ hexToRgb(String(currentTheme['on-surface'])) },${ variableTheme['disabled-opacity'] })`
+  });
+  
+  const primaryTextColor = computed(() => {
+    return `rgba(${ hexToRgb(String(currentTheme['on-surface'])) },${ variableTheme['high-emphasis-opacity'] })`
+  });
+  
+  const chartOptions = computed(() => {
+    return {
+      chart: {
+        sparkline: { enabled: true },
+        animations: { enabled: false },
       },
-    },
-    plotOptions: {
-      pie: {
-        expandOnClick: false,
-        donut: {
-          size: '75%',
-          labels: {
-            show: true,
-            name: {
-              offsetY: 17,
-              fontSize: '14px',
-              color: disabledTextColor,
-              fontFamily: 'Public Sans',
-            },
-            value: {
-              offsetY: -17,
-              fontSize: '24px',
-              color: primaryTextColor,
-              fontFamily: 'Public Sans',
-            },
-            total: {
+      stroke: {
+        width: 6,
+        colors: [currentTheme.surface],
+      },
+      legend: { show: false },
+      tooltip: { enabled: false },
+      dataLabels: { enabled: false },
+      labels: ['Progress'],
+      colors: [currentTheme.success, currentTheme.background], 
+      grid: {
+        padding: {
+          top: -7,
+          bottom: 5,
+        },
+      },
+      plotOptions: {
+        pie: {
+          expandOnClick: false,
+          donut: {
+            size: '75%',
+            labels: {
               show: true,
-              label: 'Progress',
-              fontSize: '14px',
-              formatter: () => `${circlePercentage}%`,
-              color: disabledTextColor,
-              fontFamily: 'Public Sans',
+              name: {
+                offsetY: 17,
+                fontSize: '14px',
+                color: disabledTextColor.value,
+                fontFamily: 'Public Sans',
+              },
+              value: {
+                offsetY: -17,
+                fontSize: '24px',
+                color: primaryTextColor.value,
+                fontFamily: 'Public Sans',
+              },
+              total: {
+                show: true,
+                label: 'Progress',
+                fontSize: '14px',
+                formatter: () => `${circlePercentage}%`,
+                color: disabledTextColor.value,
+                fontFamily: 'Public Sans',
+              },
             },
           },
         },
       },
-    },
-  };
+    }
+  });
   </script>
   
   <style scoped>
-  .div {
-    border-radius: 8px;
-    box-shadow: 0px 2px 0px 0px rgba(10, 10, 10, 0.04);
-    background-color: #fff;
-    display: flex;
-    align-items: flex-start;
-    gap: 20px;
-    padding: 6px 45px 28px 19px;
-    width: 100%;
+  .card-padding {
+    padding: 10px; /* Adicionando padding interno de 10px */
   }
+  
   .progress-circle {
     text-align: center;
   }
+  
   .apexcharts-donut-slice {
     border-radius: 50px; /* Ajuste o valor do raio conforme necessário */
   }
+  
   .div-2 {
     display: flex;
     flex-direction: column;
     flex: 1;
     margin: auto 0;
   }
+  
   .div-3 {
     color: #8c9097;
     font: 400 13px/150% Inter, sans-serif;
   }
+  
   .div-4 {
     color: #333335;
     margin-top: 11px;
     font: 600 20px/120% Inter, sans-serif;
   }
   </style>
+  
