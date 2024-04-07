@@ -169,7 +169,7 @@ const upgradeBanner = computed(() => {
     <template #after-vertical-nav-items>
       <!-- 👉 ilustração -->
       <a
-        href="https://themeselection.com/item/sneat-vuetify-vuejs-admin-template"
+        href=""
         target="_blank"
         rel="noopener noreferrer"
         style="margin-left: 7px;"

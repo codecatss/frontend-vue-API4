@@ -21,6 +21,10 @@ const series = {
       29,
       50,
       100,
+      31,
+      50,
+      100,
+      
     ],
   }],
   expenses: [{
@@ -33,7 +37,12 @@ const series = {
       26,
       35,
       29,
-      50,100,
+      50,
+      100,
+      31,
+      50,
+      100,
+      
     ],
   }],
   profit: [{
@@ -47,6 +56,11 @@ const series = {
       35,
       35,
       45,
+      100,
+      31,
+      50,
+      100,
+      
     ],
   }],
 }
@@ -83,7 +97,6 @@ const tabData = computed(() => {
   
   return data[currentTab.value]
 })
-
 const chartConfig = computed(() => {
   const currentTheme = vuetifyTheme.current.value.colors
   const variableTheme = vuetifyTheme.current.value.variables
@@ -157,6 +170,9 @@ const chartConfig = computed(() => {
         'Jul',
         'Ago',
         'Sep',
+        'Oct',
+        'Nov',
+        'Dec',
       ],
       labels: {
         style: {
@@ -167,10 +183,19 @@ const chartConfig = computed(() => {
       },
     },
     yaxis: {
-      min: 10,
-      max: 50,
-      show: false,
-      tickAmount: 4,
+      min: 0,
+      max: 100,
+      tickAmount: 5,
+      labels: {
+        formatter: function(value) {
+          return value === 0 ? '0' : value;
+        },
+        style: {
+          fontSize: '14px',
+          colors: disabledTextColor,
+          fontFamily: 'Public Sans',
+        },
+      },
     },
     markers: {
       size: 8,
@@ -189,6 +214,7 @@ const chartConfig = computed(() => {
     },
   }
 })
+
 </script>
 
 <template>
