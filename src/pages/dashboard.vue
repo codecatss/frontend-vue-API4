@@ -5,6 +5,7 @@ import AnalyticsOrderStatistics from '@/views/dashboard/AnalyticsOrderStatistics
 import AnalyticsProfitReport from '@/views/dashboard/AnalyticsProfitReport.vue'
 import AnalyticsTotalRevenue from '@/views/dashboard/AnalyticsTotalRevenue.vue'
 import AnalyticsTransactions from '@/views/dashboard/AnalyticsTransactions.vue'
+import AnalyticsTransactionsTop from '@/views/dashboard/AnalyticsTransactionsTop.vue'
 import BestStates from '@/views/dashboard/BestStates.vue'
 
 // 👉 Images
@@ -21,38 +22,19 @@ import wallet from '@images/cards/wallet-info.png'
       cols="12"
       md="8"
     >
-      <AnalyticsCongratulations />
+    <AnalyticsCongratulations  />
+      <AnalyticsTransactionsTop class="mt-3"/>
     </VCol>
 
-   
-    <!-- 👉 Total Revenue -->
+    <!-- 👉 BestStates -->
     <VCol
       cols="12"
-      md="8"
-      order="2"
-      order-md="1"
-    >
-      <AnalyticsTotalRevenue />
-    </VCol>
-
-    <VCol
-      cols="12"
-      sm="8"
+      sm="4"
       md="4"
       order="1"
       order-md="2"
     >
-
-
-      <VRow>
-        <!-- 👉 Profit Report -->
-        <VCol
-          cols="12"
-          sm="12"
-        >
-          <BestStates />
-        </VCol>
-      </VRow>
+      <BestStates />
     </VCol>
 
     <!-- 👉 Order Statistics -->
@@ -60,11 +42,19 @@ import wallet from '@images/cards/wallet-info.png'
       cols="12"
       md="4"
       sm="6"
-      order="3"
+      order="2"
     >
       <AnalyticsOrderStatistics />
     </VCol>
 
+    <VCol
+    cols="12"
+    md="4"
+    sm="6"
+    order="2"
+  >
+    <AnalyticsOrderStatistics />
+  </VCol>
     <!-- 👉 Tabs chart -->
     <VCol
       cols="12"
@@ -80,7 +70,7 @@ import wallet from '@images/cards/wallet-info.png'
       cols="12"
       md="4"
       sm="6"
-      order="3"
+      order="4"
     >
       <AnalyticsTransactions />
     </VCol>
