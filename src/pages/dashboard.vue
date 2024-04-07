@@ -5,8 +5,8 @@ import AnalyticsOrderStatistics from '@/views/dashboard/AnalyticsOrderStatistics
 import AnalyticsProfitReport from '@/views/dashboard/AnalyticsProfitReport.vue'
 import AnalyticsTotalRevenue from '@/views/dashboard/AnalyticsTotalRevenue.vue'
 import AnalyticsTransactions from '@/views/dashboard/AnalyticsTransactions.vue'
-import AnalyticsTransactionsTop from '@/views/dashboard/AnalyticsTransactionsTop.vue'
 import BestStates from '@/views/dashboard/BestStates.vue'
+
 // 👉 Images
 import chart from '@images/cards/chart-success.png'
 import card from '@images/cards/credit-card-primary.png'
@@ -21,11 +21,19 @@ import wallet from '@images/cards/wallet-info.png'
       cols="12"
       md="8"
     >
-      <AnalyticsTransactionsTop />
+      <AnalyticsCongratulations />
     </VCol>
 
-
+   
     <!-- 👉 Total Revenue -->
+    <VCol
+      cols="12"
+      md="8"
+      order="2"
+      order-md="1"
+    >
+      <AnalyticsTotalRevenue />
+    </VCol>
 
     <VCol
       cols="12"
@@ -34,8 +42,7 @@ import wallet from '@images/cards/wallet-info.png'
       order="1"
       order-md="2"
     >
-      <BestStates />
-       
+
 
       <VRow>
         <!-- 👉 Profit Report -->
@@ -43,7 +50,7 @@ import wallet from '@images/cards/wallet-info.png'
           cols="12"
           sm="12"
         >
-          <AnalyticsProfitReport />
+          <BestStates />
         </VCol>
       </VRow>
     </VCol>
