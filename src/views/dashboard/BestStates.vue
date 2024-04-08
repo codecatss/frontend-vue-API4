@@ -33,9 +33,9 @@ const chartOptions = computed(() => {
     dataLabels: { enabled: false },
     labels: [
       'SP',
-      'Electronic',
-      'Sports',
-      'Decor',
+      'RJ',
+      'PR',
+      'MG',
     ],
     colors: [
       currentTheme.success,
@@ -74,7 +74,7 @@ const chartOptions = computed(() => {
             },
             total: {
               show: true,
-              label: 'Weekly',
+              label: 'Aumento De Resultados',
               fontSize: '12px', // Alterado para 12px
               formatter: () => '38%',
               color: disabledTextColor,
@@ -90,28 +90,28 @@ const chartOptions = computed(() => {
 const orders = [
   {
     amount: '82.5k',
-    title: 'Electronic',
+    title: 'SP',
     avatarColor: 'primary',
     subtitle: 'Mobile, Earbuds, TV',
     avatarIcon: 'bx-mobile-alt',
   },
   {
     amount: '23.8k',
-    title: 'Fashion',
+    title: 'RJ',
     avatarColor: 'success',
     subtitle: 'Tshirt, Jeans, Shoes',
     avatarIcon: 'bx-closet',
   },
   {
     amount: 849,
-    title: 'Decor',
+    title: 'MG',
     avatarColor: 'info',
     subtitle: 'Fine Art, Dining',
     avatarIcon: 'bx-home',
   },
   {
     amount: 99,
-    title: 'Sports',
+    title: 'PR',
     avatarColor: 'secondary',
     subtitle: 'Football, Cricket Kit',
     avatarIcon: 'bx-football',
@@ -139,9 +139,9 @@ const moreList = [
     <VCard>
       <VCardItem class="pb-3">
         <VCardTitle class="mb-1">
-          Order Statistics
+          Melhores Estados 
         </VCardTitle>
-        <VCardSubtitle>42.82k Total Sales</VCardSubtitle>
+        <VCardSubtitle>Top 4 Melhores Estados</VCardSubtitle>
       </VCardItem>
 
       <VCardText>
@@ -197,5 +197,10 @@ const moreList = [
   .flex-sm-column {
     flex-direction: row !important;
   }
+}
+
+/* New rule for legend spacing */
+.d-flex.align-center.mb-sm-2 {
+  margin-right: 10px;
 }
 </style>
