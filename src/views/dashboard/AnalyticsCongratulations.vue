@@ -18,15 +18,15 @@ const illustrationJohn = computed(() => global.name.value === 'dark' ? illustrat
       >
         <VCardItem>
           <VCardTitle class="text-md-h5 text-primary">
-            Congratulations John! 🎉
+            Bem Vindo(a) de volta John! 🎉
           </VCardTitle>
         </VCardItem>
 
         <VCardText>
           <span>
-            You have done 72% 🤩 more sales today.
+           Você tem 72 🤩 Workload Finalizados
             <br>
-            Check your new raising badge in your profile.
+            Veja aqui os resultados
           </span>
           <br>
           <VBtn
@@ -34,7 +34,7 @@ const illustrationJohn = computed(() => global.name.value === 'dark' ? illustrat
             class="mt-4"
             size="small"
           >
-            View Badges
+            Ver Resultados
           </VBtn>
         </VCardText>
       </VCol>
