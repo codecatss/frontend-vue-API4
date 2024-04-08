@@ -80,7 +80,8 @@ import avatar1 from '@images/avatars/avatar-1.jpeg'
             <VListItemTitle>Configurações</VListItemTitle>
           </VListItem>
 
-          <!-- 👉 Preços -->
+<!--
+           👉 Preços 
           <VListItem link>
             <template #prepend>
               <VIcon
@@ -90,8 +91,9 @@ import avatar1 from '@images/avatars/avatar-1.jpeg'
               />
             </template>
 
-            <VListItemTitle>Preços</VListItemTitle>
+            <VListItemTitle></VListItemTitle>
           </VListItem>
+-->
 
           <!-- 👉 Perguntas Frequentes -->
           <VListItem link>
