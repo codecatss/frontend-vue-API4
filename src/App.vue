@@ -1,27 +1,13 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import HeaderComponent from './components/Header.vue'
-import FooterComponent from './components/Footer.vue'
-import importComp from './components/import.vue'
+import { useTheme } from 'vuetify'
+import UpgradeToPro from '@/components/UpgradeToPro.vue'
+import { hexToRgb } from '@layouts/utils'
+
+const { global } = useTheme()
 </script>
 
 <template>
-  
-
-  <importComp/>
-  
-  <RouterView/>
-
-
+  <VApp :style="`--v-global-theme-primary: ${hexToRgb(global.current.value.colors.primary)}`">
+    <RouterView />
+  </VApp>
 </template>
-
-<style scoped>
-
-@media (min-width: 1024px) {
-
-  nav {
-    text-align: left;
-    font-size: 1rem;
-  }
-}
-</style>
