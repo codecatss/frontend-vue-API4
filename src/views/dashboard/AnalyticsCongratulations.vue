@@ -2,6 +2,7 @@
 import { useTheme } from 'vuetify'
 import illustrationJohnDark from '@images/cards/illustration-john-dark.png'
 import illustrationJohnLight from '@images/cards/illustration-john-light.png'
+import ImportBtn from '@/components/ImportBtn.vue';
 
 const { global } = useTheme()
 const illustrationJohn = computed(() => global.name.value === 'dark' ? illustrationJohnDark : illustrationJohnLight)
@@ -24,7 +25,7 @@ const illustrationJohn = computed(() => global.name.value === 'dark' ? illustrat
 
         <VCardText>
           <span>
-           Você tem 72 🤩 Workload Finalizados
+            Você tem 72 🤩 Workload Finalizados
             <br>
             Veja aqui os resultados
           </span>
@@ -34,7 +35,7 @@ const illustrationJohn = computed(() => global.name.value === 'dark' ? illustrat
             class="mt-4"
             size="small"
           >
-            Ver Resultados
+            <ImportBtn />
           </VBtn>
         </VCardText>
       </VCol>
