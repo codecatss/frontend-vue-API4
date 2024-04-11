@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 import ProgressCard from '@/components/ProgressCard.vue'
 import AnalyticsCongratulations from '@/views/dashboard/AnalyticsCongratulations.vue'
 import AnalyticsFinanceTabs from '@/views/dashboard/AnalyticsFinanceTab.vue'
@@ -9,11 +9,13 @@ import AnalyticsTransactions from '@/views/dashboard/AnalyticsTransactions.vue'
 import AnalyticsTransactionsTop from '@/views/dashboard/AnalyticsTransactionsTop.vue'
 import BestStates from '@/views/dashboard/BestStates.vue'
 
+
 // 👉 Images
 import chart from '@images/cards/chart-success.png'
 import card from '@images/cards/credit-card-primary.png'
 import paypal from '@images/cards/paypal-error.png'
 import wallet from '@images/cards/wallet-info.png'
+
 </script>
 
 <template>

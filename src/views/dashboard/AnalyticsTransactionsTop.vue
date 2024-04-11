@@ -1,30 +1,45 @@
 <script setup>
-const statistics = [
-  {
-    title: 'Parceiros',
-    stats: '245k',
-    icon: 'ri-pie-chart-2-line',
-    color: 'primary',
-  },
-  {
-    title: 'Usuários',
-    stats: '12.5k',
-    icon: 'ri-group-line',
-    color: 'success',
-  },
-  {
-    title: 'Tracks',
-    stats: '1.54k',
-    icon: 'ri-macbook-line',
-    color: 'warning',
-  },
-  {
-    title: 'Expertise',
-    stats: '88k',
-    icon: 'ri-money-dollar-circle-line',
-    color: 'info',
-  },
-]
+import { ref, onMounted } from 'vue';
+import { api } from "../../service/apiConfig.js";
+
+
+
+let statistics = ref([]);
+
+onMounted(async () => {
+  const response = await api.get("/dash");
+  const data = response.data;
+  console.log(data);
+
+  statistics.value = [
+    {
+      title: 'Parceiros',
+      stats: data.qtyPartnersActive,
+      icon: 'ri-pie-chart-2-line',
+      color: 'primary',
+    },
+    {
+      title: 'Usuários',
+      stats: data.qtyUsers,
+      icon: 'ri-group-line',
+      color: 'success',
+    },
+    {
+      title: 'Tracks',
+      stats: data.qtyTracks,
+      icon: 'ri-macbook-line',
+      color: 'warning',
+    },
+    {
+      title: 'Expertise',
+      stats: data.qtyExpertise,
+      icon: 'ri-money-dollar-circle-line',
+      color: 'info',
+    },
+  ];
+});
+
+
 </script>
 
 <template>
@@ -48,7 +63,7 @@ const statistics = [
       <VRow>
         <VCol
           v-for="item in statistics"
-          :key="item.title"
+          :key="item.qtyPartnersActive"
           cols="12"
           sm="6"
           md="3"
