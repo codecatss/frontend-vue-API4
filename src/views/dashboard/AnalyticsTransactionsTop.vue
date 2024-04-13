@@ -1,15 +1,16 @@
 <script setup>
-import { ref, onMounted } from 'vue';
-import { api } from "../../service/apiConfig.js";
+import { ref, onMounted } from 'vue'
+import { api } from "../../service/apiConfig.js"
 
 
 
-let statistics = ref([]);
+let statistics = ref([])
 
 onMounted(async () => {
-  const response = await api.get("/dash");
-  const data = response.data;
-  console.log(data);
+  const response = await api.get("/dash")
+  const data = response.data
+  
+  console.log(data)
 
   statistics.value = [
     {
@@ -36,8 +37,8 @@ onMounted(async () => {
       icon: 'ri-money-dollar-circle-line',
       color: 'info',
     },
-  ];
-});
+  ]
+})
 
 
 </script>

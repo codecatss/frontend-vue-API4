@@ -1,9 +1,18 @@
 <script setup>
-import { hexToRgb } from '@layouts/utils';
-import VueApexCharts from 'vue3-apexcharts';
-import { useTheme } from 'vuetify';
+// eslint-disable-next-line import/no-unresolved
+import { hexToRgb } from '@layouts/utils'
+import VueApexCharts from 'vue3-apexcharts'
+import { useTheme } from 'vuetify'
+import { onMounted, ref, computed } from 'vue'
 
 const vuetifyTheme = useTheme()
+
+const titulo = ref(null)
+
+onMounted(() => {
+
+  titulo.value = 'danko'
+})
 
 const series = [
   95,
@@ -137,7 +146,7 @@ const moreList = [
   <VCard>
     <VCardItem class="pb-3">
       <VCardTitle class="mb-1">
-        Order Statistics
+        Informmações Tracks
       </VCardTitle>
       <VCardSubtitle>42.82k Total Sales</VCardSubtitle>
 

@@ -1,8 +1,10 @@
+<!-- eslint-disable import/no-unresolved -->
 <script lang="ts" setup>
 import ProgressCard from '@/components/ProgressCard.vue'
 import AnalyticsCongratulations from '@/views/dashboard/AnalyticsCongratulations.vue'
 import AnalyticsFinanceTabs from '@/views/dashboard/AnalyticsFinanceTab.vue'
-import AnalyticsOrderStatistics from '@/views/dashboard/AnalyticsOrderStatistics.vue'
+import InfoExpertises from '@/views/dashboard/InfoExpertises.vue'
+import InfoTracks from '@/views/dashboard/InfoTracks.vue'
 import AnalyticsProfitReport from '@/views/dashboard/AnalyticsProfitReport.vue'
 import AnalyticsTotalRevenue from '@/views/dashboard/AnalyticsTotalRevenue.vue'
 import AnalyticsTransactions from '@/views/dashboard/AnalyticsTransactions.vue'
@@ -47,7 +49,7 @@ import wallet from '@images/cards/wallet-info.png'
       sm="6"
       order="2"
     >
-      <AnalyticsOrderStatistics />
+      <InfoTracks />
     </VCol>
 
     <VCol
@@ -56,7 +58,7 @@ import wallet from '@images/cards/wallet-info.png'
     sm="6"
     order="2"
   >
-    <AnalyticsOrderStatistics />
+    <InfoExpertises />
   </VCol>
     <!-- 👉 Tabs chart -->
     <VCol
