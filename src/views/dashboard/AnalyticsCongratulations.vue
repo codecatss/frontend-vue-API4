@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 <!-- eslint-disable import/no-unresolved -->
 <script setup>
 import { useTheme } from 'vuetify'
@@ -9,6 +10,8 @@ const { global } = useTheme()
 const illustrationJohn = computed(() => global.name.value === 'dark' ? illustrationJohnDark : illustrationJohnLight)
 </script>
 
+=======
+>>>>>>> Stashed changes
 <template>
   <VCard class="text-center text-sm-start">
     <VRow no-gutters>
@@ -31,7 +34,34 @@ const illustrationJohn = computed(() => global.name.value === 'dark' ? illustrat
             Veja aqui os resultados
           </span>
           <br>
+<<<<<<< Updated upstream
           <ImportBtn />
+=======
+          <span class="fileinput-button">
+            <VBtn
+              variant="tonal"
+              class="mt-4"
+              size="small"
+              @click="triggerFileInput"
+            >
+              <span ref="placeHolder">Importar seus dados</span>
+              <input
+                ref="fileInput"
+                type="file"
+                @change="onFileChange"
+                style="display: none;"
+              >
+            </VBtn>
+            <VBtn
+              variant="tonal"
+              class="mt-4 ml-2"
+              size="small"
+              @click="submitForm"
+            >
+              Enviar
+            </VBtn>
+          </span>
+>>>>>>> Stashed changes
         </VCardText>
       </VCol>
 
@@ -52,10 +82,66 @@ const illustrationJohn = computed(() => global.name.value === 'dark' ? illustrat
     </VRow>
   </VCard>
 </template>
+<script setup>
+import { useTheme } from 'vuetify'
+import illustrationJohnDark from '@images/cards/illustration-john-dark.png'
+import illustrationJohnLight from '@images/cards/illustration-john-light.png'
+import axios from 'axios'
+import { ref, computed } from 'vue'
+
+const { global } = useTheme()
+const illustrationJohn = computed(() => global.name.value === 'dark' ? illustrationJohnDark : illustrationJohnLight)
+
+let file = null
+const fileInput = ref(null)
+const placeHolder = ref(null)
+
+const onFileChange = (e) => {
+  file = e.target.files[0]
+
+  const fileName = file.name
+
+  const startIndex = fileName.lastIndexOf(".")
+  const truncatedName = fileName.substring(0, startIndex)
+
+  if (truncatedName.length > 10) {
+    placeHolder.value.innerText = `${truncatedName.substring(0, 20)}...`
+  } else {
+    placeHolder.value.innerText = truncatedName
+  }
+}
+
+const triggerFileInput = () => {
+  fileInput.value.click()
+}
+
+const submitForm = () => {
+  const formData = new FormData()
+
+  formData.append("file", file)
+  axios.post("http://localhost:8080/api/import-csv", formData)
+    .then(function (result) {
+      console.log(result)
+    }, function (error) {
+      console.log(error)
+    })
+}
+</script>
 
 <style lang="scss" scoped>
 .john-illustration {
   inset-block-end: -0.0625rem;
   inset-inline-end: 3rem;
+}
+
+.fileinput-button input {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 0;
+  opacity: 0;
+  font-size: 200px;
+  direction: ltr;
+  cursor: pointer;
 }
 </style>
