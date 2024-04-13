@@ -4,6 +4,7 @@ import { useTheme } from 'vuetify'
 import VerticalNavSectionTitle from '@/@layouts/components/VerticalNavSectionTitle.vue'
 import VerticalNavLayout from '@layouts/components/VerticalNavLayout.vue'
 import VerticalNavLink from '@layouts/components/VerticalNavLink.vue'
+import group from '../../assets/images/Group_light.svg'
 
 // Componentes
 import Footer from '@/layouts/components/Footer.vue'
@@ -74,82 +75,141 @@ const vuetifyTheme = useTheme()
 
       <VerticalNavLink
         :item="{
-          title: 'Parceiros',
-          icon: 'bx-home',
+          title: 'Membros',
+          icon: 'bx-bar-chart-alt-2',
           to: '/',
         }"
       />
+
+      <VerticalNavLink
+      :item="{
+        title: 'Dados Inválidos',
+        icon: 'bx-error-circle',
+        to: '/',
+      }"
+    />
+
 
 
       <!-- 👉 Páginas -->
       <VerticalNavSectionTitle
         :item="{
-          heading: 'Páginas',
+          heading: 'Gerenacimento de Dados',
         }"
       />
+
+
+      
       <VerticalNavLink
-        :item="{
-          title: 'Login',
-          icon: 'mdi-alert',
-          to: '/login',
-        }"
-      />
-      <VerticalNavLink
-        :item="{
-          title: 'Registrar',
-          icon: 'bx-user-plus',
-          to: '/register',
-        }"
-      />
-      <VerticalNavLink
-        :item="{
-          title: 'Erro',
-          icon: 'bx-info-circle',
-          to: '/no-existence',
-        }"
-      />
+      :item="{
+        title: 'Adicionar Parceiros ',
+        icon: 'mdi-account-multiple-plus',
+        to: '/',
+      }"
+    />
+
+
+    
+    <VerticalNavLink
+    :item="{
+      title: 'Usuários ',
+      icon: 'bx-user-plus',
+      to: '/',
+    }"
+  />
+
+  
+    <VerticalNavLink
+    :item="{
+      title: 'Tracks',
+      icon: 'bx-add-to-queue',
+      to: '/',
+    }"
+  />
+
+    <VerticalNavLink
+    :item="{
+      title: 'Expertise',
+      icon: 'bx-notepad',
+      to: '/',
+    }"
+    />
+
+    <VerticalNavLink
+    :item="{
+      title: 'Workload',
+      icon: 'bx-brain',
+      to: '/',
+    }"
+    />
+
+ <!--
+<VerticalNavLink
+  :item="{
+    title: 'Login',
+    icon: 'mdi-alert',
+    to: '/login',
+  }"
+/>
+<VerticalNavLink
+  :item="{
+    title: 'Registrar',
+    icon: 'bx-user-plus',
+    to: '/register',
+  }"
+/>
+<VerticalNavLink
+  :item="{
+    title: 'Erro',
+    icon: 'bx-info-circle',
+    to: '/no-existence',
+  }"
+/>
+-->
 
       <!-- 👉 Interface do Usuário -->
       <VerticalNavSectionTitle
         :item="{
-          heading: 'Interface do Usuário',
+          heading: 'Configurações',
         }"
       />
-      <VerticalNavLink
-        :item="{
-          title: 'Tipografia',
-          icon: 'mdi-alpha-t-box-outline',
-          to: '/typography',
-        }"
-      />
-      <VerticalNavLink
-        :item="{
-          title: 'Ícones',
-          icon: 'bx-show',
-          to: '/icons',
-        }"
-      />
-      <VerticalNavLink
-        :item="{
-          title: 'Cartões',
-          icon: 'bx-credit-card',
-          to: '/cards',
-        }"
-      />
-      <VerticalNavLink
-        :item="{
-          title: 'Tabelas',
-          icon: 'bx-table',
-          to: '/tables',
-        }"
-      />
-      <VerticalNavLink
-        :item="{
-          title: 'Layouts de Formulários',
-          icon: 'mdi-form-select',
-          to: '/form-layouts',
-        }"
-      />
+     <!--
+<VerticalNavLink
+  :item="{
+    title: 'Tipografia',
+    icon: 'mdi-alpha-t-box-outline',
+    to: '/typography',
+  }"
+/>
+<VerticalNavLink
+  :item="{
+    title: 'Ícones',
+    icon: 'bx-show',
+    to: '/icons',
+  }"
+/>
+<VerticalNavLink
+  :item="{
+    title: 'Cartões',
+    icon: 'bx-credit-card',
+    to: '/cards',
+  }"
+/>
+<VerticalNavLink
+  :item="{
+    title: 'Tabelas',
+    icon: 'bx-table',
+    to: '/tables',
+  }"
+/>
+<VerticalNavLink
+  :item="{
+    title: 'Layouts de Formulários',
+    icon: 'mdi-form-select',
+    to: '/form-layouts',
+  }"
+/>
+-->
 
       <VerticalNavLink
         :item="{
@@ -158,6 +218,16 @@ const vuetifyTheme = useTheme()
           to: '/account-settings',
         }"
       />
+
+      <VerticalNavLink
+      :item="{
+        title: 'Loggout',
+        icon: 'bx-log-out',
+        to: '/',
+      }"
+    />
+
+
     </template>
 
     <template #after-vertical-nav-items>
