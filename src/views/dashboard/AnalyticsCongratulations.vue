@@ -1,17 +1,3 @@
-<<<<<<< Updated upstream
-<!-- eslint-disable import/no-unresolved -->
-<script setup>
-import { useTheme } from 'vuetify'
-import illustrationJohnDark from '@images/cards/illustration-john-dark.png'
-import illustrationJohnLight from '@images/cards/illustration-john-light.png'
-import ImportBtn from '@/components/ImportBtn.vue'
-
-const { global } = useTheme()
-const illustrationJohn = computed(() => global.name.value === 'dark' ? illustrationJohnDark : illustrationJohnLight)
-</script>
-
-=======
->>>>>>> Stashed changes
 <template>
   <VCard class="text-center text-sm-start">
     <VRow no-gutters>
@@ -34,9 +20,6 @@ const illustrationJohn = computed(() => global.name.value === 'dark' ? illustrat
             Veja aqui os resultados
           </span>
           <br>
-<<<<<<< Updated upstream
-          <ImportBtn />
-=======
           <span class="fileinput-button">
             <VBtn
               variant="tonal"
@@ -61,7 +44,6 @@ const illustrationJohn = computed(() => global.name.value === 'dark' ? illustrat
               Enviar
             </VBtn>
           </span>
->>>>>>> Stashed changes
         </VCardText>
       </VCol>
 
@@ -80,8 +62,18 @@ const illustrationJohn = computed(() => global.name.value === 'dark' ? illustrat
         >
       </VCol>
     </VRow>
+
+    <VSnackbar
+      v-model="snackbar"
+      :color="snackbarColor"
+      :timeout="5000"
+      top
+    >
+      {{ snackbarText }}
+    </VSnackbar>
   </VCard>
 </template>
+
 <script setup>
 import { useTheme } from 'vuetify'
 import illustrationJohnDark from '@images/cards/illustration-john-dark.png'
@@ -95,6 +87,9 @@ const illustrationJohn = computed(() => global.name.value === 'dark' ? illustrat
 let file = null
 const fileInput = ref(null)
 const placeHolder = ref(null)
+const snackbar = ref(false)
+const snackbarText = ref('')
+const snackbarColor = ref('')
 
 const onFileChange = (e) => {
   file = e.target.files[0]
@@ -122,8 +117,14 @@ const submitForm = () => {
   axios.post("http://localhost:8080/api/import-csv", formData)
     .then(function (result) {
       console.log(result)
+      snackbar.value = true
+      snackbarText.value = 'Seu Arquivo Foi Enviado Com Sucesso! 🎉'
+      snackbarColor.value = 'success'
     }, function (error) {
       console.log(error)
+      snackbar.value = true
+      snackbarText.value = 'Houve Um Erro Ao Enviar Seu Arquivo'
+      snackbarColor.value = 'error'
     })
 }
 </script>
@@ -133,6 +134,8 @@ const submitForm = () => {
   inset-block-end: -0.0625rem;
   inset-inline-end: 3rem;
 }
+
+
 
 .fileinput-button input {
   position: absolute;
