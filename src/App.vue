@@ -1,6 +1,6 @@
+<!-- eslint-disable import/no-unresolved -->
 <script setup>
 import { useTheme } from 'vuetify'
-import UpgradeToPro from '@/components/UpgradeToPro.vue'
 import { hexToRgb } from '@layouts/utils'
 
 const { global } = useTheme()

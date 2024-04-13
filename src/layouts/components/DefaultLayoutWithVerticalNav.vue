@@ -1,8 +1,7 @@
+<!-- eslint-disable import/no-unresolved -->
 <script setup>
 import { useTheme } from 'vuetify'
 import VerticalNavSectionTitle from '@/@layouts/components/VerticalNavSectionTitle.vue'
-import upgradeBannerDark from '@images/pro/upgrade-banner-dark.png'
-import upgradeBannerLight from '@images/pro/upgrade-banner-light.png'
 import VerticalNavLayout from '@layouts/components/VerticalNavLayout.vue'
 import VerticalNavLink from '@layouts/components/VerticalNavLink.vue'
 
@@ -12,10 +11,6 @@ import NavbarThemeSwitcher from '@/layouts/components/NavbarThemeSwitcher.vue'
 import UserProfile from '@/layouts/components/UserProfile.vue'
 
 const vuetifyTheme = useTheme()
-
-const upgradeBanner = computed(() => {
-  return vuetifyTheme.global.name.value === 'light' ? upgradeBannerLight : upgradeBannerDark
-})
 </script>
 
 <template>
@@ -32,21 +27,21 @@ const upgradeBanner = computed(() => {
         </IconBtn>
 
         <!-- 👉 Pesquisa -->
-<!--
-<div
-  class="d-flex align-center cursor-pointer"
-  style="user-select: none;"
->
-  <IconBtn>
-    <VIcon icon="bx-search" />
-  </IconBtn>
+        <!--
+          <div
+          class="d-flex align-center cursor-pointer"
+          style="user-select: none;"
+          >
+          <IconBtn>
+          <VIcon icon="bx-search" />
+          </IconBtn>
 
-  <span class="d-none d-md-flex align-center text-disabled">
-    <span class="me-3">Pesquisa</span>
-    <span class="meta-key">&#8984;K</span>
-  </span>
-</div>
--->
+          <span class="d-none d-md-flex align-center text-disabled">
+          <span class="me-3">Pesquisa</span>
+          <span class="meta-key">&#8984;K</span>
+          </span>
+          </div>
+        -->
         <VSpacer />
 
         <IconBtn
@@ -78,12 +73,12 @@ const upgradeBanner = computed(() => {
       />
 
       <VerticalNavLink
-      :item="{
-        title: 'Parceiros',
-        icon: 'bx-home',
-        to: '/',
-      }"
-    />
+        :item="{
+          title: 'Parceiros',
+          icon: 'bx-home',
+          to: '/',
+        }"
+      />
 
 
       <!-- 👉 Páginas -->
@@ -157,13 +152,12 @@ const upgradeBanner = computed(() => {
       />
 
       <VerticalNavLink
-      :item="{
-        title: 'Configurações da conta',
-        icon: 'mdi-account-cog-outline',
-        to: '/account-settings',
-      }"
-    />
-
+        :item="{
+          title: 'Configurações da conta',
+          icon: 'mdi-account-cog-outline',
+          to: '/account-settings',
+        }"
+      />
     </template>
 
     <template #after-vertical-nav-items>
@@ -173,15 +167,7 @@ const upgradeBanner = computed(() => {
         target="_blank"
         rel="noopener noreferrer"
         style="margin-left: 7px;"
-      >
-        <img
-          :src="upgradeBanner"
-          alt="upgrade-banner"
-          transition="scale-transition"
-          class="upgrade-banner mx-auto"
-          style="max-width: 230px;"
-        >
-      </a>
+      />
     </template>
 
     <!-- 👉 Páginas -->
