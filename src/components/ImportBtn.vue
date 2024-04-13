@@ -1,7 +1,10 @@
 <template>
   <form @submit.prevent="submitForm">
     <span class="fileinput-button">
-      <span ref="placeHolder">Importar seus dados</span>
+      <span
+        ref="placeHolder"
+        class="spanInnterno">Importar seus dados
+      </span>
       <input
         type="file"
         @change="onFileChange"
@@ -15,6 +18,7 @@
 </template>
   
 <script>
+// eslint-disable-next-line regex/invalid
 import axios from 'axios'
   
 export default {
@@ -64,31 +68,42 @@ export default {
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: space-around;
 
     position: relative;
     top: 0;
     right: 0;
-    }
 
-  input{
-    height: auto;
+    background-color: #efefff;
+    width: fit-content;
+    height: 5vh;
+    border-radius: 1vh;
   }
 
   .fileinput-button input {
-    position: relative;
     overflow: hidden;
     position: absolute;
     top: 0;
-    right: 0;
-    margin: 0;
+    left: 0;
+    margin-left: 10%;
+
     opacity: 0;
+
     font-size: 200px;
     direction: ltr;
     cursor: pointer;
-    align-items: center;
+
+    width: 50%;
+    height: 100%;
   }
+
+  .spanInnterno {
+    cursor: pointer;
+  }
+
   button {
-    padding: 2vw;
+    padding: 1vw;
 }
 </style>
+
   

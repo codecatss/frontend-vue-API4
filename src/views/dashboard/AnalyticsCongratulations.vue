@@ -1,8 +1,9 @@
+<!-- eslint-disable import/no-unresolved -->
 <script setup>
 import { useTheme } from 'vuetify'
 import illustrationJohnDark from '@images/cards/illustration-john-dark.png'
 import illustrationJohnLight from '@images/cards/illustration-john-light.png'
-import ImportBtn from '@/components/ImportBtn.vue';
+import ImportBtn from '@/components/ImportBtn.vue'
 
 const { global } = useTheme()
 const illustrationJohn = computed(() => global.name.value === 'dark' ? illustrationJohnDark : illustrationJohnLight)
@@ -30,13 +31,7 @@ const illustrationJohn = computed(() => global.name.value === 'dark' ? illustrat
             Veja aqui os resultados
           </span>
           <br>
-          <VBtn
-            variant="tonal"
-            class="mt-4"
-            size="small"
-          >
-            <ImportBtn />
-          </VBtn>
+          <ImportBtn />
         </VCardText>
       </VCol>
 
