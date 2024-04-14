@@ -71,27 +71,27 @@ const tabData = computed(() => {
   const data = {
     income: {
       avatar: statsVerticalWallet,
-      title: 'Total Income',
-      stats: '$459.1k',
+      title: 'Total Parceiros',
+      stats: '308',
       profitLoss: 65,
-      profitLossAmount: '6.5k',
-      compareToLastWeek: '$39k',
+      profitLossAmount: '18',
+      compareToLastWeek: '290',
     },
     expenses: {
       avatar: statsVerticalPaypal,
-      title: 'Total Expenses',
-      stats: '$316.5k',
+      title: 'Expertises Iniciadas',
+      stats: '367',
       profitLoss: 27.8,
-      profitLossAmount: '7.2k',
-      compareToLastWeek: '$16k',
+      profitLossAmount: '5',
+      compareToLastWeek: '230',
     },
     profit: {
       avatar: statsVerticalChart,
-      title: 'Total Profit',
-      stats: '$147.9k',
-      profitLoss: 35.1,
-      profitLossAmount: '4.5k',
-      compareToLastWeek: '$28k',
+      title: 'Total De Abandonos',
+      stats: '147',
+      profitLoss: -35.1,
+      profitLossAmount: '4',
+      compareToLastWeek: '176',
     },
   }
   
@@ -225,13 +225,13 @@ const chartConfig = computed(() => {
         class="v-tabs-pill"
       >
         <VTab value="income">
-          Income
+          Parceiros
         </VTab>
         <VTab value="expenses">
-          Expenses
+          Iniciadas
         </VTab>
         <VTab value="profit">
-          Profit
+          Abandonos
         </VTab>
       </VTabs>
     </VCardItem>
@@ -284,10 +284,10 @@ const chartConfig = computed(() => {
 
       <div>
         <h6 class="text-base font-weight-regular">
-          <span class="text-capitalize">{{ currentTab }}</span>
-          <span> this week</span>
+          <span class="text-capitalize">Somente</span>
+          <span> essa semana</span>
         </h6>
-        <span class="text-sm text-disabled">{{ tabData.compareToLastWeek }} less than last week</span>
+        <span class="text-sm text-disabled">{{ tabData.compareToLastWeek }} Ano Passado</span>
       </div>
     </VCardText>
   </VCard>
