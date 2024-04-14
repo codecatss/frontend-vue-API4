@@ -1,17 +1,35 @@
 <script setup>
+import { api } from '@/service/apiConfig';
 import { hexToRgb } from '@layouts/utils';
+import { onMounted, ref, computed } from 'vue';
 import VueApexCharts from 'vue3-apexcharts';
 import { useTheme } from 'vuetify';
+
+let chartState = ref([]);
+let orders = ref([]);
+
+onMounted(async () => {
+  const response = await api.get("/dash/state-per-company");
+  const data = response.data;
+
+  orders.value = data.sort((a, b) => b.companyCount - a.companyCount).map((item, index) => {
+    return {
+      amount: item.companyCount, 
+      title: item.state,
+      avatarColor: ['primary', 'secondary', 'secondary', 'secondary'][index % 4],
+      subtitle: 'Subtitle', 
+      avatarIcon: 'bx-mobile-alt', 
+    }
+  }).slice(0, 4); 
+});
+
+const labels = computed(() => orders.value.map(order => order.title));
+const series = computed(() => orders.value.map(order => order.amount)); 
+
 
 const vuetifyTheme = useTheme()
 const chartHeight = 250
 const chartWidth = 250
-const series = [
-  25,
-  25,
-  25,
-  40,
-]
 
 const chartOptions = computed(() => {
   const currentTheme = vuetifyTheme.current.value.colors
@@ -31,17 +49,12 @@ const chartOptions = computed(() => {
     legend: { show: false },
     tooltip: { enabled: false },
     dataLabels: { enabled: false },
-    labels: [
-      'SP',
-      'RJ',
-      'PR',
-      'MG',
-    ],
+    labels: labels.value,
     colors: [
-      currentTheme.success,
       currentTheme.primary,
-      currentTheme.secondary,
+      currentTheme.success,
       currentTheme.info,
+      currentTheme.secondary,
     ],
     grid: {
       padding: {
@@ -62,20 +75,20 @@ const chartOptions = computed(() => {
             show: true,
             name: {
               offsetY: 17,
-              fontSize: '12px', // Alterado para 12px
+              fontSize: '12px', 
               color: disabledTextColor,
               fontFamily: 'Public Sans',
             },
             value: {
               offsetY: -17,
-              fontSize: '20px', // Alterado para 20px
+              fontSize: '20px', 
               color: primaryTextColor,
               fontFamily: 'Public Sans',
             },
             total: {
               show: true,
               label: 'Aumento De Resultados',
-              fontSize: '12px', // Alterado para 12px
+              fontSize: '12px', 
               formatter: () => '38%',
               color: disabledTextColor,
               fontFamily: 'Public Sans',
@@ -86,37 +99,6 @@ const chartOptions = computed(() => {
     },
   }
 })
-
-const orders = [
-  {
-    amount: '82.5k',
-    title: 'SP',
-    avatarColor: 'primary',
-    subtitle: 'Mobile, Earbuds, TV',
-    avatarIcon: 'bx-mobile-alt',
-  },
-  {
-    amount: '23.8k',
-    title: 'RJ',
-    avatarColor: 'success',
-    subtitle: 'Tshirt, Jeans, Shoes',
-    avatarIcon: 'bx-closet',
-  },
-  {
-    amount: 849,
-    title: 'MG',
-    avatarColor: 'info',
-    subtitle: 'Fine Art, Dining',
-    avatarIcon: 'bx-home',
-  },
-  {
-    amount: 99,
-    title: 'PR',
-    avatarColor: 'secondary',
-    subtitle: 'Football, Cricket Kit',
-    avatarIcon: 'bx-football',
-  },
-]
 
 const moreList = [
   {
