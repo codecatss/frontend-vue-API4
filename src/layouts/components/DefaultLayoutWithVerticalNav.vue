@@ -4,7 +4,6 @@ import { useTheme } from 'vuetify'
 import VerticalNavSectionTitle from '@/@layouts/components/VerticalNavSectionTitle.vue'
 import VerticalNavLayout from '@layouts/components/VerticalNavLayout.vue'
 import VerticalNavLink from '@layouts/components/VerticalNavLink.vue'
-import group from '../../assets/images/Group_light.svg'
 
 // Componentes
 import Footer from '@/layouts/components/Footer.vue'
