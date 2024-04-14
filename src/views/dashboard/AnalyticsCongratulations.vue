@@ -15,7 +15,7 @@
 
         <VCardText>
           <span>
-            Você tem 72 🤩 Workload Finalizados
+            Importe Seus Dados e 
             <br>
             Veja aqui os resultados
           </span>
