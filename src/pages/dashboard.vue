@@ -17,6 +17,7 @@ import chart from '@images/cards/chart-success.png'
 import card from '@images/cards/credit-card-primary.png'
 import paypal from '@images/cards/paypal-error.png'
 import wallet from '@images/cards/wallet-info.png'
+import ProgressDeadline from '@/components/ProgressDeadline.vue'
 
 </script>
 
@@ -68,7 +69,7 @@ import wallet from '@images/cards/wallet-info.png'
       order="3"
     >
       <ProgressCard />
-      <ProgressCard class="mt-3"/>
+      <ProgressDeadline class="mt-3"/>
     </VCol>
 
     <!-- 👉 Transactions -->
