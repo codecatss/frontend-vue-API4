@@ -15,10 +15,10 @@ onMounted(() => {
 })
 
 const series = [
-  95,
-  80,
-  20,
-  40,
+  123,
+  98,
+  87,
+  85,
 ]
 
 const chartOptions = computed(() => {
@@ -40,10 +40,10 @@ const chartOptions = computed(() => {
     tooltip: { enabled: false },
     dataLabels: { enabled: false },
     labels: [
-      'Fashion',
-      'Electronic',
-      'Sports',
-      'Decor',
+      'Oracle Cloud Platform Integration',
+      'Dev Ops on Oracle Cloud',
+      'Oracle Cloud Platform Security',
+      'CSSE - OCI Migration',
     ],
     colors: [
       currentTheme.success,
@@ -76,14 +76,14 @@ const chartOptions = computed(() => {
             },
             value: {
               offsetY: -17,
-              fontSize: '24px',
+              fontSize: '20px',
               color: primaryTextColor,
               fontFamily: 'Public Sans',
             },
             total: {
               show: true,
               label: 'Weekly',
-              fontSize: '14px',
+              fontSize: '10px',
               formatter: () => '38%',
               color: disabledTextColor,
               fontFamily: 'Public Sans',
@@ -97,32 +97,32 @@ const chartOptions = computed(() => {
 
 const orders = [
   {
-    amount: '82.5k',
-    title: 'Electronic',
+    amount: '123',
+    title: 'Oracle Cloud Platform Integration',
     avatarColor: 'primary',
-    subtitle: 'Mobile, Earbuds, TV',
-    avatarIcon: 'bx-mobile-alt',
+    subtitle: 'Descrição sobre a Expertise',
+    avatarIcon: 'bx-color',
   },
   {
-    amount: '23.8k',
-    title: 'Fashion',
+    amount: '98',
+    title: 'Dev Ops on Oracle Cloud',
     avatarColor: 'success',
-    subtitle: 'Tshirt, Jeans, Shoes',
-    avatarIcon: 'bx-closet',
+    subtitle: 'Descrição sobre a Expertise',
+    avatarIcon: 'bx-color',
   },
   {
-    amount: 849,
-    title: 'Decor',
+    amount: 87,
+    title: 'Oracle Cloud Platform Security',
     avatarColor: 'info',
-    subtitle: 'Fine Art, Dining',
-    avatarIcon: 'bx-home',
+    subtitle: 'Descrição sobre a Expertise',
+        avatarIcon: 'bx-color',
   },
   {
-    amount: 99,
-    title: 'Sports',
+    amount: 85,
+    title: 'CSSE - OCI Migration',
     avatarColor: 'secondary',
-    subtitle: 'Football, Cricket Kit',
-    avatarIcon: 'bx-football',
+    subtitle: 'Descrição sobre a Expertise',
+    avatarIcon: 'bx-color',
   },
 ]
 
@@ -148,7 +148,9 @@ const moreList = [
       <VCardTitle class="mb-1">
         Informações Expertises
       </VCardTitle>
-      <VCardSubtitle>42.82k Total Sales</VCardSubtitle>
+      <VCardSubtitle>
+        Porcentagem De Parcerios Nas Expertises
+      </VCardSubtitle>
 
       <template #append>
         <div class="me-n3 mt-n8">
@@ -161,9 +163,9 @@ const moreList = [
       <div class="d-flex align-center justify-space-between mb-3">
         <div class="flex-grow-1">
           <h4 class="text-h4 mb-1">
-            8,258
+            31
           </h4>
-          <span>Total Orders</span>
+          <span>Total OrdeDe Expertise</span>
         </div>
 
         <div>
