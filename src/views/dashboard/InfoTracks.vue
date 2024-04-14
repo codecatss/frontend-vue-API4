@@ -40,10 +40,10 @@ const chartOptions = computed(() => {
     tooltip: { enabled: false },
     dataLabels: { enabled: false },
     labels: [
-      'Fashion',
-      'Electronic',
-      'Sports',
-      'Decor',
+      'Cloud Build',
+      'Cloud Sell',
+      'Cloud Service',
+      'License and Hardware',
     ],
     colors: [
       currentTheme.success,
@@ -82,8 +82,8 @@ const chartOptions = computed(() => {
             },
             total: {
               show: true,
-              label: 'Weekly',
-              fontSize: '14px',
+              label: 'Essa Semana',
+              fontSize: '10px',
               formatter: () => '38%',
               color: disabledTextColor,
               fontFamily: 'Public Sans',
@@ -97,49 +97,36 @@ const chartOptions = computed(() => {
 
 const orders = [
   {
-    amount: '82.5k',
-    title: 'Electronic',
+    amount: '82',
+    title: 'Cloud Build',
     avatarColor: 'primary',
-    subtitle: 'Mobile, Earbuds, TV',
-    avatarIcon: 'bx-mobile-alt',
+    subtitle: 'Descrição Da Track',
+    avatarIcon: 'bx-bar-chart-alt-2',
   },
   {
-    amount: '23.8k',
-    title: 'Fashion',
+    amount: '80',
+    title: 'Cloud Service',
     avatarColor: 'success',
-    subtitle: 'Tshirt, Jeans, Shoes',
-    avatarIcon: 'bx-closet',
+    subtitle: 'Descrição Da Track',
+    avatarIcon: 'bx-bar-chart-alt-2',
   },
   {
-    amount: 849,
-    title: 'Decor',
+    amount: 73,
+    title: 'Cloud Service',
     avatarColor: 'info',
-    subtitle: 'Fine Art, Dining',
-    avatarIcon: 'bx-home',
+    subtitle: 'Descrição Da Track',
+    avatarIcon: 'bx-bar-chart-alt-2',
   },
   {
-    amount: 99,
-    title: 'Sports',
+    amount: 69,
+    title: 'License and Hardware',
     avatarColor: 'secondary',
-    subtitle: 'Football, Cricket Kit',
-    avatarIcon: 'bx-football',
+    subtitle: 'Descrição Da Track',
+    avatarIcon: 'bx-bar-chart-alt-2',
   },
 ]
 
-const moreList = [
-  {
-    title: 'Share',
-    value: 'Share',
-  },
-  {
-    title: 'Refresh',
-    value: 'Refresh',
-  },
-  {
-    title: 'Update',
-    value: 'Update',
-  },
-]
+
 </script>
 
 <template>
@@ -148,7 +135,7 @@ const moreList = [
       <VCardTitle class="mb-1">
         Informmações Tracks
       </VCardTitle>
-      <VCardSubtitle>42.82k Total Sales</VCardSubtitle>
+      <VCardSubtitle>Porcentagem De Parcerios Nas Tracks</VCardSubtitle>
 
       <template #append>
         <div class="me-n3 mt-n8">
@@ -161,9 +148,9 @@ const moreList = [
       <div class="d-flex align-center justify-space-between mb-3">
         <div class="flex-grow-1">
           <h4 class="text-h4 mb-1">
-            8,258
+            8
           </h4>
-          <span>Total Orders</span>
+          <span>Total De Tracks</span>
         </div>
 
         <div>
