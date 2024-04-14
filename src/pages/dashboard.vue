@@ -1,19 +1,24 @@
-<script setup>
+<!-- eslint-disable import/no-unresolved -->
+<script lang="ts" setup>
 import ProgressCard from '@/components/ProgressCard.vue'
 import AnalyticsCongratulations from '@/views/dashboard/AnalyticsCongratulations.vue'
 import AnalyticsFinanceTabs from '@/views/dashboard/AnalyticsFinanceTab.vue'
-import AnalyticsOrderStatistics from '@/views/dashboard/AnalyticsOrderStatistics.vue'
+import InfoExpertises from '@/views/dashboard/InfoExpertises.vue'
+import InfoTracks from '@/views/dashboard/InfoTracks.vue'
 import AnalyticsProfitReport from '@/views/dashboard/AnalyticsProfitReport.vue'
 import AnalyticsTotalRevenue from '@/views/dashboard/AnalyticsTotalRevenue.vue'
 import AnalyticsTransactions from '@/views/dashboard/AnalyticsTransactions.vue'
 import AnalyticsTransactionsTop from '@/views/dashboard/AnalyticsTransactionsTop.vue'
 import BestStates from '@/views/dashboard/BestStates.vue'
 
+
 // 👉 Images
 import chart from '@images/cards/chart-success.png'
 import card from '@images/cards/credit-card-primary.png'
 import paypal from '@images/cards/paypal-error.png'
 import wallet from '@images/cards/wallet-info.png'
+import ProgressDeadline from '@/components/ProgressDeadline.vue'
+
 </script>
 
 <template>
@@ -45,7 +50,7 @@ import wallet from '@images/cards/wallet-info.png'
       sm="6"
       order="2"
     >
-      <AnalyticsOrderStatistics />
+      <InfoTracks />
     </VCol>
 
     <VCol
@@ -54,7 +59,7 @@ import wallet from '@images/cards/wallet-info.png'
     sm="6"
     order="2"
   >
-    <AnalyticsOrderStatistics />
+    <InfoExpertises />
   </VCol>
     <!-- 👉 Tabs chart -->
     <VCol
@@ -64,7 +69,7 @@ import wallet from '@images/cards/wallet-info.png'
       order="3"
     >
       <ProgressCard />
-      <ProgressCard class="mt-3"/>
+      <ProgressDeadline class="mt-3"/>
     </VCol>
 
     <!-- 👉 Transactions -->

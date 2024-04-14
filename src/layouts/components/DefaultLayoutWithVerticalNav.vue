@@ -1,10 +1,10 @@
+<!-- eslint-disable import/no-unresolved -->
 <script setup>
 import { useTheme } from 'vuetify'
 import VerticalNavSectionTitle from '@/@layouts/components/VerticalNavSectionTitle.vue'
-import upgradeBannerDark from '@images/pro/upgrade-banner-dark.png'
-import upgradeBannerLight from '@images/pro/upgrade-banner-light.png'
 import VerticalNavLayout from '@layouts/components/VerticalNavLayout.vue'
 import VerticalNavLink from '@layouts/components/VerticalNavLink.vue'
+import group from '../../assets/images/Group_light.svg'
 
 // Componentes
 import Footer from '@/layouts/components/Footer.vue'
@@ -12,10 +12,6 @@ import NavbarThemeSwitcher from '@/layouts/components/NavbarThemeSwitcher.vue'
 import UserProfile from '@/layouts/components/UserProfile.vue'
 
 const vuetifyTheme = useTheme()
-
-const upgradeBanner = computed(() => {
-  return vuetifyTheme.global.name.value === 'light' ? upgradeBannerLight : upgradeBannerDark
-})
 </script>
 
 <template>
@@ -32,21 +28,21 @@ const upgradeBanner = computed(() => {
         </IconBtn>
 
         <!-- 👉 Pesquisa -->
-<!--
-<div
-  class="d-flex align-center cursor-pointer"
-  style="user-select: none;"
->
-  <IconBtn>
-    <VIcon icon="bx-search" />
-  </IconBtn>
+        <!--
+          <div
+          class="d-flex align-center cursor-pointer"
+          style="user-select: none;"
+          >
+          <IconBtn>
+          <VIcon icon="bx-search" />
+          </IconBtn>
 
-  <span class="d-none d-md-flex align-center text-disabled">
-    <span class="me-3">Pesquisa</span>
-    <span class="meta-key">&#8984;K</span>
-  </span>
-</div>
--->
+          <span class="d-none d-md-flex align-center text-disabled">
+          <span class="me-3">Pesquisa</span>
+          <span class="meta-key">&#8984;K</span>
+          </span>
+          </div>
+        -->
         <VSpacer />
 
         <IconBtn
@@ -78,91 +74,159 @@ const upgradeBanner = computed(() => {
       />
 
       <VerticalNavLink
+        :item="{
+          title: 'Membros',
+          icon: 'bx-bar-chart-alt-2',
+          to: '/',
+        }"
+      />
+
+      <VerticalNavLink
       :item="{
-        title: 'Parceiros',
-        icon: 'bx-home',
+        title: 'Dados Inválidos',
+        icon: 'bx-error-circle',
         to: '/',
       }"
     />
 
 
+
       <!-- 👉 Páginas -->
       <VerticalNavSectionTitle
         :item="{
-          heading: 'Páginas',
+          heading: 'Gerenacimento de Dados',
         }"
       />
+
+
+      
       <VerticalNavLink
-        :item="{
-          title: 'Login',
-          icon: 'mdi-alert',
-          to: '/login',
-        }"
-      />
-      <VerticalNavLink
-        :item="{
-          title: 'Registrar',
-          icon: 'bx-user-plus',
-          to: '/register',
-        }"
-      />
-      <VerticalNavLink
-        :item="{
-          title: 'Erro',
-          icon: 'bx-info-circle',
-          to: '/no-existence',
-        }"
-      />
+      :item="{
+        title: 'Adicionar Parceiros ',
+        icon: 'mdi-account-multiple-plus',
+        to: '/',
+      }"
+    />
+
+
+    
+    <VerticalNavLink
+    :item="{
+      title: 'Usuários ',
+      icon: 'bx-user-plus',
+      to: '/',
+    }"
+  />
+
+  
+    <VerticalNavLink
+    :item="{
+      title: 'Tracks',
+      icon: 'bx-add-to-queue',
+      to: '/',
+    }"
+  />
+
+    <VerticalNavLink
+    :item="{
+      title: 'Expertise',
+      icon: 'bx-notepad',
+      to: '/',
+    }"
+    />
+
+    <VerticalNavLink
+    :item="{
+      title: 'Workload',
+      icon: 'bx-brain',
+      to: '/',
+    }"
+    />
+
+ <!--
+<VerticalNavLink
+  :item="{
+    title: 'Login',
+    icon: 'mdi-alert',
+    to: '/login',
+  }"
+/>
+<VerticalNavLink
+  :item="{
+    title: 'Registrar',
+    icon: 'bx-user-plus',
+    to: '/register',
+  }"
+/>
+<VerticalNavLink
+  :item="{
+    title: 'Erro',
+    icon: 'bx-info-circle',
+    to: '/no-existence',
+  }"
+/>
+-->
 
       <!-- 👉 Interface do Usuário -->
       <VerticalNavSectionTitle
         :item="{
-          heading: 'Interface do Usuário',
+          heading: 'Configurações',
         }"
       />
+     <!--
+<VerticalNavLink
+  :item="{
+    title: 'Tipografia',
+    icon: 'mdi-alpha-t-box-outline',
+    to: '/typography',
+  }"
+/>
+<VerticalNavLink
+  :item="{
+    title: 'Ícones',
+    icon: 'bx-show',
+    to: '/icons',
+  }"
+/>
+<VerticalNavLink
+  :item="{
+    title: 'Cartões',
+    icon: 'bx-credit-card',
+    to: '/cards',
+  }"
+/>
+<VerticalNavLink
+  :item="{
+    title: 'Tabelas',
+    icon: 'bx-table',
+    to: '/tables',
+  }"
+/>
+<VerticalNavLink
+  :item="{
+    title: 'Layouts de Formulários',
+    icon: 'mdi-form-select',
+    to: '/form-layouts',
+  }"
+/>
+-->
+
       <VerticalNavLink
         :item="{
-          title: 'Tipografia',
-          icon: 'mdi-alpha-t-box-outline',
-          to: '/typography',
-        }"
-      />
-      <VerticalNavLink
-        :item="{
-          title: 'Ícones',
-          icon: 'bx-show',
-          to: '/icons',
-        }"
-      />
-      <VerticalNavLink
-        :item="{
-          title: 'Cartões',
-          icon: 'bx-credit-card',
-          to: '/cards',
-        }"
-      />
-      <VerticalNavLink
-        :item="{
-          title: 'Tabelas',
-          icon: 'bx-table',
-          to: '/tables',
-        }"
-      />
-      <VerticalNavLink
-        :item="{
-          title: 'Layouts de Formulários',
-          icon: 'mdi-form-select',
-          to: '/form-layouts',
+          title: 'Configurações da conta',
+          icon: 'mdi-account-cog-outline',
+          to: '/account-settings',
         }"
       />
 
       <VerticalNavLink
       :item="{
-        title: 'Configurações da conta',
-        icon: 'mdi-account-cog-outline',
-        to: '/account-settings',
+        title: 'Loggout',
+        icon: 'bx-log-out',
+        to: '/',
       }"
     />
+
 
     </template>
 
@@ -173,15 +237,7 @@ const upgradeBanner = computed(() => {
         target="_blank"
         rel="noopener noreferrer"
         style="margin-left: 7px;"
-      >
-        <img
-          :src="upgradeBanner"
-          alt="upgrade-banner"
-          transition="scale-transition"
-          class="upgrade-banner mx-auto"
-          style="max-width: 230px;"
-        >
-      </a>
+      />
     </template>
 
     <!-- 👉 Páginas -->

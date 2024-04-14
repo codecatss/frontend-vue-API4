@@ -59,13 +59,11 @@ const handleNavScroll = evt => {
           class="app-logo d-flex align-center gap-x-3 app-title-wrapper"
         >
           <div
-            class="d-flex"
+            class="d-flex logo-container"
             v-html="logo"
           />
 
-          <h1 class="leading-normal">
-            sneat
-          </h1>
+
         </RouterLink>
       </slot>
     </div>
@@ -123,11 +121,7 @@ const handleNavScroll = evt => {
   .nav-items {
     block-size: 100%;
 
-    // ℹ️ We no loner needs this overflow styles as perfect scrollbar applies it
-    // overflow-x: hidden;
 
-    // // ℹ️ We used `overflow-y` instead of `overflow` to mitigate overflow x. Revert back if any issue found.
-    // overflow-y: auto;
   }
 
   .nav-item-title {
@@ -136,7 +130,12 @@ const handleNavScroll = evt => {
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-
+  .logo-container {
+    display: flex;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 220px;
+  }
   // 👉 Collapsed
   .layout-vertical-nav-collapsed & {
     &:not(.hovered) {

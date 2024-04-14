@@ -10,8 +10,8 @@
         />
       </v-col>
       <v-col cols="6" class="div-2">
-        <v-subheader class="div-3">Expertises Concluídas</v-subheader>
-        <v-headline class="div-4">923</v-headline>
+        <v-subheader class="div-3">Workload Expirando</v-subheader>
+        <v-headline class="div-4">54</v-headline>
       </v-col>
     </v-row>
   </v-card>
@@ -25,7 +25,7 @@ import { useTheme } from 'vuetify';
 const vuetifyTheme = useTheme()
 
 const circleSize = 150; // Tamanho do círculo
-const circlePercentage = 60; // Porcentagem do círculo preenchido
+const circlePercentage = 70; // Porcentagem do círculo preenchido
 
 const currentTheme = vuetifyTheme.current.value.colors
 const variableTheme = vuetifyTheme.current.value.variables
@@ -70,7 +70,7 @@ const chartOptions = computed(() => {
     tooltip: { enabled: false },
     dataLabels: { enabled: false },
     labels: ['Progress'],
-    colors: [currentTheme.success, currentTheme.background], 
+    colors: [currentTheme.error, currentTheme.background], 
     grid: {
       padding: {
         top: -7,
