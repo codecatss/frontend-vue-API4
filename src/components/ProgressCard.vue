@@ -10,8 +10,8 @@
         />
       </v-col>
       <v-col cols="6" class="div-2">
-        <v-subheader class="div-3">Expertises Finalizadas</v-subheader>
-        <v-headline class="div-4">9,903</v-headline>
+        <v-subheader class="div-3">Expertises Concluídas</v-subheader>
+        <v-headline class="div-4">923</v-headline>
       </v-col>
     </v-row>
   </v-card>
