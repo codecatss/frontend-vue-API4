@@ -121,9 +121,9 @@ const moreList = [
     <VCard>
       <VCardItem class="pb-3">
         <VCardTitle class="mb-1">
-          Melhores Estados 
+          Onde Estamos? 
         </VCardTitle>
-        <VCardSubtitle>Top 4 Melhores Estados</VCardSubtitle>
+        <VCardSubtitle>Porcentagem de Parceiro Por Estado</VCardSubtitle>
       </VCardItem>
 
       <VCardText>
