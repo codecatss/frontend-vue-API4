@@ -1,7 +1,8 @@
 <script setup>
+import axios from 'axios';
+import { useTheme } from 'vuetify'
 import { hexToRgb } from '@layouts/utils'
 import VueApexCharts from 'vue3-apexcharts'
-import { useTheme } from 'vuetify'
 import { onMounted, ref, computed } from 'vue'
 
 const props = defineProps({
