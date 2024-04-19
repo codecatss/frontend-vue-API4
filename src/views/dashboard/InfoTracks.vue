@@ -133,7 +133,7 @@ const orders = [
   <VCard>
     <VCardItem class="pb-3">
       <VCardTitle class="mb-1">
-        Informmações Tracks
+        Informações Tracks
       </VCardTitle>
       <VCardSubtitle>Porcentagem De Parcerios Nas Tracks</VCardSubtitle>
 

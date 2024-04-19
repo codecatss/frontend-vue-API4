@@ -76,7 +76,7 @@ const vuetifyTheme = useTheme()
         :item="{
           title: 'Membros',
           icon: 'bx-bar-chart-alt-2',
-          to: '/',
+          to: '/membros',
         }"
       />
 

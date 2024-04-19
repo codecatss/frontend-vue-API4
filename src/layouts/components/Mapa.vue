@@ -1,4 +1,12 @@
 <template>
+
+  <VCard class="pb-3">
+    <p>Mapa</p>
+
+
+    
+
+    
     <div>
       <div ref="infoBox" id="info-box" v-show="infoBoxVisible">{{ infoText }}</div>
       <svg ref="brazilMap" id="brazil-map" xmlns:mapsvg="http://mapsvg.com" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" width="612.51611" height="639.04297" mapsvg:geoViewBox="-74.008595 5.275696 -34.789914 -33.743888">
@@ -123,6 +131,9 @@
         id="BR-TO" />
       </svg>
     </div>
+  </VCard>
+ 
+
   </template>
   
 
@@ -170,18 +181,19 @@ export default {
 
       brazilMap.addEventListener("mouseout", (event) => {
         if (event.target.tagName === 'path') {
-          // Redefinir a cor de preenchimento para a cor original
+
           event.target.style.fill = event.target.dataset.originalColor;
-          // Ocultar o valor do estado
+
           infoBox.style.display = "none";
         }
       });
 
-      // Atualizar a posição do info-box ao mover o mouse
+  
       brazilMap.addEventListener("mousemove", (event) => {
-        infoBox.style.left = event.pageX + 'px';
-        infoBox.style.top = event.pageY + 'px';
-      });
+  const rect = brazilMap.getBoundingClientRect();
+  infoBox.style.left = event.clientX - rect.left + 'px';
+  infoBox.style.top = event.clientY - rect.top + 'px';
+});
     },
     setupSVG() {
       const lista = [
@@ -231,7 +243,18 @@ export default {
 
 
   
-  <style scoped>
+<style scoped>
+
+
+
+  .pb-3 {
+    display: flex;
+    justify-content: center;
+    padding: 70px;
+    
+  }
+
+
   #info-box {
     position: absolute;
     top: 10px;
@@ -241,9 +264,7 @@ export default {
     border: 1px solid #ccc;
     border-radius: 5px;
   }
-  </style>
-  
-  <style>
+ 
         #info-box {
             position: absolute;
             top: 10px;
@@ -257,7 +278,7 @@ export default {
 
         path:hover {
             filter: brightness(0.5); /* Ajuste o valor para aumentar ou diminuir o brilho */
-            
+
         }
 
     </style>
