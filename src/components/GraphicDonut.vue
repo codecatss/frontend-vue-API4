@@ -25,7 +25,7 @@ const props = defineProps({
 })
 
 </script>
-
+-
 <template>
     <VCard>
       <VCardItem class="pb-3">
@@ -55,7 +55,7 @@ const props = defineProps({
               type="donut"
               :height="125"
               width="105"
-              :options="props.chartOptions"
+              :options="props.chartOptions.value"
               :series="props.series"
             />
           </div>
