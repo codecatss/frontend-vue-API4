@@ -25,7 +25,7 @@ const props = defineProps({
 })
 
 </script>
--
+
 <template>
     <VCard>
       <VCardItem class="pb-3">
