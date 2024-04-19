@@ -139,16 +139,26 @@ const moreList = [
 
           <!-- Legenda -->
           <div class="mt-3 d-flex flex-row flex-sm-column justify-space-between flex-wrap">
-            <div v-for="order in orders" :key="order.title" class="d-flex align-center mb-sm-2">
+
+
+
+           <div 
+              v-for="(order, index) in orders" 
+              :key="order.title" 
+              class="d-flex align-center mb-sm-2"
+              :class="`filho ${index + 1}`"
+            >
               <VAvatar
                 rounded
                 variant="tonal"
-                :color="order.avatarColor"
+                :color="`filho${index + 1}`"
                 size="20"
+                :style="{ backgroundColor: order.avatarColor }"
               >
               </VAvatar>
               <span class="ml-2">{{ order.title }}</span>
             </div>
+            
           </div>
         </div>
       </VCardText>
@@ -185,4 +195,29 @@ const moreList = [
 .d-flex.align-center.mb-sm-2 {
   margin-right: 10px;
 }
+
+
+
+.v-avatar--variant-plain, .v-avatar--variant-outlined, .v-avatar--variant-text, .v-avatar--variant-tonal {
+  
+}
+
+
+.text-filho1 {
+  background-color: rgb(105, 108, 255);
+}
+
+.text-filho2 {
+  background-color: rgb(113, 221, 55);;
+}
+
+.text-filho3 {
+  background-color: rgb(3, 195, 236);
+  ;
+}
+
+.text-filho4 {
+  background-color: rgb(133, 146, 163);
+}
+
 </style>
