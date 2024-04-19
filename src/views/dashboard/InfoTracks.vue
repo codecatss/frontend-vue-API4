@@ -18,12 +18,11 @@ const variableTheme = vuetifyTheme.current.value.variables
 const disabledTextColor = `rgba(${ hexToRgb(String(currentTheme['on-surface'])) },${ variableTheme['disabled-opacity'] })`
 const primaryTextColor = `rgba(${ hexToRgb(String(currentTheme['on-surface'])) },${ variableTheme['high-emphasis-opacity'] })`
 
-var chartOptions = null
-var dataLoaded = false
-var labels = []
-var series = []
-var orders = []
-var colors = []
+var labels = ref([])
+var series = ref([])
+var orders = ref([])
+var colors = ref([])
+var chartOptions = ref({})
 
 function getValuesFromDatabase(){
   axios
@@ -32,10 +31,10 @@ function getValuesFromDatabase(){
       const data = response.data;
       for (let key in data) {
         const colorStr = data[key]['avatarColor'];
-        orders.push(data[key]);
-        series.push(parseInt(data[key]['amount']));
-        labels.push(data[key]['title']);
-        colors.push(
+        orders.value.push(data[key]);
+        series.value.push(parseInt(data[key]['amount']));
+        labels.value.push(data[key]['title']);
+        colors.value.push(
           colorStr === 'success' ? currentTheme.success :
           colorStr === 'primary' ? currentTheme.primary :
           colorStr === 'secondary' ? currentTheme.secondary :
@@ -51,7 +50,7 @@ function getValuesFromDatabase(){
 function refreshVariables(){
   getValuesFromDatabase()
 
-  chartOptions = computed(() => {
+  chartOptions.value = computed(() => {
     return {
       chart: {
         sparkline: { enabled: true },
@@ -64,8 +63,8 @@ function refreshVariables(){
       legend: { show: false },
       tooltip: { enabled: false },
       dataLabels: { enabled: false },
-      labels: labels,
-      colors: colors,
+      labels: labels.value,
+      colors: colors.value,
       grid: {
         padding: {
           top: -7,
@@ -109,8 +108,6 @@ function refreshVariables(){
       },
     }
   })
-
-  dataLoaded = true
 }
 
 refreshVariables()
@@ -118,7 +115,7 @@ refreshVariables()
 </script>
 
 <template>
-  <div v-if="dataLoaded">
+  <div>
     <GraphicDonut 
       :labels="labels"
       :series="series"
