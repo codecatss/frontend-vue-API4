@@ -124,6 +124,7 @@ const orders = [
     subtitle: 'Descrição Da Track',
     avatarIcon: 'bx-bar-chart-alt-2',
   },
+  
 ]
 
 
@@ -133,7 +134,7 @@ const orders = [
   <VCard>
     <VCardItem class="pb-3">
       <VCardTitle class="mb-1">
-        Informações Tracks
+        Porcentagem De Parcerios  Nas Tracks
       </VCardTitle>
       <VCardSubtitle>Porcentagem De Parcerios Nas Tracks</VCardSubtitle>
 

@@ -1,7 +1,9 @@
 <template>
 
   <VCard class="pb-3">
-    <p>Mapa</p>
+    <VCardTitle class="text-md-h5 text-primary">
+      Distribuição Dos Parceiros Entre Os Estados
+    </VCardTitle>
 
 
     
@@ -131,8 +133,32 @@
         id="BR-TO" />
       </svg>
     </div>
-  </VCard>
- 
+
+
+    
+  
+
+
+  <div class="legend-container">
+    <div class="legend-item">
+      <div class="legend-square1"></div>
+      <div class="legend-text">Legenda</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-square2"></div>
+      <div class="legend-text">Legenda</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-square3"></div>
+      <div class="legend-text">Legenda</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-square4"></div>
+      <div class="legend-text">Legenda</div>
+    </div>
+  </div>
+  
+</VCard>
 
   </template>
   
@@ -244,13 +270,67 @@ export default {
 
   
 <style scoped>
+.legend-container {
+  display: flex;
+  justify-content: space-around;
+  padding: 30px;
+  gap: 20px;
+}
 
+.legend-item {
+  display: flex;
+  align-items: center;
+
+ 
+}
+
+
+.legend-text {
+  font-size: 14px;
+}
+
+.legend-square1{
+  background-color: #FFB6B6;
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+  border-radius: 5px;
+}
+
+.legend-square2 {
+  background-color: #FF7F7F;
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+  border-radius: 5px;
+
+}
+
+.legend-square3 {
+  background-color: #FF4C4C;
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+  border-radius: 5px;
+
+}
+
+.legend-square4 {
+  background-color: #FF0000;
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+  border-radius: 5px;
+
+}
 
 
   .pb-3 {
     display: flex;
     justify-content: center;
     padding: 70px;
+    flex-direction: column;
+    align-items: center;
     
   }
 
