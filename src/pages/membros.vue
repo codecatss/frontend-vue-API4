@@ -2,7 +2,7 @@
 <script lang="ts" setup>
 
 import Mapa from '@/layouts/components/Mapa.vue'
-import AnalyticsSalesByCountries from '@/views/membros/AnalyticsSalesByCountries.vue'
+import AnalyticsSalesByStates from '@/views/membros/AnalyticsSalesByStates.vue'
 import AnalyticsUserTable from '@/views/membros/AnalyticsUserTable.vue'
 
 
@@ -28,7 +28,7 @@ import AnalyticsUserTable from '@/views/membros/AnalyticsUserTable.vue'
         md="4"
         sm="4"
       >
-      <AnalyticsSalesByCountries /> 
+      <AnalyticsSalesByStates /> 
   
       </VCol>
 
