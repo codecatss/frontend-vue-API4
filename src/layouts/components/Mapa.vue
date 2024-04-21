@@ -241,15 +241,15 @@ export default {
       paths.forEach((path) => {
         const valor = parseInt(path.getAttribute('valor'));
 
-        if (valor < values[1]) {
+        if (valor <= values[1]) {
           path.style.fill = style1.backgroundColor; // Vermelho claro
-        } else if (valor >= values[1] && valor < values[2]) {
+        } else if (valor > values[1] && valor <= values[2]) {
           path.style.fill = style2.backgroundColor; // Vermelho médio-claro
-        } else if (valor >= values[2] && valor < values[3]) {
+        } else if (valor > values[2] && valor <= values[3]) {
           path.style.fill = style3.backgroundColor; // Vermelho médio
-        } else if (valor >= values[3] && valor < values[4]) {
+        } else if (valor > values[3] && valor <= values[4]) {
           path.style.fill = style4.backgroundColor; // Vermelho médio-escuro
-        } else if (valor >= values[4] && valor < values[5]) {
+        } else if (valor > values[4] && valor <= values[5]) {
           path.style.fill = style5.backgroundColor; // Vermelho escuro
         } else {
           path.style.fill = style6.backgroundColor;; // Vermelho muito escuro
@@ -293,7 +293,11 @@ export default {
       const values = this.getLimitsValues();
 
       legends.forEach((legend, index) => {
-        legend.textContent = values[index] + " a " + values[index+1];
+        if (values[index] === 0) {
+          legend.textContent = "Até " + values[index+1];
+        } else{
+        legend.textContent = (parseInt(values[index]) + parseInt("1")) + " a " + values[index+1];
+        }
       });
     },
 
