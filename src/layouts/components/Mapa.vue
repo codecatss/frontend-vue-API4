@@ -240,7 +240,8 @@ export default {
 
       paths.forEach((path) => {
         const valor = parseInt(path.getAttribute('valor'));
-                if (valor < values[1]) {
+
+        if (valor < values[1]) {
           path.style.fill = style1.backgroundColor; // Vermelho claro
         } else if (valor >= values[1] && valor < values[2]) {
           path.style.fill = style2.backgroundColor; // Vermelho médio-claro

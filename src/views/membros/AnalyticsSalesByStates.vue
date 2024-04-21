@@ -196,9 +196,33 @@ async function putDataInSalesByStates(){
   return salesByStates;
 }
 
+function setColors(data){
+
+  const colors = [
+    'success',
+    'warning',
+    'error',
+  ];
+
+  const colorLimit = Math.floor(data.length / colors.length);
+
+  data.forEach((item, index) => {
+
+    if (index < colorLimit) {
+      item.color = colors[0];
+    } else if (index < colorLimit * 2) {
+      item.color = colors[1];
+    } else {
+      item.color = colors[2];
+    }
+  });
+  return data;
+}
+
 async function orderSalesByStates(){
   let salesByStates = await putDataInSalesByStates();
   salesByStates.sort((a, b) => Number(b.sales) - Number(a.sales));
+  salesByStates = setColors(salesByStates);
   return salesByStates;
 }
 
