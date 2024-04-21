@@ -231,21 +231,27 @@ export default {
       const brazilMap = this.$refs.brazilMap;
       const paths = brazilMap.querySelectorAll('path');
       const values = this.getLimitsValues();
+      const style1 = getComputedStyle(document.querySelector('.legend-square1'));
+      const style2 = getComputedStyle(document.querySelector('.legend-square2'));
+      const style3 = getComputedStyle(document.querySelector('.legend-square3'));
+      const style4 = getComputedStyle(document.querySelector('.legend-square4'));
+      const style5 = getComputedStyle(document.querySelector('.legend-square5'));
+      const style6 = getComputedStyle(document.querySelector('.legend-square6'));
 
       paths.forEach((path) => {
         const valor = parseInt(path.getAttribute('valor'));
                 if (valor < values[1]) {
-          path.style.fill = "#FFB6B6"; // Vermelho claro
+          path.style.fill = style1.backgroundColor; // Vermelho claro
         } else if (valor >= values[1] && valor < values[2]) {
-          path.style.fill = "#FF7F7F"; // Vermelho médio-claro
+          path.style.fill = style2.backgroundColor; // Vermelho médio-claro
         } else if (valor >= values[2] && valor < values[3]) {
-          path.style.fill = "#FF4C4C"; // Vermelho médio
+          path.style.fill = style3.backgroundColor; // Vermelho médio
         } else if (valor >= values[3] && valor < values[4]) {
-          path.style.fill = "#FF1919"; // Vermelho médio-escuro
+          path.style.fill = style4.backgroundColor; // Vermelho médio-escuro
         } else if (valor >= values[4] && valor < values[5]) {
-          path.style.fill = "#FF0000"; // Vermelho escuro
+          path.style.fill = style5.backgroundColor; // Vermelho escuro
         } else {
-          path.style.fill = "#B30000"; // Vermelho muito escuro
+          path.style.fill = style6.backgroundColor;; // Vermelho muito escuro
         }
         path.style.stroke = "black";
         path.style.strokeWidth = "1px";
