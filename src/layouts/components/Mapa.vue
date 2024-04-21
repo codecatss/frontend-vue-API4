@@ -168,6 +168,14 @@
       <div class="legend-square4"></div>
       <div class="legend-text">Legenda</div>
     </div>
+    <div class="legend-item">
+      <div class="legend-square5"></div>
+      <div class="legend-text">Legenda</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-square6"></div>
+      <div class="legend-text">Legenda</div>
+    </div>
   </div>
   
 </VCard>
@@ -210,7 +218,7 @@ export default {
     getLimitsValues(){
       const maxValue = this.getMaxValue();
       
-      const maxDiv = maxValue / 6;
+      const maxDiv = (maxValue / 6).toFixed(0);
       
       const values = [
         0, maxDiv, maxDiv * 2, maxDiv * 3, maxDiv * 4, maxDiv * 5, maxValue
@@ -328,8 +336,6 @@ export default {
 .legend-item {
   display: flex;
   align-items: center;
-
- 
 }
 
 
@@ -351,7 +357,6 @@ export default {
   height: 20px;
   margin-right: 5px;
   border-radius: 5px;
-
 }
 
 .legend-square3 {
@@ -360,16 +365,30 @@ export default {
   height: 20px;
   margin-right: 5px;
   border-radius: 5px;
-
 }
 
 .legend-square4 {
+  background-color: #FF1919;
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+  border-radius: 5px;
+}
+
+.legend-square5 {
   background-color: #FF0000;
   width: 20px;
   height: 20px;
   margin-right: 5px;
   border-radius: 5px;
+}
 
+.legend-square6 {
+  background-color: #B30000;
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+  border-radius: 5px;
 }
 
 
