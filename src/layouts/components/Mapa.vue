@@ -311,7 +311,7 @@ export default {
         try {
           item.state = decodeURIComponent(escape(item.state));
         } catch (e) {
-          console.error(`Failed to decode state: ${item.state}`);
+          // do nothing;
         }
 
         paths.forEach((path) => {
