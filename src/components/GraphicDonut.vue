@@ -6,8 +6,24 @@ import VueApexCharts from 'vue3-apexcharts'
 import { onMounted, ref, computed } from 'vue'
 
 const props = defineProps({
+  title: {
+    type: String,
+    required: true,
+  },
+  subtitle: {
+    type: String,
+    required: true,
+  },
   labels: {
     type: Array,
+    required: true,
+  },
+  mainInformation: {
+    type: String,
+    required: true,
+  },
+  mainInformationSubtitle: {
+    type: String,
     required: true,
   },
   series: {
@@ -30,9 +46,9 @@ const props = defineProps({
     <VCard>
       <VCardItem class="pb-3">
         <VCardTitle class="mb-1">
-          Informmações Tracks
+          {{ title }}
         </VCardTitle>
-        <VCardSubtitle>Porcentagem De Parcerios Nas Tracks</VCardSubtitle>
+        <VCardSubtitle> {{ subtitle }} </VCardSubtitle>
   
         <template #append>
           <div class="me-n3 mt-n8">
@@ -45,9 +61,9 @@ const props = defineProps({
         <div class="d-flex align-center justify-space-between mb-3">
           <div class="flex-grow-1">
             <h4 class="text-h4 mb-1">
-              8
+              {{ mainInformation }}
             </h4>
-            <span>Total De Tracks</span>
+            <span> {{ mainInformationSubtitle }} </span>
           </div>
   
           <div>

@@ -117,6 +117,10 @@ refreshVariables()
 <template>
   <div>
     <GraphicDonut 
+      title="Teste"
+      subtitle="Testando"
+      mainInformation="8"
+      mainInformationSubtitle="Total De Tracks"
       :labels="labels"
       :series="series"
       :orders="orders"
