@@ -421,6 +421,7 @@ export default {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    color: black;
   }
  
         #info-box {
