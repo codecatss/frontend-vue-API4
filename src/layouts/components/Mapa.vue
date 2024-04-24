@@ -406,12 +406,16 @@ export default {
   .pb-3 {
     display: flex;
     justify-content: center;
-    padding: 70px;
+    padding: 11px;
     flex-direction: column;
     align-items: center;
-    
+
   }
 
+
+  .text-md-h5{
+    margin-bottom: 46px;
+  }
 
   #info-box {
     position: absolute;
