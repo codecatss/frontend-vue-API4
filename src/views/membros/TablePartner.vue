@@ -3,34 +3,39 @@ import { VDataTable } from 'vuetify/labs/VDataTable'
 
 const recentDevicesHeaders = [
   {
-    title: 'BROWSER',
+    title: 'Nome do Parceiro',
     key: 'browser',
   },
   {
-    title: 'DEVICE',
-    key: 'device',
-  },
-  {
-    title: 'LOCATION',
+    title: 'Estado',
     key: 'location',
   },
   {
-    title: 'RECENT ACTIVITY',
-    key: 'recentActivity',
+    title: 'OPN Track',
+    key: 'track',
   },
   {
-    title: 'PORCENTAGEM',
+    title: 'Expertise',
+    key: 'expertise',
+  },
+  {
+    title: 'Progresso',
     key: 'percentage',
+  },
+  {
+    title: 'Deadline',
+    key: 'deadline',
   },
 ]
 
 const recentDevices = [
   {
     browser: 'Chrome on Windows',
-    device: 'HP Spectre 360',
+    track: 'Cloud Service',
+    expertise: 'Oracle Cloud Platform Integration',
     location: 'New York, NY',
-    recentActivity: '28 Apr 2022, 18:20',
     percentage: 10,
+    deadline: '10 Dias',
     deviceIcon: {
       icon: 'bxl-windows',
       color: 'primary',
@@ -38,10 +43,11 @@ const recentDevices = [
   },
   {
     browser: 'Chrome on iPhone',
-    device: 'iPhone 12x',
+    track: 'Cloud Sell',
+    expertise: 'CSSE: AI / Machine Learning',
     location: 'Los Angeles, CA',
-    recentActivity: '20 Apr 2022, 10:20',
     percentage: 30,
+    deadline: '15 Dias',
     deviceIcon: {
       icon: 'bx-mobile',
       color: 'error',
@@ -49,10 +55,11 @@ const recentDevices = [
   },
   {
     browser: 'Chrome on Android',
-    device: 'Oneplus 9 Pro',
+    track: 'Cloud Build & Service',
+    expertise: 'Dev Ops on Oracle Cloud',
     location: 'San Francisco, CA',
-    recentActivity: '16 Apr 2022, 04:20',
     percentage: 50,
+    deadline: '20 Dias',
     deviceIcon: {
       icon: 'bxl-android',
       color: 'success',
@@ -60,10 +67,11 @@ const recentDevices = [
   },
   {
     browser: 'Chrome on MacOS',
-    device: 'Apple iMac',
+    track: 'License and Hardware',
+    expertise: 'Oracle Database to Oracle Cloud',
     location: 'New York, NY',
-    recentActivity: '28 Apr 2022, 18:20',
     percentage: 70,
+    deadline: '25 Dias',
     deviceIcon: {
       icon: 'bxl-apple',
       color: 'secondary',
@@ -71,10 +79,11 @@ const recentDevices = [
   },
   {
     browser: 'Chrome on Windows',
-    device: 'HP Spectre 360',
+    track: 'Cloud Service',
+    expertise: 'Oracle Cloud Platform Business Analytics',
     location: 'Los Angeles, CA',
-    recentActivity: '20 Apr 2022, 10:20',
     percentage: 90,
+    deadline: '30 Dias',
     deviceIcon: {
       icon: 'bxl-windows',
       color: 'primary',
@@ -82,17 +91,17 @@ const recentDevices = [
   },
   {
     browser: 'Chrome on Android',
-    device: 'Oneplus 9 Pro',
+    track: 'Cloud Sell',
+    expertise: 'Oracle Cloud Platform Data Management',
     location: 'San Francisco, CA',
-    recentActivity: '16 Apr 2022, 04:20',
     percentage: 20,
+    deadline: '35 Dias',
     deviceIcon: {
       icon: 'bxl-android',
       color: 'success',
     },
   },
 ]
-
 </script>
 
 <template>
@@ -132,12 +141,14 @@ const recentDevices = [
 .progress-bar-wrapper {
   width: 100px;
   height: 10px;
-  background-color: #f0f0f0;
+  background-color: #bcbcbc;
   margin-left: 10px;
+  border-radius: 5px;
 }
 
 .progress-bar {
   height: 100%;
-  background-color: #007bff;
+  background-color: #ff3939;
+  border-radius: 5px;
 }
 </style>
