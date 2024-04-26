@@ -9,8 +9,35 @@ import VerticalNavLink from '@layouts/components/VerticalNavLink.vue'
 import Footer from '@/layouts/components/Footer.vue'
 import NavbarThemeSwitcher from '@/layouts/components/NavbarThemeSwitcher.vue'
 import UserProfile from '@/layouts/components/UserProfile.vue'
+import NotificationBox from '@/components/NotificationBox.vue'
+import { ref } from 'vue'
 
 const vuetifyTheme = useTheme()
+
+const showNotifBox = ref(false)
+const notifBoxRef = ref(null)
+const componentWrapper = ref(null)
+
+const toggleNotifBox = () => {
+  showNotifBox.value = !showNotifBox.value
+  console.log(showNotifBox)
+}
+
+const handleClickOutside = (event) => {
+  if (
+    showNotifBox.value &&
+      componentWrapper.value && // Ensure componentWrapper is not null
+        !componentWrapper.value.contains(event.target) && // Check if the clicked element is outside the component
+          notifBoxRef.value && // Ensure notifBoxRef is not null
+            !notifBoxRef.value.$el.contains(event.target)
+  ) {
+    showNotifBox.value = false
+  }
+}
+
+onMounted(() => {
+  document.addEventListener('click', handleClickOutside)
+})
 </script>
 
 <template>
@@ -53,9 +80,14 @@ const vuetifyTheme = useTheme()
           <VIcon icon="bxl-github" />
         </IconBtn>
 
-        <IconBtn class="me-2">
-          <VIcon icon="bx-bell" />
-        </IconBtn>
+        <div ref="componentWrapper">
+          <IconBtn class="me-2 btnNotif" @click="toggleNotifBox">
+            <VIcon icon="bx-bell" />
+            <div class="notifDiv" v-if="showNotifBox">
+              <NotificationBox ref="notifBoxRef"/>
+            </div>
+          </IconBtn>
+        </div>
 
         <NavbarThemeSwitcher class="me-2" />
 
@@ -81,12 +113,12 @@ const vuetifyTheme = useTheme()
       />
 
       <VerticalNavLink
-      :item="{
-        title: 'Dados Inválidos',
-        icon: 'bx-error-circle',
-        to: '/',
-      }"
-    />
+        :item="{
+          title: 'Dados Inválidos',
+          icon: 'bx-error-circle',
+          to: '/',
+        }"
+      />
 
 
 
@@ -100,47 +132,47 @@ const vuetifyTheme = useTheme()
 
       
       <VerticalNavLink
-      :item="{
-        title: 'Adicionar Parceiros ',
-        icon: 'mdi-account-multiple-plus',
-        to: '/',
-      }"
-    />
+        :item="{
+          title: 'Adicionar Parceiros ',
+          icon: 'mdi-account-multiple-plus',
+          to: '/',
+        }"
+      />
 
 
     
-    <VerticalNavLink
-    :item="{
-      title: 'Usuários ',
-      icon: 'bx-user-plus',
-      to: '/',
-    }"
-  />
+      <VerticalNavLink
+        :item="{
+          title: 'Usuários ',
+          icon: 'bx-user-plus',
+          to: '/',
+        }"
+      />
 
   
-    <VerticalNavLink
-    :item="{
-      title: 'Tracks',
-      icon: 'bx-add-to-queue',
-      to: '/',
-    }"
-  />
+      <VerticalNavLink
+        :item="{
+          title: 'Tracks',
+          icon: 'bx-add-to-queue',
+          to: '/',
+        }"
+      />
 
-    <VerticalNavLink
-    :item="{
-      title: 'Expertise',
-      icon: 'bx-notepad',
-      to: '/',
-    }"
-    />
+      <VerticalNavLink
+        :item="{
+          title: 'Expertise',
+          icon: 'bx-notepad',
+          to: '/',
+        }"
+      />
 
-    <VerticalNavLink
-    :item="{
-      title: 'Workload',
-      icon: 'bx-brain',
-      to: '/',
-    }"
-    />
+      <VerticalNavLink
+        :item="{
+          title: 'Workload',
+          icon: 'bx-brain',
+          to: '/',
+        }"
+      />
 
  <!--
 <VerticalNavLink
@@ -250,12 +282,25 @@ const vuetifyTheme = useTheme()
 </template>
 
 <style lang="scss" scoped>
-.meta-key {
-  border: thin solid rgba(var(--v-border-color), var(--v-border-opacity));
-  border-radius: 6px;
-  block-size: 1.5625rem;
-  line-height: 1.3125rem;
-  padding-block: 0.125rem;
-  padding-inline: 0.25rem;
-}
+  .meta-key {
+    border: thin solid rgba(var(--v-border-color), var(--v-border-opacity));
+    border-radius: 6px;
+    block-size: 1.5625rem;
+    line-height: 1.3125rem;
+    padding-block: 0.125rem;
+    padding-inline: 0.25rem;
+  }
+
+  .btnNotif {
+    position: relative;
+  }
+
+  .notifDiv {
+    display: block;
+    position: absolute;
+    width: 250%;
+    top: 50px;
+    right: 160px;
+    // box-shadow: 5px 5px 15px rgba(0,0,0,0.25)
+  }
 </style>
