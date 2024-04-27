@@ -17,8 +17,8 @@ const router = createRouter({
           component: () => import('../pages/account-settings.vue'),
         },
         {
-          path: 'typography',
-          component: () => import('../pages/typography.vue'),
+          path: 'membros',
+          component: () => import('../pages/membros.vue'),
         },
         {
           path: 'icons',
