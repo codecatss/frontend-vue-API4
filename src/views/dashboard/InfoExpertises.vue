@@ -30,16 +30,11 @@ function getValuesFromDatabase(){
     .then((response) => {
       const data = response.data;
       for (let key in data) {
-        const colorStr = data[key]['avatarColor'];
+        const colorStr = data[key]['avatarColor'].toLowerCase();
         orders.value.push(data[key]);
         series.value.push(parseInt(data[key]['amount']));
         labels.value.push(data[key]['title']);
-        colors.value.push(
-          colorStr === 'success' ? currentTheme.success :
-          colorStr === 'primary' ? currentTheme.primary :
-          colorStr === 'secondary' ? currentTheme.secondary :
-          colorStr === 'info' ? currentTheme.info : currentTheme.warning
-        );
+        colors.value.push(data[key]['avatarColor'])
       }
     })
     .catch((error) => {
@@ -115,22 +110,20 @@ refreshVariables()
 </script>
 
 <template>
-  <div>
-    <GraphicDonut 
-      title="Teste"
-      subtitle="Testando"
-      mainInformation="8"
-      mainInformationSubtitle="Total De Tracks"
-      :labels="labels"
-      :series="series"
-      :orders="orders"
-      :chartOptions="chartOptions"
-    />
-  </div>
+  <GraphicDonut 
+    title="Expertise"
+    subtitle="Testando"
+    mainInformation="8"
+    mainInformationSubtitle="Total De Tracks"
+    :labels="labels"
+    :series="series"
+    :orders="orders"
+    :chartOptions="chartOptions"
+  />
 </template>
 
-<style lang="scss" scoped>
+<!-- <style lang="scss" scoped>
 .card-list {
   --v-card-list-gap: 21px;
 }
-</style>
+</style> -->

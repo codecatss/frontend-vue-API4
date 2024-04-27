@@ -30,17 +30,13 @@ function getValuesFromDatabase(){
     .then((response) => {
       const data = response.data;
       for (let key in data) {
-        const colorStr = data[key]['avatarColor'];
+        const colorStr = data[key]['avatarColor'].toLowerCase();
         orders.value.push(data[key]);
         series.value.push(parseInt(data[key]['amount']));
         labels.value.push(data[key]['title']);
-        colors.value.push(
-          colorStr === 'success' ? currentTheme.success :
-          colorStr === 'primary' ? currentTheme.primary :
-          colorStr === 'secondary' ? currentTheme.secondary :
-          colorStr === 'info' ? currentTheme.info : currentTheme.warning
-        );
+        colors.value.push(data[key]['avatarColor'])
       }
+      console.log(colors)
     })
     .catch((error) => {
       // console.log(error);
@@ -117,7 +113,7 @@ refreshVariables()
 <template>
   <div>
     <GraphicDonut 
-      title="Teste"
+      title="Opnt Track"
       subtitle="Testando"
       mainInformation="8"
       mainInformationSubtitle="Total De Tracks"
