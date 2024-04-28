@@ -1,5 +1,12 @@
 <script setup>
 import { VDataTable } from 'vuetify/labs/VDataTable'
+import { ref } from 'vue';
+import { api } from '@/service/apiConfig.js';
+
+async function fetchData(){
+  const response = await api.get('/dash/companyexpertiseusercountservice')
+  return response.data
+}
 
 const recentDevicesHeaders = [
   {
@@ -28,80 +35,41 @@ const recentDevicesHeaders = [
   },
 ]
 
-const recentDevices = [
-  {
-    browser: 'Chrome on Windows',
-    track: 'Cloud Service',
-    expertise: 'Oracle Cloud Platform Integration',
-    location: 'New York, NY',
-    percentage: 10,
-    deadline: '10 Dias',
-    deviceIcon: {
-      icon: 'bxl-windows',
-      color: 'primary',
-    },
-  },
-  {
-    browser: 'Chrome on iPhone',
-    track: 'Cloud Sell',
-    expertise: 'CSSE: AI / Machine Learning',
-    location: 'Los Angeles, CA',
-    percentage: 30,
-    deadline: '15 Dias',
-    deviceIcon: {
-      icon: 'bx-mobile',
-      color: 'error',
-    },
-  },
-  {
-    browser: 'Chrome on Android',
-    track: 'Cloud Build & Service',
-    expertise: 'Dev Ops on Oracle Cloud',
-    location: 'San Francisco, CA',
-    percentage: 50,
-    deadline: '20 Dias',
-    deviceIcon: {
-      icon: 'bxl-android',
-      color: 'success',
-    },
-  },
-  {
-    browser: 'Chrome on MacOS',
-    track: 'License and Hardware',
-    expertise: 'Oracle Database to Oracle Cloud',
-    location: 'New York, NY',
-    percentage: 70,
-    deadline: '25 Dias',
-    deviceIcon: {
-      icon: 'bxl-apple',
-      color: 'secondary',
-    },
-  },
-  {
-    browser: 'Chrome on Windows',
-    track: 'Cloud Service',
-    expertise: 'Oracle Cloud Platform Business Analytics',
-    location: 'Los Angeles, CA',
-    percentage: 90,
-    deadline: '30 Dias',
-    deviceIcon: {
-      icon: 'bxl-windows',
-      color: 'primary',
-    },
-  },
-  {
-    browser: 'Chrome on Android',
-    track: 'Cloud Sell',
-    expertise: 'Oracle Cloud Platform Data Management',
-    location: 'San Francisco, CA',
-    percentage: 20,
-    deadline: '35 Dias',
-    deviceIcon: {
-      icon: 'bxl-android',
-      color: 'success',
-    },
-  },
-]
+async function putData(){
+  const data = await fetchData();
+  
+  let recentDevices = [];
+
+  data.forEach((item) => {
+    try{
+      item.companyState = decodeURIComponent(escape(item.companyState));
+    } catch (e) {
+      // do nothing;
+    };
+    recentDevices.push({
+      browser: item.companyName,
+      track: item.trackName,
+      expertise: item.expertiseName,
+      location: item.companyState,
+      percentage: item.progressPercentage,
+      deadline: item.deadline,
+      deviceIcon: {
+        icon: 'bxl-windows',
+        color: 'primary',
+      },
+    });
+  
+  });
+  console.log("Listaaaaaa: ", recentDevices);
+  return recentDevices;
+}
+
+const recentDevices = ref([]);
+
+onMounted(async () => {
+  recentDevices.value = await putData();
+});
+
 </script>
 
 <template>
