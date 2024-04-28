@@ -26,7 +26,7 @@ var chartOptions = ref({})
 
 function getValuesFromDatabase(){
   axios
-    .get('http://localhost:8080/dash/opntrack/visualization')
+    .get('http://localhost:8080/dash/expertise/visualization')
     .then((response) => {
       const data = response.data;
       for (let key in data) {
