@@ -18,20 +18,12 @@ const recentDevicesHeaders = [
     key: 'location',
   },
   {
-    title: 'OPN Track',
-    key: 'track',
-  },
-  {
     title: 'Expertise',
     key: 'expertise',
   },
   {
     title: 'Progresso',
     key: 'percentage',
-  },
-  {
-    title: 'Deadline',
-    key: 'deadline',
   },
 ]
 
@@ -90,9 +82,17 @@ onMounted(async () => {
             </div>
           </template>
           <template #item.percentage="{ item }">
-            <div class="progress-bar-wrapper">
-              <div class="progress-bar" :style="{ width: item.raw.percentage + '%' }"></div>
+            <div class="percentage">
+              <span class="text-high-emphasis text-base">
+                {{ Math.floor(item.raw.percentage) }}%
+              </span>
+              <div class="progress-bar-wrapper">
+                <div class="progress-bar" :style="{ width: item.raw.percentage + '%' }"></div>
+              </div>
             </div>
+           
+            
+
           </template>
           <template #bottom />
         </VDataTable>
@@ -108,6 +108,7 @@ onMounted(async () => {
   background-color: #bcbcbc;
   margin-left: 10px;
   border-radius: 5px;
+
 }
 
 .progress-bar {
@@ -118,5 +119,13 @@ onMounted(async () => {
 
 .oracle-icon {
   margin-right: 10px;
+}
+
+
+.percentage {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }
 </style>
