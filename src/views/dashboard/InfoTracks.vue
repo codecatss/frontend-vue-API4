@@ -29,14 +29,19 @@ function getValuesFromDatabase(){
     .get('http://localhost:8080/dash/opntrack/visualization')
     .then((response) => {
       const data = response.data;
+      let cont = 0;
       for (let key in data) {
-        const colorStr = data[key]['avatarColor'].toLowerCase();
-        orders.value.push(data[key]);
-        series.value.push(parseInt(data[key]['amount']));
-        labels.value.push(data[key]['title']);
-        colors.value.push(data[key]['avatarColor'])
+        if(cont < 4){
+          orders.value.push(data[key]);
+          series.value.push(parseInt(data[key]['amount']));
+          labels.value.push(data[key]['title']);
+          colors.value.push(data[key]['avatarColor'])
+          cont++;
+        }
+        else{
+          break
+        }
       }
-      console.log(colors)
     })
     .catch((error) => {
       // console.log(error);
@@ -111,18 +116,69 @@ refreshVariables()
 </script>
 
 <template>
-  <div>
-    <GraphicDonut 
-      title="Opnt Track"
-      subtitle="Testando"
-      mainInformation="8"
-      mainInformationSubtitle="Total De Tracks"
-      :labels="labels"
-      :series="series"
-      :orders="orders"
-      :chartOptions="chartOptions"
-    />
-  </div>
+  <VCard>
+    <VCardItem class="pb-3">
+      <VCardTitle class="mb-1">
+        Tracks
+      </VCardTitle>
+      <VCardSubtitle> Tracks </VCardSubtitle>
+
+      <template #append>
+        <div class="me-n3 mt-n8">
+          <MoreBtn :menu-list="moreList" />
+        </div>
+      </template>
+    </VCardItem>
+
+    <VCardText>
+      <div class="d-flex align-center justify-space-between mb-3">
+        <div class="flex-grow-1">
+          <h4 class="text-h4 mb-1">
+            {{ orders.length }}
+          </h4>
+          <span> Quantidade de Tracks usada pelas companias </span>
+        </div>
+
+        <div>
+          <VueApexCharts
+            type="donut"
+            :height="125"
+            width="105"
+            :options="chartOptions.value"
+            :series="series"
+          />
+        </div>
+      </div>
+
+      <VList class="card-list mt-7">
+        <VListItem
+          v-for="order in orders"
+          :key="order.title"
+        >
+          <template #prepend>
+            <VAvatar
+              rounded
+              variant="tonal"
+              :color="order.avatarColor"
+            >
+              <VIcon :icon="order.avatarIcon" />
+            </VAvatar>
+          </template>
+
+          <VListItemTitle class="mb-1">
+            {{ order.title }}
+          </VListItemTitle>
+          <VListItemSubtitle class="text-disabled">
+            {{ order.subtitle }}
+          </VListItemSubtitle>
+
+          <template #append>
+            <span>{{ order.amount }}</span>
+          </template>
+        </VListItem>
+      </VList>
+    </VCardText>
+  </VCard>
 </template>
 
 <style lang="scss" scoped>

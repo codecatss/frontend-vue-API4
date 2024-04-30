@@ -106,7 +106,7 @@ const props = defineProps({
       </VList>
     </VCardText>
   </VCard>
-  </template>
+</template>
 
 <style lang="scss" scoped>
 .card-list {
