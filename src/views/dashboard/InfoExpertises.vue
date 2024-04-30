@@ -152,7 +152,7 @@ refreshVariables()
 
       <VList class="card-list mt-7">
         <VListItem
-          v-for="order in orders"
+          v-for="(order, ) in orders.slice(0, 4)"
           :key="order.title"
         >
           <template #prepend>
