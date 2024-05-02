@@ -18,9 +18,10 @@ const showNotifBox = ref(false)
 const notifBoxRef = ref(null)
 const componentWrapper = ref(null)
 
-const toggleNotifBox = () => {
+const toggleNotifBox = () => {  
+
   showNotifBox.value = !showNotifBox.value
-  console.log(showNotifBox)
+  console.log("TOGGLE NOTIF BOX")
 }
 
 const handleClickOutside = (event) => {
