@@ -1,16 +1,31 @@
 <template>
-  <v-card class="notificacaoBox">
+  <v-card class="notificacaoBox" :variant="elevated">
     <div class="notificacao" v-if="notificacoes.length > 0">
-      <v-card-subtitle class="pa-3">
-        <div v-for="(notif, index) in notificacoes" :key="index">
-          {{ notif.name }} - {{ notif.company }} - {{ notif.expertise }}
-        </div>
-      </v-card-subtitle>
+      <div v-for="(notif, index) in notificacoes" :key="index" class="cardDiv" style="width: 90%;">
+        <v-card-title class="notificacaoTitle pt-2 pb-0">
+          {{ notif.company }}
+        </v-card-title>
+        <v-card-subtitle class="notificacaoSubtitle pt-0">
+          {{ notif.name }}
+        </v-card-subtitle>
+        <v-card-text class="notificacaoText pt-1 pb-0">
+          <p v-if="notif.expertise.length < 51">
+            {{ notif.expertise }}
+          </p>
+          <p v-else class="expertiseBig">
+            {{ notif.expertise }}
+          </p>
+        </v-card-text>
+        <v-card-text class="notificacaoText pt-1 pb-2">
+          vencimento em <p class="timeLeft">{{ notif.timeLeft }} dias</p>.
+        </v-card-text>
+        <v-card-text class="notificacaoText">
+          <div class="line"></div>
+        </v-card-text>
+      </div>
     </div>
     <div v-else>
-      <v-card-subtitle class="pa-3">
-        example2
-      </v-card-subtitle>
+      Loading...
     </div>
   </v-card>
 </template>
@@ -40,6 +55,7 @@ onMounted(async () => {
       name: item[0],
       company: item[1],
       expertise: item[2],
+      timeLeft: item[5],
     }))
   } catch (error) {
     console.error("Error fetching and populating data:", error);
@@ -130,7 +146,36 @@ onMounted(async () => {
 
 <style scoped>
   .notificacaoBox {
-    width: 250%;
+    width: 350%;
     text-align: left;
+    box-shadow: 5px 5px 15px rgba(0,0,0,0.25);
+  }
+
+  .notificacaoTitle {
+    font-size: 16px;
+  }
+
+  .notificacaoSubtitle {
+    font-size: 12px;
+  }
+
+  .notificacaoText {
+    font-size: 12px;
+    overflow-wrap: break-word !important;
+  }
+
+  .timeLeft {
+    display: inline;
+    color: red;
+  }
+
+  .line {
+    border-top: 1px dotted gray;
+  }
+
+  .expertiseBig {
+    font-size: 11px !important;
+    /* overflow:auto; */
+    overflow-wrap: break-word;
   }
 </style> 

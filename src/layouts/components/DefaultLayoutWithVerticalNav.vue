@@ -301,7 +301,7 @@ onMounted(() => {
     position: absolute;
     width: 250%;
     top: 50px;
-    right: 160px;
-    // box-shadow: 5px 5px 15px rgba(0,0,0,0.25)
+    right: 600%;
+    // box-shadow: 5px 5px 15px rgba(0,0,0,0.25);
   }
 </style>
