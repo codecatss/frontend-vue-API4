@@ -44,7 +44,6 @@ async function putData(){
       expertise: item.expertiseName,
       location: item.companyState,
       percentage: item.completionPercentage,
-      deadline: item.deadline,
     });
   
   });
@@ -62,7 +61,7 @@ onMounted(async () => {
 <template>
   <VRow>
     <VCol cols="12">
-      <VCard title="Recent Devices">
+      <VCard title="Membros Do Programa OPN">
         <VDataTable
           :headers="recentDevicesHeaders"
           :items="recentDevices"
