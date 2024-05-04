@@ -1,5 +1,5 @@
 <script setup>
-// eslint-disable-next-line import/no-unresolved
+import axios from 'axios'
 import { hexToRgb } from '@layouts/utils'
 import VueApexCharts from 'vue3-apexcharts'
 import { useTheme } from 'vuetify'
@@ -9,17 +9,63 @@ const vuetifyTheme = useTheme()
 
 const titulo = ref(null)
 
-onMounted(() => {
 
-  titulo.value = 'danko'
+onMounted(async () => {
+  await getTrackDataFromDatabase()
 })
 
-const series = [
-  95,
-  80,
-  20,
-  40,
+async function getTrackDataFromDatabase() {
+  try {
+    const response = await axios.get('http://localhost:8080/dash/opntrack/visualization');
+    const data = response.data;
+    let dataArray = [];
+    for (let key in data) {
+      data[key]['amount'] = parseInt(data[key]['amount']);
+      dataArray.push(data[key]);
+    }
+    dataArray.sort((a, b) => b.amount - a.amount);
+    orders.value = dataArray;
+    series.value = [];
+    labels.value = [];
+    colors.value = [];
+    for (let item of dataArray) {
+      series.value.push(item['amount']);
+      labels.value.push(item['title']);
+      colors.value.push(item['avatarColor'])
+    }
+    totalDeTracks.value = orders.value.length;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+
+
+let totalDeTracks = ref(0)
+
+const series = ref([])
+
+const labels = ref([])
+
+const colors = ref([])
+
+const moreList = [
+  {
+    title: 'Share',
+    value: 'Share',
+  },
+  {
+    title: 'Refresh',
+    value: 'Refresh',
+  },
+  {
+    title: 'Update',
+    value: 'Update',
+  },
 ]
+
+
+
 
 const chartOptions = computed(() => {
   const currentTheme = vuetifyTheme.current.value.colors
@@ -39,18 +85,8 @@ const chartOptions = computed(() => {
     legend: { show: false },
     tooltip: { enabled: false },
     dataLabels: { enabled: false },
-    labels: [
-      'Cloud Build',
-      'Cloud Sell',
-      'Cloud Service',
-      'License and Hardware',
-    ],
-    colors: [
-      currentTheme.success,
-      currentTheme.primary,
-      currentTheme.secondary,
-      currentTheme.info,
-    ],
+    labels: labels.value,
+    colors: colors.value,
     grid: {
       padding: {
         top: -7,
@@ -76,7 +112,7 @@ const chartOptions = computed(() => {
             },
             value: {
               offsetY: -17,
-              fontSize: '24px',
+              fontSize: '20px',
               color: primaryTextColor,
               fontFamily: 'Public Sans',
             },
@@ -95,48 +131,17 @@ const chartOptions = computed(() => {
   }
 })
 
-const orders = [
-  {
-    amount: '82',
-    title: 'Cloud Build',
-    avatarColor: 'primary',
-    subtitle: 'Descrição Da Track',
-    avatarIcon: 'bx-bar-chart-alt-2',
-  },
-  {
-    amount: '80',
-    title: 'Cloud Service',
-    avatarColor: 'success',
-    subtitle: 'Descrição Da Track',
-    avatarIcon: 'bx-bar-chart-alt-2',
-  },
-  {
-    amount: 73,
-    title: 'Cloud Service',
-    avatarColor: 'info',
-    subtitle: 'Descrição Da Track',
-    avatarIcon: 'bx-bar-chart-alt-2',
-  },
-  {
-    amount: 69,
-    title: 'License and Hardware',
-    avatarColor: 'secondary',
-    subtitle: 'Descrição Da Track',
-    avatarIcon: 'bx-bar-chart-alt-2',
-  },
-]
 
-
+const orders = ref([])
 </script>
 
 <template>
   <VCard>
     <VCardItem class="pb-3">
       <VCardTitle class="mb-1">
-        Informmações Tracks
+        Porcentagem De Parcerios Nas Tracks
       </VCardTitle>
-      <VCardSubtitle>Porcentagem De Parcerios Nas Tracks</VCardSubtitle>
-
+     
       <template #append>
         <div class="me-n3 mt-n8">
           <MoreBtn :menu-list="moreList" />
@@ -148,9 +153,8 @@ const orders = [
       <div class="d-flex align-center justify-space-between mb-3">
         <div class="flex-grow-1">
           <h4 class="text-h4 mb-1">
-            8
+            {{ totalDeTracks }} Total De Tracks
           </h4>
-          <span>Total De Tracks</span>
         </div>
 
         <div>
@@ -162,6 +166,11 @@ const orders = [
             :series="series"
           />
         </div>
+      </div>
+
+      <div class="colunasTitulo d-flex justify-space-between mt-5">
+        <h3>Nome Do Parceiro</h3>
+        <h3>Quantidade</h3>
       </div>
 
       <VList class="card-list mt-7">
@@ -191,6 +200,10 @@ const orders = [
           </template>
         </VListItem>
       </VList>
+      
+      <div class="d-flex justify-center mt-3">
+        <v-btn color="primary">Ver Todas As Tracks</v-btn>
+      </div>
     </VCardText>
   </VCard>
 </template>

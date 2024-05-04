@@ -5,12 +5,29 @@ import { api } from "../../service/apiConfig.js"
 
 
 let statistics = ref([])
+let growth = ref(0)
+let parameters = ref(0)
+let emoji = ref('')
+
 
 onMounted(async () => {
   const response = await api.get("/dash")
   const data = response.data
   
   console.log(data)
+
+  growth.value = data.qtygrowth;
+
+  if(growth.value > 5){
+    parameters.value = 'crecimento acelerado'
+    emoji.value = '🚀'
+  } else if(growth.value > 0 && growth.value < 5){
+    parameters.value = 'crescimento'
+    emoji.value = '😎'
+  } else if(growth.value < 0){
+    parameters.value = 'decréscimo'
+    emoji.value = '😭'
+  }
 
   statistics.value = [
     {
@@ -47,7 +64,7 @@ onMounted(async () => {
   <VCard title="Informações Gerais">
     <template #subtitle>
       <p class="text-body-1 mb-0">
-        <span class="d-inline-block font-weight-medium text-high-emphasis">Total 48.5% de crescimento </span> <span class="text-high-emphasis">😎</span>  nesse mês
+        <span class="d-inline-block font-weight-medium text-high-emphasis">Total de {{growth}}% de {{parameters}} {{ emoji }} de parceiros nesse mês </span> <span class="text-high-emphasis"></span>
       </p>
     </template>
 

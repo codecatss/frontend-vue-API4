@@ -1,5 +1,5 @@
 <script setup>
-// eslint-disable-next-line import/no-unresolved
+import axios from 'axios'
 import { hexToRgb } from '@layouts/utils'
 import VueApexCharts from 'vue3-apexcharts'
 import { useTheme } from 'vuetify'
@@ -9,24 +9,53 @@ const vuetifyTheme = useTheme()
 
 const titulo = ref(null)
 
-onMounted(() => {
-
+onMounted(async () => {
   titulo.value = 'danko'
+  await getValuesFromDatabase()
 })
 
-const series = [
-  123,
-  98,
-  87,
-  85,
-]
+const totalDeExpertises = ref(0);
+
+async function getValuesFromDatabase() {
+  try {
+    const response = await axios.get('http://localhost:8080/dash/expertise/visualization')
+    const data = response.data;
+    totalDeExpertises.value = Object.keys(data).length;
+    let dataArray = [];
+    for (let key in data) {
+      data[key]['amount'] = parseInt(data[key]['amount']); 
+      dataArray.push(data[key]);
+    }
+    dataArray.sort((a, b) => b.amount - a.amount);
+    dataArray = dataArray.slice(0, 4);
+    orders.value = [];
+    for (let item of dataArray) {
+      const colorStr = item['avatarColor'].toLowerCase();
+      orders.value.push(item);
+      series.value.push(item['amount']);
+      labels.value.push(item['title']);
+      colors.value.push(item['avatarColor'])
+    }
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+const series = ref([])
+
+const labels = ref([])
+
+const colors = ref([])
+
+
+
 
 const chartOptions = computed(() => {
   const currentTheme = vuetifyTheme.current.value.colors
   const variableTheme = vuetifyTheme.current.value.variables
-  const disabledTextColor = `rgba(${ hexToRgb(String(currentTheme['on-surface'])) },${ variableTheme['disabled-opacity'] })`
-  const primaryTextColor = `rgba(${ hexToRgb(String(currentTheme['on-surface'])) },${ variableTheme['high-emphasis-opacity'] })`
-  
+  const disabledTextColor = `rgba(${hexToRgb(String(currentTheme['on-surface']))},${variableTheme['disabled-opacity']})`
+  const primaryTextColor = `rgba(${hexToRgb(String(currentTheme['on-surface']))},${variableTheme['high-emphasis-opacity']})`
+
   return {
     chart: {
       sparkline: { enabled: true },
@@ -39,18 +68,8 @@ const chartOptions = computed(() => {
     legend: { show: false },
     tooltip: { enabled: false },
     dataLabels: { enabled: false },
-    labels: [
-      'Oracle Cloud Platform Integration',
-      'Dev Ops on Oracle Cloud',
-      'Oracle Cloud Platform Security',
-      'CSSE - OCI Migration',
-    ],
-    colors: [
-      currentTheme.success,
-      currentTheme.primary,
-      currentTheme.secondary,
-      currentTheme.info,
-    ],
+    labels: labels.value,
+    colors: colors.value,
     grid: {
       padding: {
         top: -7,
@@ -82,9 +101,9 @@ const chartOptions = computed(() => {
             },
             total: {
               show: true,
-              label: 'Weekly',
+              label: '',
               fontSize: '10px',
-              formatter: () => '38%',
+              formatter: () => '',
               color: disabledTextColor,
               fontFamily: 'Public Sans',
             },
@@ -95,36 +114,7 @@ const chartOptions = computed(() => {
   }
 })
 
-const orders = [
-  {
-    amount: '123',
-    title: 'Oracle Cloud Platform Integration',
-    avatarColor: 'primary',
-    subtitle: 'Descrição sobre a Expertise',
-    avatarIcon: 'bx-color',
-  },
-  {
-    amount: '98',
-    title: 'Dev Ops on Oracle Cloud',
-    avatarColor: 'success',
-    subtitle: 'Descrição sobre a Expertise',
-    avatarIcon: 'bx-color',
-  },
-  {
-    amount: 87,
-    title: 'Oracle Cloud Platform Security',
-    avatarColor: 'info',
-    subtitle: 'Descrição sobre a Expertise',
-        avatarIcon: 'bx-color',
-  },
-  {
-    amount: 85,
-    title: 'CSSE - OCI Migration',
-    avatarColor: 'secondary',
-    subtitle: 'Descrição sobre a Expertise',
-    avatarIcon: 'bx-color',
-  },
-]
+const orders = ref([])
 
 const moreList = [
   {
@@ -140,17 +130,20 @@ const moreList = [
     value: 'Update',
   },
 ]
+
+function getFirstTwoWords(title) {
+  const words = title.split(' ');
+  return words.slice(0, 3).join(' ');
+}
 </script>
 
 <template>
   <VCard>
     <VCardItem class="pb-3">
       <VCardTitle class="mb-1">
-        Informações Expertises
-      </VCardTitle>
-      <VCardSubtitle>
         Porcentagem De Parcerios Nas Expertises
-      </VCardSubtitle>
+      </VCardTitle>
+
 
       <template #append>
         <div class="me-n3 mt-n8">
@@ -163,20 +156,26 @@ const moreList = [
       <div class="d-flex align-center justify-space-between mb-3">
         <div class="flex-grow-1">
           <h4 class="text-h4 mb-1">
-            31
+            {{totalDeExpertises}} Total De Expertise
           </h4>
-          <span>Total OrdeDe Expertise</span>
-        </div>
 
+        </div>
+        
         <div>
           <VueApexCharts
-            type="donut"
-            :height="125"
-            width="105"
-            :options="chartOptions"
-            :series="series"
+          type="donut"
+          :height="125"
+          width="105"
+          :options="chartOptions"
+          :series="series"
           />
         </div>
+      </div>
+      <div class="colunasTitulo d-flex justify-space-between mt-5">
+        <h3>Nome Do Parceiro</h3>
+        <h3>Quantidade</h3>
+
+
       </div>
 
       <VList class="card-list mt-7">
@@ -195,7 +194,7 @@ const moreList = [
           </template>
 
           <VListItemTitle class="mb-1">
-            {{ order.title }}
+            {{getFirstTwoWords(order.title) }}
           </VListItemTitle>
           <VListItemSubtitle class="text-disabled">
             {{ order.subtitle }}
@@ -206,6 +205,11 @@ const moreList = [
           </template>
         </VListItem>
       </VList>
+      
+      <div class="d-flex justify-center mt-3">
+        <v-btn color="primary">Ver Todas As Expertises</v-btn>
+      </div>
+
     </VCardText>
   </VCard>
 </template>
