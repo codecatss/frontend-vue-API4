@@ -11,8 +11,20 @@ let orders = ref([]);
 onMounted(async () => {
   const response = await api.get("/dash/state-per-company");
   const data = response.data;
+  console.log(data)
 
-  orders.value = data.sort((a, b) => b.companyCount - a.companyCount).map((item, index) => {
+  const topThree = data.sort((a, b) => b.companyCount - a.companyCount).slice(0, 3);
+  const others = data.slice(3);
+
+  const othersCount = others.reduce((total, item) => total + item.companyCount, 0);
+
+  orders.value = [...topThree, {
+    companyCount: othersCount,
+    state: "Outros",
+    avatarColor: 'secondary',
+    subtitle: 'Subtitle', 
+    avatarIcon: 'bx-mobile-alt', 
+  }].map((item, index) => {
     return {
       amount: item.companyCount, 
       title: item.state,
@@ -20,7 +32,7 @@ onMounted(async () => {
       subtitle: 'Subtitle', 
       avatarIcon: 'bx-mobile-alt', 
     }
-  }).slice(0, 4); 
+  });
 });
 
 const labels = computed(() => orders.value.map(order => order.title));
