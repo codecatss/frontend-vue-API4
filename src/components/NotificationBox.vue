@@ -29,7 +29,6 @@
     </div>
   </v-card>
 </template>
-
 <script setup>
 import { api } from '@/service/apiConfig';
 import { onMounted, ref } from 'vue';
@@ -56,7 +55,7 @@ onMounted(async () => {
       company: item[1],
       expertise: item[2],
       timeLeft: item[5],
-    }))
+    })).sort((a, b) => a.timeLeft - b.timeLeft);
   } catch (error) {
     console.error("Error fetching and populating data:", error);
   }
