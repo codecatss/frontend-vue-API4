@@ -20,7 +20,7 @@
             Veja aqui os resultados
           </span>
           <br>
-          <span class="fileinput-button">
+          <span class="fileinput-button"> 
             <VBtn
               variant="tonal"
               class="mt-4"
@@ -31,8 +31,8 @@
               <input
                 ref="fileInput"
                 type="file"
-                @change="onFileChange"
                 style="display: none;"
+                @change="onFileChange"
               >
             </VBtn>
             <VBtn
@@ -92,7 +92,16 @@ const snackbarText = ref('')
 const snackbarColor = ref('')
 
 const onFileChange = (e) => {
+  
   file = e.target.files[0]
+
+  if (!file.type.match('csv.*')) {
+    snackbar.value = true
+    snackbarText.value = 'Por favor, apenas arquivos CSV.'
+    snackbarColor.value = 'error'
+
+    return
+  }
 
   const fileName = file.name
 
@@ -114,16 +123,25 @@ const submitForm = () => {
   const formData = new FormData()
 
   formData.append("file", file)
+
+  if (!file) {
+    snackbar.value = true
+    snackbarText.value = 'Selecione um arquivo para enviar'
+    snackbarColor.value = 'info'
+
+    return 
+  }
+
   axios.post("http://localhost:8080/api/import-csv", formData)
     .then(function (result) {
       console.log(result)
       snackbar.value = true
-      snackbarText.value = 'Seu Arquivo Foi Enviado Com Sucesso! 🎉'
+      snackbarText.value = 'Arquivo foi enviado com sucesso! 🎉'
       snackbarColor.value = 'success'
     }, function (error) {
       console.log(error)
       snackbar.value = true
-      snackbarText.value = 'Houve Um Erro Ao Enviar Seu Arquivo'
+      snackbarText.value = 'Houve um erro ao enviar seu arquivo'
       snackbarColor.value = 'error'
     })
 }
