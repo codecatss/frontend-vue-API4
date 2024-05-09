@@ -118,9 +118,9 @@ const chartOptions = computed(() => {
             },
             total: {
               show: true,
-              label: 'Essa Semana',
+              label: '',
               fontSize: '10px',
-              formatter: () => '38%',
+              formatter: () => '',
               color: disabledTextColor,
               fontFamily: 'Public Sans',
             },
