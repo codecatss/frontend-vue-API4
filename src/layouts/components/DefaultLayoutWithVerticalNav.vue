@@ -24,7 +24,7 @@ const toggleNotifBox = () => {
   console.log("TOGGLE NOTIF BOX")
 }
 
-const handleClickOutside = (event) => {
+const handleClickOutside = event => {
   if (
     showNotifBox.value &&
       componentWrapper.value && // Ensure componentWrapper is not null
@@ -70,7 +70,28 @@ onMounted(() => {
           </span>
           </div>
         -->
+
+
         <VSpacer />
+
+        <IconBtn class="btnHome me-2">
+          <RouterLink to="/dashboard">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              aria-hidden="true"
+              role="img"
+              tag="i"
+              style="font-size: 24px; height: 24px; width: 24px; color: #4D5F71;"
+              width="1em"
+              height="1em"
+              viewBox="0 0 24 24"
+            ><path
+              fill="currentColor"
+              d="M3 13h1v7c0 1.103.897 2 2 2h12c1.103 0 2-.897 2-2v-7h1a1 1 0 0 0 .707-1.707l-9-9a.999.999 0 0 0-1.414 0l-9 9A1 1 0 0 0 3 13zm7 7v-5h4v5h-4zm2-15.586l6 6V15l.001 5H16v-5c0-1.103-.897-2-2-2h-4c-1.103 0-2 .897-2 2v5H6v-9.586l6-6z"
+            /></svg>
+          </RouterLink>
+        </IconBtn>
 
         <IconBtn
           class="me-2"
@@ -82,10 +103,16 @@ onMounted(() => {
         </IconBtn>
 
         <div ref="componentWrapper">
-          <IconBtn class="me-2 btnNotif" @click="toggleNotifBox">
+          <IconBtn
+            class="me-2 btnNotif"
+            @click="toggleNotifBox"
+          >
             <VIcon icon="bx-bell" />
-            <div class="notifDiv" v-if="showNotifBox">
-              <NotificationBox ref="notifBoxRef"/>
+            <div
+              v-if="showNotifBox"
+              class="notifDiv"
+            >
+              <NotificationBox ref="notifBoxRef" />
             </div>
           </IconBtn>
         </div>
@@ -175,29 +202,29 @@ onMounted(() => {
         }"
       />
 
- <!--
-<VerticalNavLink
-  :item="{
-    title: 'Login',
-    icon: 'mdi-alert',
-    to: '/login',
-  }"
-/>
-<VerticalNavLink
-  :item="{
-    title: 'Registrar',
-    icon: 'bx-user-plus',
-    to: '/register',
-  }"
-/>
-<VerticalNavLink
-  :item="{
-    title: 'Erro',
-    icon: 'bx-info-circle',
-    to: '/no-existence',
-  }"
-/>
--->
+      <!--
+        <VerticalNavLink
+        :item="{
+        title: 'Login',
+        icon: 'mdi-alert',
+        to: '/login',
+        }"
+        />
+        <VerticalNavLink
+        :item="{
+        title: 'Registrar',
+        icon: 'bx-user-plus',
+        to: '/register',
+        }"
+        />
+        <VerticalNavLink
+        :item="{
+        title: 'Erro',
+        icon: 'bx-info-circle',
+        to: '/no-existence',
+        }"
+        />
+      -->
 
       <!-- 👉 Interface do Usuário -->
       <VerticalNavSectionTitle
@@ -205,43 +232,43 @@ onMounted(() => {
           heading: 'Configurações',
         }"
       />
-     <!--
-<VerticalNavLink
-  :item="{
-    title: 'Tipografia',
-    icon: 'mdi-alpha-t-box-outline',
-    to: '/typography',
-  }"
-/>
-<VerticalNavLink
-  :item="{
-    title: 'Ícones',
-    icon: 'bx-show',
-    to: '/icons',
-  }"
-/>
-<VerticalNavLink
-  :item="{
-    title: 'Cartões',
-    icon: 'bx-credit-card',
-    to: '/cards',
-  }"
-/>
-<VerticalNavLink
-  :item="{
-    title: 'Tabelas',
-    icon: 'bx-table',
-    to: '/tables',
-  }"
-/>
-<VerticalNavLink
-  :item="{
-    title: 'Layouts de Formulários',
-    icon: 'mdi-form-select',
-    to: '/form-layouts',
-  }"
-/>
--->
+      <!--
+        <VerticalNavLink
+        :item="{
+        title: 'Tipografia',
+        icon: 'mdi-alpha-t-box-outline',
+        to: '/typography',
+        }"
+        />
+        <VerticalNavLink
+        :item="{
+        title: 'Ícones',
+        icon: 'bx-show',
+        to: '/icons',
+        }"
+        />
+        <VerticalNavLink
+        :item="{
+        title: 'Cartões',
+        icon: 'bx-credit-card',
+        to: '/cards',
+        }"
+        />
+        <VerticalNavLink
+        :item="{
+        title: 'Tabelas',
+        icon: 'bx-table',
+        to: '/tables',
+        }"
+        />
+        <VerticalNavLink
+        :item="{
+        title: 'Layouts de Formulários',
+        icon: 'mdi-form-select',
+        to: '/form-layouts',
+        }"
+        />
+      -->
 
       <VerticalNavLink
         :item="{
@@ -252,14 +279,12 @@ onMounted(() => {
       />
 
       <VerticalNavLink
-      :item="{
-        title: 'Loggout',
-        icon: 'bx-log-out',
-        to: '/',
-      }"
-    />
-
-
+        :item="{
+          title: 'Loggout',
+          icon: 'bx-log-out',
+          to: '/',
+        }"
+      />
     </template>
 
     <template #after-vertical-nav-items>
@@ -283,7 +308,11 @@ onMounted(() => {
 </template>
 
 <style lang="scss" scoped>
-  .meta-key {
+  .btnHome{
+    margin: auto;
+  }
+
+  .meta-key{
     border: thin solid rgba(var(--v-border-color), var(--v-border-opacity));
     border-radius: 6px;
     block-size: 1.5625rem;

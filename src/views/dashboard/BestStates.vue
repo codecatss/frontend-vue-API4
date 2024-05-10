@@ -1,22 +1,23 @@
 <script setup>
-import { api } from '@/service/apiConfig';
-import { hexToRgb } from '@layouts/utils';
-import { onMounted, ref, computed } from 'vue';
-import VueApexCharts from 'vue3-apexcharts';
-import { useTheme } from 'vuetify';
+import { api } from '@/service/apiConfig'
+import { hexToRgb } from '@layouts/utils'
+import { onMounted, ref, computed } from 'vue'
+import VueApexCharts from 'vue3-apexcharts'
+import { useTheme } from 'vuetify'
 
-let chartState = ref([]);
-let orders = ref([]);
+let chartState = ref([])
+let orders = ref([])
 
 onMounted(async () => {
-  const response = await api.get("/dash/state-per-company");
-  const data = response.data;
+  const response = await api.get("/dash/state-per-company")
+  const data = response.data
+
   console.log(data)
 
-  const topThree = data.sort((a, b) => b.companyCount - a.companyCount).slice(0, 3);
-  const others = data.slice(3);
+  const topThree = data.sort((a, b) => b.companyCount - a.companyCount).slice(0, 3)
+  const others = data.slice(3)
 
-  const othersCount = others.reduce((total, item) => total + item.companyCount, 0);
+  const othersCount = others.reduce((total, item) => total + item.companyCount, 0)
 
   orders.value = [...topThree, {
     companyCount: othersCount,
@@ -32,11 +33,11 @@ onMounted(async () => {
       subtitle: 'Subtitle', 
       avatarIcon: 'bx-mobile-alt', 
     }
-  });
-});
+  })
+})
 
-const labels = computed(() => orders.value.map(order => order.title));
-const series = computed(() => orders.value.map(order => order.amount)); 
+const labels = computed(() => orders.value.map(order => order.title))
+const series = computed(() => orders.value.map(order => order.amount)) 
 
 
 const vuetifyTheme = useTheme()
@@ -150,11 +151,8 @@ const moreList = [
           />
 
           <!-- Legenda -->
-          <div class="mt-3 d-flex flex-row flex-sm-column justify-space-between flex-wrap">
-
-
-
-           <div 
+          <div class="mt-3 d-flex flex-sm-column justify-space-between flex-wrap">
+            <div 
               v-for="(order, index) in orders" 
               :key="order.title" 
               class="d-flex align-center mb-sm-2"
@@ -166,11 +164,9 @@ const moreList = [
                 :color="`filho${index + 1}`"
                 size="20"
                 :style="{ backgroundColor: order.avatarColor }"
-              >
-              </VAvatar>
+              />
               <span class="ml-2">{{ order.title }}</span>
             </div>
-            
           </div>
         </div>
       </VCardText>
@@ -231,5 +227,4 @@ const moreList = [
 .text-filho4 {
   background-color: rgb(133, 146, 163);
 }
-
 </style>

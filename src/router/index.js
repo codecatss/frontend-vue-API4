@@ -43,7 +43,7 @@ const router = createRouter({
       component: () => import('../layouts/blank.vue'),
       children: [
         {
-          path: 'login',
+          path: 'auth',
           component: () => import('../pages/login.vue'),
         },
         {
