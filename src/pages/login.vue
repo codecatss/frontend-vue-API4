@@ -20,24 +20,20 @@ const isPasswordVisible = ref(false)
       <VCardItem class="justify-center">
         <template #prepend>
           <div class="d-flex">
-            <div
-              class="d-flex text-primary"
-              v-html="logo"
-            />
+
           </div>
         </template>
 
         <VCardTitle class="text-2xl font-weight-bold">
-          sneat
+          Oracle Partner
         </VCardTitle>
       </VCardItem>
 
       <VCardText class="pt-2">
         <h5 class="text-h5 mb-1">
-          Welcome to sneat! 👋🏻
+          Welcome to Oracle Partner! 👋🏻
         </h5>
         <p class="mb-0">
-          Please sign-in to your account and start the adventure
         </p>
       </VCardText>
 

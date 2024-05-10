@@ -100,9 +100,9 @@ const chartOptions = computed(() => {
             },
             total: {
               show: true,
-              label: 'Aumento De Resultados',
-              fontSize: '12px', 
-              formatter: () => '38%',
+              label: '',
+              fontSize: '10px', 
+              formatter: () => 'Passe O Mouse',
               color: disabledTextColor,
               fontFamily: 'Public Sans',
             },

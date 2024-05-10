@@ -163,7 +163,7 @@ onMounted(() => {
         :item="{
           title: 'Adicionar Parceiros ',
           icon: 'mdi-account-multiple-plus',
-          to: '/',
+          to: '/company',
         }"
       />
 
