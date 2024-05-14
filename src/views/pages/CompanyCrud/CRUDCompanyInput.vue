@@ -2,250 +2,89 @@
 import avatar1 from '@images/avatars/avatar-1.png'
 
 const accountData = {
-  avatarImg: avatar1,
-  firstName: 'john',
-  lastName: 'Doe',
-  email: 'johnDoe@example.com',
-  org: 'CodeCats',
-  phone: '+1 (917) 543-9876',
-  address: '123 Main St, New York, NY 10001',
-  state: 'New York',
-  zip: '10001',
-  country: 'USA',
-  language: 'English',
-  timezone: '(GMT-11:00) International Date Line West',
-  currency: 'USD',
+  nomeParceiro: '',
+  cnpj: '',
+  estado: 'Selecione Um Estado',
+  cidade: 'Seleciona Uma Cidade',
+  endereco: '',
+  slogan: ''
 }
 
-const refInputEl = ref()
 const accountDataLocal = ref(structuredClone(accountData))
-const isAccountDeactivated = ref(false)
 
 const resetForm = () => {
   accountDataLocal.value = structuredClone(accountData)
 }
-
-const changeAvatar = file => {
-  const fileReader = new FileReader()
-  const { files } = file.target
-  if (files && files.length) {
-    fileReader.readAsDataURL(files[0])
-    fileReader.onload = () => {
-      if (typeof fileReader.result === 'string')
-        accountDataLocal.value.avatarImg = fileReader.result
-    }
-  }
-}
-
-// reset avatar image
-const resetAvatar = () => {
-  accountDataLocal.value.avatarImg = accountData.avatarImg
-}
-
-const timezones = [
-  '(GMT-11:00) International Date Line West',
-  '(GMT-11:00) Midway Island',
-  '(GMT-10:00) Hawaii',
-  '(GMT-09:00) Alaska',
-  '(GMT-08:00) Pacific Time (US & Canada)',
-  '(GMT-08:00) Tijuana',
-  '(GMT-07:00) Arizona',
-  '(GMT-07:00) Chihuahua',
-  '(GMT-07:00) La Paz',
-  '(GMT-07:00) Mazatlan',
-  '(GMT-07:00) Mountain Time (US & Canada)',
-  '(GMT-06:00) Central America',
-  '(GMT-06:00) Central Time (US & Canada)',
-  '(GMT-06:00) Guadalajara',
-  '(GMT-06:00) Mexico City',
-  '(GMT-06:00) Monterrey',
-  '(GMT-06:00) Saskatchewan',
-  '(GMT-05:00) Bogota',
-  '(GMT-05:00) Eastern Time (US & Canada)',
-  '(GMT-05:00) Indiana (East)',
-  '(GMT-05:00) Lima',
-  '(GMT-05:00) Quito',
-  '(GMT-04:00) Atlantic Time (Canada)',
-  '(GMT-04:00) Caracas',
-  '(GMT-04:00) La Paz',
-  '(GMT-04:00) Santiago',
-  '(GMT-03:30) Newfoundland',
-  '(GMT-03:00) Brasilia',
-  '(GMT-03:00) Buenos Aires',
-  '(GMT-03:00) Georgetown',
-  '(GMT-03:00) Greenland',
-  '(GMT-02:00) Mid-Atlantic',
-  '(GMT-01:00) Azores',
-  '(GMT-01:00) Cape Verde Is.',
-  '(GMT+00:00) Casablanca',
-  '(GMT+00:00) Dublin',
-  '(GMT+00:00) Edinburgh',
-  '(GMT+00:00) Lisbon',
-  '(GMT+00:00) London',
-]
-
-const currencies = [
-  'USD',
-  'EUR',
-  'GBP',
-  'AUD',
-  'BRL',
-  'CAD',
-  'CNY',
-  'CZK',
-  'DKK',
-  'HKD',
-  'HUF',
-  'INR',
-]
 </script>
 
 <template>
   <VRow>
     <VCol cols="12">
-      <VCard title="Account Details">
-        <VCardText class="d-flex">
-          <!-- 👉 Avatar -->
-          <VAvatar
-            rounded="lg"
-            size="100"
-            class="me-6"
-            :image="accountDataLocal.avatarImg"
-          />
-
-          <!-- 👉 Upload Photo -->
-          <form class="d-flex flex-column justify-center gap-5">
-            <div class="d-flex flex-wrap gap-2">
-              <VBtn
-                color="primary"
-                @click="refInputEl?.click()"
-              >
-                <VIcon
-                  icon="bx-cloud-upload"
-                  class="d-sm-none"
-                />
-                <span class="d-none d-sm-block">Upload new photo</span>
-              </VBtn>
-
-              <input
-                ref="refInputEl"
-                type="file"
-                name="file"
-                accept=".jpeg,.png,.jpg,GIF"
-                hidden
-                @input="changeAvatar"
-              >
-
-              <VBtn
-                type="reset"
-                color="error"
-                variant="tonal"
-                @click="resetAvatar"
-              >
-                <span class="d-none d-sm-block">Reset</span>
-                <VIcon
-                  icon="bx-refresh"
-                  class="d-sm-none"
-                />
-              </VBtn>
-            </div>
-
-            <p class="text-body-1 mb-0">
-              Allowed JPG, GIF or PNG. Max size of 800K
-            </p>
-          </form>
-        </VCardText>
+      <VCard title="Cadastro De Parceiro">
 
         <VDivider />
 
         <VCardText>
           <!-- 👉 Form -->
-          <VForm class="mt-6">
+          <VForm class="mt-6" v-model="accountDataLocal">
             <VRow>
               <!-- 👉 First Name -->
-              <VCol
-                md="6"
-                cols="12"
-              >
+              <VCol md="6" cols="12">
                 <VTextField
                   placeholder="Nome Do Parceiro"
                   label="Nome Do Parceiro"
+                  v-model="accountDataLocal.nomeParceiro"
                 />
               </VCol>
               
               <!-- 👉 First Name -->
-              <VCol
-              md="6"
-              cols="12"
-            >
-              <VTextField
-                placeholder="CNPJ"
-                label="CNPJ"
-              />
-            </VCol>
+              <VCol md="6" cols="12">
+                <VTextField
+                  placeholder="CNPJ"
+                  label="CNPJ"
+                  v-model="accountDataLocal.cnpj"
+                />
+              </VCol>
             
               <!-- 👉 First Name -->
-              <VCol
-              md="6"
-              cols="12"
-            >
-              <VSelect
-                placeholder="Estado"
-                label="Estado"
-              />
-            </VCol>
+              <VCol md="6" cols="12">
+                <VSelect
+                  placeholder="Estado"
+                  label="Estado"
+                  no-data-text="Nenhum estado disponível"
+                  v-model="accountDataLocal.estado"
+                />
+              </VCol>
 
-                        
+              <!-- 👉 First Name -->
+              <VCol md="6" cols="12">
+                <VSelect
+                  placeholder="Cidade"
+                  label="Cidade"
+                  no-data-text="Nenhuma cidade disponível"
+                  v-model="accountDataLocal.cidade"
+                />
+              </VCol>
             
               <!-- 👉 First Name -->
-              <VCol
-              md="6"
-              cols="12"
-            >
-              <VTextField
-                placeholder="Cidade"
-                label="Cidade"
-              />
-            </VCol>
-            
-              <!-- 👉 First Name -->
-              <VCol
-              md="6"
-              cols="12"
-            >
-              <VTextField
-                placeholder="Endereço"
-                label="Endereço"
-              />
-            </VCol>
+              <VCol md="6" cols="12">
+                <VTextField
+                  placeholder="Endereço"
+                  label="Endereço"
+                  v-model="accountDataLocal.endereco"
+                />
+              </VCol>
 
-            <VCol
-            md="6"
-            cols="12"
-          >
-            <VTextField
-              placeholder="Forneça Um Slogan Para Empresa"
-              label="Slogan"
-            />
-          </VCol>
-
-          <VCol
-          md="6"
-          cols="12"
-        >
-          <VTextField
-            placeholder="Credit Hold"
-            label="Credit Hold"
-          />
-        </VCol>
-                        
-                                                      
-
+              <VCol md="6" cols="12">
+                <VTextField
+                  placeholder="Forneça Um Slogan Para Empresa"
+                  label="Slogan"
+                  v-model="accountDataLocal.slogan"
+                />
+              </VCol>
+                                                    
               <!-- 👉 Form Actions -->
-              <VCol
-                cols="12"
-                class="d-flex flex-wrap gap-4"
-              >
+              <VCol cols="12" class="d-flex flex-wrap gap-4">
                 <VBtn>Save changes</VBtn>
 
                 <VBtn
