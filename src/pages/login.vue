@@ -1,6 +1,27 @@
 <script setup>
+// eslint-disable-next-line import/no-unresolved
 import AuthProvider from '@/views/pages/authentication/AuthProvider.vue'
 import logo from '@images/logo.svg?raw'
+// eslint-disable-next-line regex/invalid
+import axios from 'axios'
+
+const submitLogin = async () => {
+  try {
+    // TODO: Add the login logic here
+    const response = await axios.post('http://localhost:8080/auth', {
+      email: form.email,
+      password: form.password,
+    })
+
+    if (response.status === 200) {
+      router.push('/dashboard')
+    } else {
+      console.error('Login failed', response.status)
+    }
+  } catch (error) {
+    console.error('An error occurred during login:', error)
+  }
+}
 
 const form = ref({
   email: '',
@@ -24,9 +45,11 @@ const isPasswordVisible = ref(false)
           </div>
         </template>
 
-        <VCardTitle class="text-2xl font-weight-bold">
+        <!-- 
+          <VCardTitle class="text-2xl font-weight-bold">
           Oracle Partner
-        </VCardTitle>
+          </VCardTitle>
+        -->
       </VCardItem>
 
       <VCardText class="pt-2">
@@ -38,7 +61,7 @@ const isPasswordVisible = ref(false)
       </VCardText>
 
       <VCardText>
-        <VForm @submit.prevent="$router.push('/')">
+        <VForm @submit.prevent="submitLogin">
           <VRow>
             <!-- email -->
             <VCol cols="12">
