@@ -5,12 +5,20 @@ import logo from '@images/logo.svg?raw'
 // eslint-disable-next-line regex/invalid
 import axios from 'axios'
 
+const email = ref('email')
+const password = ref('password')
+const remember = ref()
+
 const submitLogin = async () => {
+
+  const emailToCheck = email.value
+  const passwordToCheck = password.value
+
   try {
     // TODO: Add the login logic here
     const response = await axios.post('http://localhost:8080/auth', {
-      email: form.email,
-      password: form.password,
+      email: emailToCheck,
+      password: passwordToCheck,
     })
 
     if (response.status === 200) {
@@ -23,11 +31,7 @@ const submitLogin = async () => {
   }
 }
 
-const form = ref({
-  email: '',
-  password: '',
-  remember: false,
-})
+
 
 const isPasswordVisible = ref(false)
 </script>
@@ -66,7 +70,7 @@ const isPasswordVisible = ref(false)
             <!-- email -->
             <VCol cols="12">
               <VTextField
-                v-model="form.email"
+                v-model="email"
                 autofocus
                 placeholder="johndoe@email.com"
                 label="Email"
@@ -77,7 +81,7 @@ const isPasswordVisible = ref(false)
             <!-- password -->
             <VCol cols="12">
               <VTextField
-                v-model="form.password"
+                v-model="password"
                 label="Password"
                 placeholder="············"
                 :type="isPasswordVisible ? 'text' : 'password'"
@@ -88,7 +92,7 @@ const isPasswordVisible = ref(false)
               <!-- remember me checkbox -->
               <div class="d-flex align-center justify-space-between flex-wrap mt-1 mb-4">
                 <VCheckbox
-                  v-model="form.remember"
+                  v-model="remember"
                   label="Remember me"
                 />
 
