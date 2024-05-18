@@ -1,9 +1,11 @@
 <script setup>
 // eslint-disable-next-line import/no-unresolved
 import AuthProvider from '@/views/pages/authentication/AuthProvider.vue'
-import logo from '@images/logo.svg?raw'
+import { useRouter } from 'vue-router'
 // eslint-disable-next-line regex/invalid
 import axios from 'axios'
+
+const router = useRouter()
 
 const email = ref('email')
 const password = ref('password')
@@ -11,20 +13,22 @@ const remember = ref()
 
 const submitLogin = async () => {
 
-  const emailToCheck = email.value
-  const passwordToCheck = password.value
+  const formData = new FormData()
+
+  formData.append('email', email.value)
+  formData.append('password', password.value)
 
   try {
-    const response = await axios.post('http://localhost:8080/auth', {
-      email: emailToCheck,
-      password: passwordToCheck,
-    })
+    const response = await axios.post('http://localhost:8080/auth', formData)
 
     if (response.status === 201) {
+      localStorage.setItem('token', response.data)
+      console.log(localStorage.getItem('token'))
       router.push('/dashboard')
     } else {
       console.error('Login failed', response.status)
     }
+
   } catch (error) {
     console.error('An error occurred during login:', error)
   }
