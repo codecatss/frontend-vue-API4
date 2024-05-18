@@ -15,13 +15,12 @@ const submitLogin = async () => {
   const passwordToCheck = password.value
 
   try {
-    // TODO: Add the login logic here
     const response = await axios.post('http://localhost:8080/auth', {
       email: emailToCheck,
       password: passwordToCheck,
     })
 
-    if (response.status === 200) {
+    if (response.status === 201) {
       router.push('/dashboard')
     } else {
       console.error('Login failed', response.status)
