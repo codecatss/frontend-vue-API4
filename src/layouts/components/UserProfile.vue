@@ -1,16 +1,22 @@
 <script setup>
 import avatar1 from '@images/avatars/avatar-1.jpeg'
 import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 
 const userLabel = ref()
 const userRole = ref()
 
+const router = useRouter()
+
 onMounted(() => {
-  
   userLabel.value = localStorage.getItem('userName')
   userRole.value = localStorage.getItem('userRole')
-
 })
+
+const logOut = async () => {
+  localStorage.clear()
+  router.push('/auth' )
+}
 </script>
 
 <template>
@@ -128,7 +134,7 @@ onMounted(() => {
           <VDivider class="my-2" />
 
           <!-- 👉 Sair -->
-          <VListItem to="/login">
+          <VListItem @click="logOut">
             <template #prepend>
               <VIcon
                 class="me-2"
