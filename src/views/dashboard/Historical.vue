@@ -87,7 +87,7 @@ onMounted(async () => {
           </template>
           <template #item.changeButton>
             <div>
-                <button @click="showModal()">Modificações</button>
+                <!-- Aqui vai o botão para abrir o modal -->
             </div>
           </template>
           <!-- <template #bottom /> -->
