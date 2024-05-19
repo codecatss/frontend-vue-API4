@@ -94,17 +94,17 @@ const tabs = [
       <VWindowItem value="account">
         <VRow>
           <VCol cols="12">
-            <VCard title="Cadastro De Parceiro">
+            <VCard title="Cadastro De Certification">
               <VDivider />
               <VCardText>
                 <!-- Form -->
                 <VForm class="mt-6">
                   <VRow>
-                    <!-- Nome Da Parceiro -->
+                    <!-- Nome Da Certification -->
                     <VCol md="6" cols="12">
                       <VTextField
-                        placeholder="Nome Da Parceiro"
-                        label="Nome Da Parceiro"
+                        placeholder="Nome Da Certification"
+                        label="Nome Da Certification"
                         v-model="accountDataLocal.nomeTrack"
                       />
                     </VCol>
