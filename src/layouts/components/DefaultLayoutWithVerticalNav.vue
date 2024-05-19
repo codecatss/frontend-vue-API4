@@ -144,7 +144,7 @@ onMounted(() => {
         :item="{
           title: 'Dados Inválidos',
           icon: 'bx-error-circle',
-          to: '/',
+          to: '/historical',
         }"
       />
 
