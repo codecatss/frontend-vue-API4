@@ -22,9 +22,13 @@ const submitLogin = async () => {
     const response = await axios.post('http://localhost:8080/auth', formData)
 
     if (response.status === 201) {
-      localStorage.setItem('token', response.data)
-      console.log(localStorage.getItem('token'))
+
+      localStorage.setItem('token', response.data.token)
+      localStorage.setItem('userName', response.data.userName)
+      localStorage.setItem('userRole', response.data.userRole)
+
       router.push('/dashboard')
+      
     } else {
       console.error('Login failed', response.status)
     }

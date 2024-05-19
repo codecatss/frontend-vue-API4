@@ -1,5 +1,16 @@
 <script setup>
 import avatar1 from '@images/avatars/avatar-1.jpeg'
+import { ref, onMounted } from 'vue'
+
+const userLabel = ref()
+const userRole = ref()
+
+onMounted(() => {
+  
+  userLabel.value = localStorage.getItem('userName')
+  userRole.value = localStorage.getItem('userRole')
+
+})
 </script>
 
 <template>
@@ -47,10 +58,15 @@ import avatar1 from '@images/avatars/avatar-1.jpeg'
               </VListItemAction>
             </template>
 
-            <VListItemTitle class="font-weight-semibold">
-              John Doe
+            <VListItemTitle
+              v-model="userLabel"
+              class="font-weight-semibold"
+            >
+              {{ userLabel }}
             </VListItemTitle>
-            <VListItemSubtitle>Admin</VListItemSubtitle>
+            <VListItemSubtitle v-model="userRole">
+              {{ userRole }}
+            </VListItemSubtitle>
           </VListItem>
           <VDivider class="my-2" />
 
@@ -80,20 +96,20 @@ import avatar1 from '@images/avatars/avatar-1.jpeg'
             <VListItemTitle>Configurações</VListItemTitle>
           </VListItem>
 
-<!--
-           👉 Preços 
-          <VListItem link>
+          <!--
+            👉 Preços 
+            <VListItem link>
             <template #prepend>
-              <VIcon
-                class="me-2"
-                icon="bx-dollar"
-                size="22"
-              />
+            <VIcon
+            class="me-2"
+            icon="bx-dollar"
+            size="22"
+            />
             </template>
 
             <VListItemTitle></VListItemTitle>
-          </VListItem>
--->
+            </VListItem>
+          -->
 
           <!-- 👉 Perguntas Frequentes -->
           <VListItem link>
