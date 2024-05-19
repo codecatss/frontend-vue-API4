@@ -1,10 +1,14 @@
 <script setup>
+import DataTimeLine from '@/layouts/components/DataTimeLine.vue';
+import DataTeste from '@/layouts/components/DataTeste.vue';
 import { VDataTable } from 'vuetify/labs/VDataTable';
-import { ref } from 'vue';
 import { api } from '@/service/apiConfig.js';
+import { ref } from 'vue';
+import DataTesteVue from '@/layouts/components/DataTeste.vue';
 
 const historicalData = ref([]);
-
+const modalOpen = ref(false);
+const selectedChange = ref(null);
 const headerMapping = [
   {
     title: 'Tipo de modificação',
@@ -57,6 +61,16 @@ async function refreshData(){
     });
 }
 
+function openModal(item) {
+  selectedChange.value = item.raw;
+  modalOpen.value = true;
+}
+
+function closeModal() {
+  modalOpen.value = false;
+  selectedChange.value = null;
+}
+
 onMounted(async () => {
     refreshData()
 });
@@ -85,43 +99,47 @@ onMounted(async () => {
               </span>
             </div>
           </template>
-          <template #item.changeButton>
+          <template #item.changeButton="{ item }">
             <div>
-                <!-- Aqui vai o botão para abrir o modal -->
+                <VBtn @click="openModal(item)">Abrir Modal</VBtn>
             </div>
           </template>
           <!-- <template #bottom /> -->
         </VDataTable>
+
+        <!-- Modal -->
+        <VDialog v-model="modalOpen" max-width="80vw">
+          <div class="close-button-container">
+            <VBtn class="close-button" text @click="closeModal">Fechar</VBtn>
+          </div>
+          <div class="timeline-container">
+            <DataTeste />
+          </div>
+        </VDialog>
       </VCard>
     </VCol>
   </VRow>
 </template>
 
 <style scoped>
-.progress-bar-wrapper {
-  width: 100px;
-  height: 10px;
-  background-color: #bcbcbc;
-  margin-left: 10px;
-  border-radius: 5px;
-
+.timeline-container {
+  max-height: 70vh;
+  max-width: 80vw;
+  overflow-y: auto;
+  position: relative;
 }
 
-.progress-bar {
-  height: 100%;
-  background-color: #ff3939;
-  border-radius: 5px;
+.close-button-container {
+  /* position: absolute; */
+  z-index: 1000;
+}
+
+.close-button {
+  position: relative;
 }
 
 .oracle-icon {
   margin-right: 10px;
 }
 
-
-.percentage {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-}
 </style>

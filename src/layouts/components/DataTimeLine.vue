@@ -30,14 +30,17 @@ export default {
         { title: 'Evento 3', description: 'Descrição do evento 3' },
         { title: 'Evento 4', description: 'Descrição do evento 4' },
         { title: 'Evento 5', description: 'Descrição do evento 5' },
+        { title: 'Evento 6', description: 'Descrição do evento 6' },
+        { title: 'Evento 7', description: 'Descrição do evento 7' },
+        { title: 'Evento 8', description: 'Descrição do evento 8' },
+        { title: 'Evento 9', description: 'Descrição do evento 9' },
+        { title: 'Evento 10', description: 'Descrição do evento 10' },
         // Adicione mais eventos conforme necessário
       ]
     };
   }
 };
 </script>
-
-
 
 <style scoped>
 .timeline {
@@ -60,3 +63,4 @@ export default {
   box-shadow: 0 0 10px rgba(255, 255, 255, 1);
 }
 </style>
+
