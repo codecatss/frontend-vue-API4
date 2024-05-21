@@ -1,4 +1,5 @@
 <script setup>
+// eslint-disable-next-line import/no-unresolved
 import avatar1 from '@images/avatars/avatar-1.jpeg'
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
