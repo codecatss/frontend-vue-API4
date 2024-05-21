@@ -12,13 +12,16 @@ const password = ref('password')
 const isPasswordVisible = ref(false)
 const remember = ref()
 
-let loginError = false
+const loginError = ref(false)
+const loginErrorColor = ref('')
 
 const submitLogin = async () => {
 
-  loginError = false
-
   const formData = new FormData()
+  
+  if (email.value === '' || password.value === '' || !/@.*\.com$/.test(email.value)){
+    loginError.value = true
+  }
 
   formData.append('email', email.value)
   formData.append('password', password.value)
@@ -45,10 +48,11 @@ const submitLogin = async () => {
 
   } catch (error) {
     console.log(error)
-    loginError = true
+    loginError.value = true
+    loginErrorColor.value = 'error'
   }
 
-  console.log("loginError: ", loginError)
+  console.log("loginError: ", loginError.value)
 }
 </script>
 
@@ -80,7 +84,10 @@ const submitLogin = async () => {
         </p>
       </VCardText>
       
-      <VCardText v-if="loginError.value">
+      <VCardText
+        v-if="loginError"
+        :color="loginErrorColor"
+      >
         <h2>Erro ao fazer login</h2>
       </VCardText>
       
