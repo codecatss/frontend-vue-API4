@@ -9,11 +9,19 @@ const router = useRouter()
 
 const email = ref('email')
 const password = ref('password')
+const isPasswordVisible = ref(false)
 const remember = ref()
+
+const loginError = ref(false)
+const loginErrorColor = ref('')
 
 const submitLogin = async () => {
 
   const formData = new FormData()
+  
+  if (email.value === '' || password.value === '' || !/@.*\.com$/.test(email.value)){
+    loginError.value = true
+  }
 
   formData.append('email', email.value)
   formData.append('password', password.value)
@@ -29,18 +37,23 @@ const submitLogin = async () => {
 
       router.push('/dashboard')
       
-    } else {
-      console.error('Login failed', response.status)
     }
 
+    // if(response.status === 401) {
+    //   invalidCredentials = true
+    // }
+    // if(response.status === 404) {
+    //   userNotFound = true
+    // }
+
   } catch (error) {
-    console.error('An error occurred during login:', error)
+    console.log(error)
+    loginError.value = true
+    loginErrorColor.value = 'error'
   }
+
+  console.log("loginError: ", loginError.value)
 }
-
-
-
-const isPasswordVisible = ref(false)
 </script>
 
 <template>
@@ -70,7 +83,14 @@ const isPasswordVisible = ref(false)
         <p class="mb-0">
         </p>
       </VCardText>
-
+      
+      <VCardText
+        v-if="loginError"
+        :color="loginErrorColor"
+      >
+        <h2>Erro ao fazer login</h2>
+      </VCardText>
+      
       <VCardText>
         <VForm @submit.prevent="submitLogin">
           <VRow>
