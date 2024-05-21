@@ -9,12 +9,10 @@ import avatar1 from '@images/avatars/avatar-1.png';
 
 // Data and functions for the form
 const accountData = {
-  nomeTrack: '',
-  cnpj: '',
-  estado: 'Selecione Um Estado',
-  cidade: 'Seleciona Uma Cidade',
-  endereco: '',
-  slogan: ''
+  nomeExpertise: '',
+  descricao: '',
+  status: 'Selecione...',
+  certificado: '',
 };
 
 const accountDataLocal = ref(structuredClone(accountData));
@@ -105,49 +103,32 @@ const tabs = [
                       <VTextField
                         placeholder="Nome Da Expertise"
                         label="Nome Da Expertise"
-                        v-model="accountDataLocal.nomeTrack"
+                        v-model="accountDataLocal.nomeExpertise"
                       />
                     </VCol>
-                    <!-- CNPJ -->
+                    <!-- Descrição -->
                     <VCol md="6" cols="12">
                       <VTextField
-                        placeholder="CNPJ"
-                        label="CNPJ"
-                        v-model="accountDataLocal.cnpj"
+                        placeholder="Descricao..."
+                        label="Descricao"
+                        v-model="accountDataLocal.descricao"
                       />
                     </VCol>
-                    <!-- Estado -->
+                    <!-- Status -->
                     <VCol md="6" cols="12">
                       <VSelect
-                        placeholder="Estado"
-                        label="Estado"
-                        no-data-text="Nenhum estado disponível"
-                        v-model="accountDataLocal.estado"
+                        placeholder="Status"
+                        label="Status"
+                        no-data-text="Escolha uma opcao"
+                        v-model="accountDataLocal.status"
                       />
                     </VCol>
-                    <!-- Cidade -->
-                    <VCol md="6" cols="12">
-                      <VSelect
-                        placeholder="Cidade"
-                        label="Cidade"
-                        no-data-text="Nenhuma cidade disponível"
-                        v-model="accountDataLocal.cidade"
-                      />
-                    </VCol>
-                    <!-- Endereço -->
+                    <!-- Cerificado -->
                     <VCol md="6" cols="12">
                       <VTextField
-                        placeholder="Endereço"
-                        label="Endereço"
-                        v-model="accountDataLocal.endereco"
-                      />
-                    </VCol>
-                    <!-- Slogan -->
-                    <VCol md="6" cols="12">
-                      <VTextField
-                        placeholder="Forneça Um Slogan Para Empresa"
-                        label="Slogan"
-                        v-model="accountDataLocal.slogan"
+                        placeholder="Certificado"
+                        label="Certificado"
+                        v-model="accountDataLocal.certificado"
                       />
                     </VCol>
                     <!-- Form Actions -->
