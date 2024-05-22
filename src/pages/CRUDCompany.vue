@@ -4,9 +4,6 @@ import { useRoute } from 'vue-router';
 import { api } from '@/service/apiConfig.js';
 import { VDataTable } from 'vuetify/labs/VDataTable';
 
-// Import form component
-import avatar1 from '@images/avatars/avatar-1.png';
-
 // Data and functions for the form
 const accountData = {
   nomeTrack: '',
@@ -25,41 +22,31 @@ const resetForm = () => {
 
 // Data and functions for the table
 const recentDevicesHeaders = [
-  { title: 'Nome do Certificação', key: 'browser' },
-  { title: 'Estado', key: 'location' },
-  { title: 'Expertise', key: 'expertise' },
-  { title: 'Progresso', key: 'percentage' },
-  { title: 'Configurações', key: 'config' },
+  { title: 'Nome da Empresa', key: 'name' },
+  { title: 'Cidade', key: 'city' },
+  { title: 'UF', key: 'state' },
+  { title: 'OPN status', key: 'opnStatus' },
+  { title: 'Status', key: 'status' },
 ];
 
-async function fetchData() {
-  const response = await api.get('/dash/companyexpertiseusercountservice');
-  return response.data;
-}
 
-async function putData() {
-  const data = await fetchData();
-  let recentDevices = [];
-  data.forEach((item) => {
-    try {
-      item.companyState = decodeURIComponent(escape(item.companyState));
-    } catch (e) {}
-    recentDevices.push({
-      browser: item.companyName,
-      Certificação: item.CertificaçãoName,
-      expertise: item.expertiseName,
-      location: item.companyState,
-      percentage: item.completionPercentage,
-    });
-  });
-  return recentDevices;
-}
 
 const recentDevices = ref([]);
 
-onMounted(async () => {
-  recentDevices.value = await putData();
-});
+async function putData() {
+  const response = await api.get('/company');
+  console.log(response.data);
+
+  for(var key in response.data){
+    recentDevices.value.push(response.data[key]);
+  }
+}
+putData();
+
+// onMounted(async () => {
+//   recentDevices.value = await putData();
+// });
+
 
 // Tab navigation
 const route = useRoute();
@@ -178,7 +165,7 @@ const tabs = [
                 :height="'600px'"
                 class="text-no-wrap rounded-0 text-sm"
               >
-                <template #item.browser="{ item }">
+                <template #item.name="{ item }">
                   <div class="d-flex">
                     <svg
                       class="oracle-icon"
@@ -194,11 +181,11 @@ const tabs = [
                       />
                     </svg>
                     <span class="text-high-emphasis text-base">
-                      {{ item.raw.browser }}
+                      {{ item.raw.name }}
                     </span>
                   </div>
                 </template>
-                <template #item.percentage="{ item }">
+                <!-- <template #item.percentage="{ item }">
                   <div class="percentage">
                     <span class="text-high-emphasis text-base">
                       {{ Math.floor(item.raw.percentage) }}%
@@ -216,7 +203,7 @@ const tabs = [
                       <v-icon left>bxs-cog</v-icon>
                     </Button>
                   </div>
-                </template>
+                </template> -->
                 <template #bottom />
               </VDataTable>
             </VCard>
