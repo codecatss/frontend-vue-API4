@@ -11,7 +11,7 @@ import avatar1 from '@images/avatars/avatar-1.png';
 const accountData = {
   nomeExpertise: '',
   descricao: '',
-  status: 'Selecione...',
+  status: 'ACTIVE',
   certificado: '',
 };
 
@@ -57,6 +57,8 @@ const recentDevices = ref([]);
 
 onMounted(async () => {
   recentDevices.value = await putData();
+  populateCertifications();
+  console.log(certifications);
 });
 
 // Tab navigation
@@ -65,16 +67,35 @@ const activeTab = ref(route.params.tab || 'account');
 
 const tabs = [
   {
-    title: 'Criar Certificação',
+    title: 'Criar Expertise',
     icon: 'bx-user',
     tab: 'account',
   },
   {
-    title: 'Tabela de Certificação',
+    title: 'Tabela de Expertise',
     icon: 'mdi-store',
     tab: 'security',
   },
 ];
+
+const populateCertifications = async () => {
+  try {
+    const response = await api.get("/expertise");
+
+    certifications = response.data.map(certification => certification.name);
+  } catch (e) {
+    console.error('Failed getting certification names', e)
+  }
+};
+
+const certifications = [];
+
+const statuses = ['ACTIVE', 'INACTIVE'];
+
+const submitForm = () => {
+  console.log(accountDataLocal.value)
+};
+
 </script>
 
 <template>
@@ -117,13 +138,14 @@ const tabs = [
                     <!-- Status -->
                     <VCol md="6" cols="12">
                       <VSelect
+                        :items="statuses"
                         placeholder="Status"
                         label="Status"
                         no-data-text="Escolha uma opcao"
                         v-model="accountDataLocal.status"
                       />
                     </VCol>
-                    <!-- Cerificado -->
+                    <!-- Certificado -->
                     <VCol md="6" cols="12">
                       <VTextField
                         placeholder="Certificado"
@@ -133,7 +155,7 @@ const tabs = [
                     </VCol>
                     <!-- Form Actions -->
                     <VCol cols="12" class="d-flex flex-wrap gap-4">
-                      <VBtn>Save changes</VBtn>
+                      <VBtn @click.prevent="submitForm">Save changes</VBtn>
                       <VBtn color="secondary" variant="tonal" type="reset" @click.prevent="resetForm">
                         Reset
                       </VBtn>
