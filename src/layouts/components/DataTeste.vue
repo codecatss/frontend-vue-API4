@@ -12,8 +12,10 @@
             </v-avatar>
             </template>
             <v-card>
-            <v-card-title>{{ key }}</v-card-title>
-            <v-card-text>{{ item.tipo }}</v-card-text>
+                <v-card-title>{{ key }}</v-card-title>
+                <v-card v-for="(info, keyInfo) in item"> 
+                   <v-card-text> <strong> {{ keyInfo }}:</strong> {{ info }}</v-card-text>
+                </v-card>
             </v-card>
         </v-timeline-item>
         </v-timeline>
