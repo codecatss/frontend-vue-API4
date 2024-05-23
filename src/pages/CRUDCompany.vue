@@ -3,6 +3,8 @@ import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { api } from '@/service/apiConfig.js';
 import { VDataTable } from 'vuetify/labs/VDataTable';
+import { get_address_by_cep, format_validation_zip_code } from '@/utils/via_cep'
+import { get_data_by_cnpj, validation_cnpj } from '@/utils/cnpj'
 
 // Data and functions for the form
 const accountData = {
@@ -64,6 +66,17 @@ const tabs = [
     tab: 'security',
   },
 ];
+
+const name = ref('');
+const cnpj = ref('');
+const state = ref('');
+const city = ref('');
+const adress = ref('');
+const slogan = ref('');
+
+
+
+
 </script>
 
 <template>
@@ -87,20 +100,20 @@ const tabs = [
                 <!-- Form -->
                 <VForm class="mt-6">
                   <VRow>
-                    <!-- Nome Da Parceiro -->
-                    <VCol md="6" cols="12">
-                      <VTextField
-                        placeholder="Nome Da Parceiro"
-                        label="Nome Da Parceiro"
-                        v-model="accountDataLocal.nomeTrack"
-                      />
-                    </VCol>
                     <!-- CNPJ -->
                     <VCol md="6" cols="12">
                       <VTextField
                         placeholder="CNPJ"
                         label="CNPJ"
-                        v-model="accountDataLocal.cnpj"
+                        v-model="cnpj"
+                      />
+                    </VCol>
+                     <!-- Nome Da Parceiro -->
+                     <VCol md="6" cols="12">
+                      <VTextField
+                        placeholder="Nome Da Parceiro"
+                        label="Nome Da Parceiro"
+                        v-model="name"
                       />
                     </VCol>
                     <!-- Estado -->
@@ -109,7 +122,7 @@ const tabs = [
                         placeholder="Estado"
                         label="Estado"
                         no-data-text="Nenhum estado disponível"
-                        v-model="accountDataLocal.estado"
+                        v-model="state"
                       />
                     </VCol>
                     <!-- Cidade -->
@@ -118,7 +131,7 @@ const tabs = [
                         placeholder="Cidade"
                         label="Cidade"
                         no-data-text="Nenhuma cidade disponível"
-                        v-model="accountDataLocal.cidade"
+                        v-model="city"
                       />
                     </VCol>
                     <!-- Endereço -->
@@ -126,7 +139,7 @@ const tabs = [
                       <VTextField
                         placeholder="Endereço"
                         label="Endereço"
-                        v-model="accountDataLocal.endereco"
+                        v-model="adress"
                       />
                     </VCol>
                     <!-- Slogan -->
@@ -134,7 +147,7 @@ const tabs = [
                       <VTextField
                         placeholder="Forneça Um Slogan Para Empresa"
                         label="Slogan"
-                        v-model="accountDataLocal.slogan"
+                        v-model="slogan"
                       />
                     </VCol>
                     <!-- Form Actions -->
