@@ -12,7 +12,7 @@ const accountData = {
   nomeExpertise: '',
   descricao: '',
   status: 'ACTIVE',
-  certificado: '',
+  certificado: [],
 };
 
 const accountDataLocal = ref(structuredClone(accountData));
@@ -80,15 +80,17 @@ const tabs = [
 
 const populateCertifications = async () => {
   try {
-    const response = await api.get("/expertise");
-
-    certifications = response.data.map(certification => certification.name);
+    const response = await api.get("/certification");
+ 
+    certifications.value = response.data.map(certification => certification.name);
   } catch (e) {
     console.error('Failed getting certification names', e)
   }
+
+  return certifications;
 };
 
-const certifications = [];
+const certifications = ref([]);
 
 const statuses = ['ACTIVE', 'INACTIVE'];
 
@@ -147,9 +149,11 @@ const submitForm = () => {
                     </VCol>
                     <!-- Certificado -->
                     <VCol md="6" cols="12">
-                      <VTextField
+                      <VSelect
+                        :items="certifications"
                         placeholder="Certificado"
                         label="Certificado"
+                        no-data-text="Escolha uma opcao"
                         v-model="accountDataLocal.certificado"
                       />
                     </VCol>
