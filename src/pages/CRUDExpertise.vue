@@ -6,6 +6,7 @@ import { VDataTable } from 'vuetify/labs/VDataTable';
 
 // Import form component
 import avatar1 from '@images/avatars/avatar-1.png';
+import axios from 'axios';
 
 // Data and functions for the form
 const accountData = {
@@ -94,8 +95,29 @@ const certifications = ref([]);
 
 const statuses = ['ACTIVE', 'INACTIVE'];
 
-const submitForm = () => {
-  console.log(accountDataLocal.value)
+const submitForm = async () => {
+  console.log(accountDataLocal.value);
+
+  const expertiseDTO = {
+    name: accountDataLocal.value.nomeExpertise,
+    description: accountDataLocal.value.descricao,
+    statusString: accountDataLocal.value.status,
+    status: accountDataLocal.value.status,
+    createAt: new Date().toISOString,
+    updateAt: new Date().toISOString,
+    ingestionOperation: 'MANUAL',
+  };
+
+  console.log(expertiseDTO);
+
+  try {
+    const response = await api.post("/expertise", expertiseDTO);
+
+    console.log('Response: ', response);
+    resetForm();
+  } catch (error) {
+    console.error('Error: ', error)
+  };
 };
 
 </script>
