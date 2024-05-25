@@ -8,7 +8,7 @@
         >
             <template v-slot:icon>
             <v-avatar size="36">
-                <v-icon  color="primary">mdi-clock-time-five-outline</v-icon>
+                <v-icon color="primary">mdi-clock-time-five-outline</v-icon>
             </v-avatar>
             </template>
             <v-card>
@@ -28,7 +28,6 @@
 
 <script>
 import { api } from '@/service/apiConfig.js';
-import { ref } from 'vue';
 
 export default {
     props: {
