@@ -3,7 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    { path: '/', redirect: '/dashboard' },
+    { path: '/', redirect: '/auth' },
     {
       path: '/',
       component: () => import('../layouts/default.vue'),
@@ -56,6 +56,10 @@ const router = createRouter({
         {
           path: 'form-layouts',
           component: () => import('../pages/form-layouts.vue'),
+        },
+        {
+          path: 'historical',
+          component: () => import('../views/dashboard/Historical.vue'),
         },
       ],
     },
