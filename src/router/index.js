@@ -40,6 +40,10 @@ const router = createRouter({
           path: 'form-layouts',
           component: () => import('../pages/form-layouts.vue'),
         },
+        {
+          path: 'historical',
+          component: () => import('../views/dashboard/Historical.vue'),
+        },
       ],
     },
     {
