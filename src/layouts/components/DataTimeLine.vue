@@ -59,8 +59,6 @@ export default {
                     lineName: dataFromDatabase[key]["lineName"]
                 }
             }
-            console.log(this.data)
-
         },
         showDescription(description) {
             alert(description);
