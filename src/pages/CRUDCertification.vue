@@ -40,10 +40,28 @@ async function putData() {
       descricao: item.description,
       lifeTime: item.lifeTimeMonth,
       operation: item.ingestionOperation,
-      created_at: item.created_at,
+      created_at: item.createAt,
     });
   });
   return recentDevices;
+}
+
+async function getFormData() {
+  let formData = {};
+
+  for (const key in accountDataLocal.value) {
+    formData[key] = accountDataLocal.value[key];
+  }
+
+  formData['ingestionOperation'] = 'MANUAL';
+
+  return formData;
+
+}
+
+async function postData() {
+  const response = await api.post('/certification', await getFormData());
+  return response.data;
 }
 
 const recentDevices = ref([]);
@@ -109,11 +127,15 @@ const tabs = [
                         placeholder="Tempo De Vida Da Certificação"
                         label="Tempo De Vida Da Certificação"
                         v-model="accountDataLocal.lifeTimeMonth"
+                        type="number"
+                        min="0"
+                        step="1"
+                        suffix=" meses"
                       />
                     </VCol>
                     <!-- Form Actions -->
                     <VCol cols="12" class="d-flex flex-wrap gap-4">
-                      <VBtn>Save changes</VBtn>
+                      <VBtn @click="postData">Save changes</VBtn>
                       <VBtn color="secondary" variant="tonal" type="reset" @click.prevent="resetForm">
                         Reset
                       </VBtn>
@@ -162,14 +184,14 @@ const tabs = [
                 <template #item.lifeTime="{ item }">
                   <div class="lifeTime">
                     <span class="text-high-emphasis text-base">
-                      {{ item.raw.lifeTime }}
+                      {{ item.raw.lifeTime }} meses
                     </span>
                   </div>
                 </template>
-                <template #item.created_at="{ item }">
+                <template #item.createAt="{ item }">
                   <div class="created_at">
                     <span class="text-high-emphasis text-base">
-                      {{ item.raw.created_at }}
+                      {{ item.raw.createAt }}
                     </span>
                   </div>
                 </template>
