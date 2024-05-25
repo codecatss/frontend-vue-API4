@@ -1,20 +1,13 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, reactive, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-import { api } from '@/service/apiConfig.js';
-import { VDataTable } from 'vuetify/labs/VDataTable';
+import axios from 'axios';
 
-// Import form component
-import avatar1 from '@images/avatars/avatar-1.png';
-
-// Data and functions for the form
 const accountData = {
-  nomeTrack: '',
-  cnpj: '',
-  estado: 'Selecione Um Estado',
-  cidade: 'Seleciona Uma Cidade',
-  endereco: '',
-  slogan: ''
+  name: '',
+  email: '',
+  cnpjCompanyString: null, // Definido como null para permitir objeto ou valor
+  password: 'senha123'
 };
 
 const accountDataLocal = ref(structuredClone(accountData));
@@ -23,60 +16,46 @@ const resetForm = () => {
   accountDataLocal.value = structuredClone(accountData);
 };
 
-// Data and functions for the table
-const recentDevicesHeaders = [
-  { title: 'Nome do Certificação', key: 'browser' },
-  { title: 'Estado', key: 'location' },
-  { title: 'Expertise', key: 'expertise' },
-  { title: 'Progresso', key: 'percentage' },
-  { title: 'Configurações', key: 'config' },
-];
+const saveChanges = async () => {
+  // Lógica para salvar mudanças
+  try{
+    const response = await axios.post('http://localhost:8080/employee', accountDataLocal.value);
+    console.log('Changes saved', accountDataLocal.value);
+    resetForm();
+  } catch (error) {
+    console.error('Erro ao salvar mudanças:', error);
+  }
+};
 
-async function fetchData() {
-  const response = await api.get('/dash/companyexpertiseusercountservice');
-  return response.data;
-}
-
-async function putData() {
-  const data = await fetchData();
-  let recentDevices = [];
-  data.forEach((item) => {
-    try {
-      item.companyState = decodeURIComponent(escape(item.companyState));
-    } catch (e) {}
-    recentDevices.push({
-      browser: item.companyName,
-      Certificação: item.CertificaçãoName,
-      expertise: item.expertiseName,
-      location: item.companyState,
-      percentage: item.completionPercentage,
-    });
-  });
-  return recentDevices;
-}
-
-const recentDevices = ref([]);
-
-onMounted(async () => {
-  recentDevices.value = await putData();
-});
-
-// Tab navigation
 const route = useRoute();
 const activeTab = ref(route.params.tab || 'account');
 
 const tabs = [
   {
-    title: 'Criar Certificação',
+    title: 'Registro de Usuário',
     icon: 'bx-user',
     tab: 'account',
-  },
-  {
-    title: 'Tabela de Certificação',
-    icon: 'mdi-store',
-    tab: 'security',
-  },
+  }
 ];
+
+const state = reactive({
+  accountDataLocal: structuredClone(accountData),
+  empresas: [],
+});
+
+const fetchEmpresas = async () => {
+  try {
+    const response = await axios.get('http://localhost:8080/company/active');
+    console.log('Empresas:', response.data); // Verifique os dados retornados
+    state.empresas = response.data;
+  } catch (error) {
+    console.error('Erro ao buscar empresas:', error);
+  }
+};
+
+onMounted(() => {
+  fetchEmpresas();
+});
 </script>
 
 <template>
@@ -90,69 +69,71 @@ const tabs = [
     <VDivider />
 
     <VWindow v-model="activeTab" class="mt-5 disable-tab-transition">
-      <!-- Account -->
       <VWindowItem value="account">
         <VRow>
           <VCol cols="12">
             <VCard title="Cadastro De Usuário">
               <VDivider />
               <VCardText>
-                <!-- Form -->
                 <VForm class="mt-6">
                   <VRow>
-                    <!-- Nome Da Usuário -->
                     <VCol md="6" cols="12">
                       <VTextField
-                        placeholder="Nome Da Usuário"
-                        label="Nome Da Usuário"
-                        v-model="accountDataLocal.nomeTrack"
+                        class="custom-color"
+                        placeholder="Nome do usuário"
+                        label="Nome do usuário"
+                        v-model="accountDataLocal.name"
                       />
                     </VCol>
-                    <!-- CNPJ -->
                     <VCol md="6" cols="12">
                       <VTextField
-                        placeholder="CNPJ"
+                        class="custom-color"
+                        placeholder="Email"
+                        label="Email"
+                        v-model="accountDataLocal.email"
+                      />
+                    </VCol>
+                    <!-- Empresa -->
+                    <VCol md="6" cols="12">
+                      <VTextField
+                        class="custom-color"
+                        placeholder="CNPJ da empresa"
                         label="CNPJ"
-                        v-model="accountDataLocal.cnpj"
+                        v-model="accountDataLocal.cnpjCompanyString"
                       />
                     </VCol>
-                    <!-- Estado -->
-                    <VCol md="6" cols="12">
+                    <!-- <VCol md="6" cols="12">
                       <VSelect
-                        placeholder="Estado"
-                        label="Estado"
-                        no-data-text="Nenhum estado disponível"
-                        v-model="accountDataLocal.estado"
-                      />
-                    </VCol>
-                    <!-- Cidade -->
-                    <VCol md="6" cols="12">
-                      <VSelect
-                        placeholder="Cidade"
-                        label="Cidade"
-                        no-data-text="Nenhuma cidade disponível"
-                        v-model="accountDataLocal.cidade"
-                      />
-                    </VCol>
-                    <!-- Endereço -->
+                        class="custom-color"
+                        :items="state.empresas"
+                        item-text="name"
+                        item-value="cnpj"
+                        label="Empresa"
+                        v-model="accountDataLocal.empresa"
+                        return-object
+                      >
+                        <template v-slot:prepend-item>
+                          <VListItem>
+                            <VListItemTitle>Selecione uma Empresa</VListItemTitle>
+                          </VListItem>
+                        </template>
+                        <template v-slot:item="{ item }">
+                          <VListItem :title="item.name" :value="item.cnpj" />
+                        </template>
+                      </VSelect>
+                    </VCol> -->
+                    <!-- SENHA -->
                     <VCol md="6" cols="12">
                       <VTextField
-                        placeholder="Endereço"
-                        label="Endereço"
-                        v-model="accountDataLocal.endereco"
+                        class="custom-color"
+                        placeholder="Senha"
+                        label="Senha"
+                        v-model="accountDataLocal.password"
+                        type="password"
                       />
                     </VCol>
-                    <!-- Slogan -->
-                    <VCol md="6" cols="12">
-                      <VTextField
-                        placeholder="Forneça Um Slogan Para Empresa"
-                        label="Slogan"
-                        v-model="accountDataLocal.slogan"
-                      />
-                    </VCol>
-                    <!-- Form Actions -->
                     <VCol cols="12" class="d-flex flex-wrap gap-4">
-                      <VBtn>Save changes</VBtn>
+                      <VBtn @click="saveChanges">Save changes</VBtn>
                       <VBtn color="secondary" variant="tonal" type="reset" @click.prevent="resetForm">
                         Reset
                       </VBtn>
@@ -160,65 +141,6 @@ const tabs = [
                   </VRow>
                 </VForm>
               </VCardText>
-            </VCard>
-          </VCol>
-        </VRow>
-      </VWindowItem>
-
-      <!-- Security -->
-      <VWindowItem value="security">
-        <VRow>
-          <VCol cols="12">
-            <VCard title="Membros Do Programa OPN">
-              <VDataTable
-                :headers="recentDevicesHeaders"
-                :items="recentDevices"
-                :items-per-page="-1"
-                :fixed-header="true"
-                :height="'600px'"
-                class="text-no-wrap rounded-0 text-sm"
-              >
-                <template #item.browser="{ item }">
-                  <div class="d-flex">
-                    <svg
-                      class="oracle-icon"
-                      width="25px"
-                      height="25px"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fill="#F00"
-                        fill-rule="evenodd"
-                        d="M7.957359,18.9123664 C4.11670252,18.9123664 1,15.803458 1,11.9617373 C1,8.12000773 4.11670252,5 7.957359,5 L16.0437948,5 C19.8855156,5 23,8.12000773 23,11.9617373 C23,15.803458 19.8855156,18.9123664 16.0437948,18.9123664 L7.957359,18.9123664 L7.957359,18.9123664 Z M15.8639176,16.4585488 C18.352201,16.4585488 20.3674397,14.448858 20.3674397,11.9617373 C20.3674397,9.47460595 18.352201,7.45381934 15.8639176,7.45381934 L8.1360824,7.45381934 C5.64895285,7.45381934 3.63255855,9.47460595 3.63255855,11.9617373 C3.63255855,14.448858 5.64895285,16.4585488 8.1360824,16.4585488 L15.8639176,16.4585488 L15.8639176,16.4585488 Z"
-                      />
-                    </svg>
-                    <span class="text-high-emphasis text-base">
-                      {{ item.raw.browser }}
-                    </span>
-                  </div>
-                </template>
-                <template #item.percentage="{ item }">
-                  <div class="percentage">
-                    <span class="text-high-emphasis text-base">
-                      {{ Math.floor(item.raw.percentage) }}%
-                    </span>
-                    <div class="progress-bar-wrapper">
-                      <div
-                        class="progress-bar"
-                        :style="{ width: item.raw.percentage + '%' }"
-                      ></div>
-                    </div>
-                    <Button>
-                      <v-icon left>bxs-show</v-icon>
-                    </Button>
-                    <Button>
-                      <v-icon left>bxs-cog</v-icon>
-                    </Button>
-                  </div>
-                </template>
-                <template #bottom />
-              </VDataTable>
             </VCard>
           </VCol>
         </VRow>
@@ -251,5 +173,9 @@ const tabs = [
   flex-direction: row;
   align-items: center;
   justify-content: center;
+}
+
+.custom-color {
+  color: #000;
 }
 </style>
