@@ -96,7 +96,6 @@ const certifications = ref([]);
 const statuses = ['ACTIVE', 'INACTIVE'];
 
 const submitForm = async () => {
-  console.log(accountDataLocal.value);
 
   const expertiseDTO = {
     name: accountDataLocal.value.nomeExpertise,
@@ -108,8 +107,6 @@ const submitForm = async () => {
     ingestionOperation: 'MANUAL',
   };
 
-  console.log(expertiseDTO);
-
   try {
     const response = await api.post("/expertise", expertiseDTO);
 
@@ -118,6 +115,7 @@ const submitForm = async () => {
   } catch (error) {
     console.error('Error: ', error)
   };
+  
 };
 
 </script>
