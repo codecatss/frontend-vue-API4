@@ -3,8 +3,9 @@ import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { api } from '@/service/apiConfig.js';
 import { VDataTable } from 'vuetify/labs/VDataTable';
-import { get_address_by_cep, format_validation_zip_code } from '@/utils/via_cep'
-import { get_data_by_cnpj, validation_cnpj} from '@/utils/cnpj'
+
+// Import form component
+import avatar1 from '@images/avatars/avatar-1.png';
 
 // Data and functions for the form
 const accountData = {
@@ -24,28 +25,41 @@ const resetForm = () => {
 
 // Data and functions for the table
 const recentDevicesHeaders = [
-  { title: 'Nome da Empresa', key: 'name' },
-  { title: 'Cidade', key: 'city' },
-  { title: 'UF', key: 'state' },
-  { title: 'OPN status', key: 'opnStatus' },
-  { title: 'Status', key: 'status' },
+  { title: 'Nome do Certificação', key: 'browser' },
+  { title: 'Estado', key: 'location' },
+  { title: 'Expertise', key: 'expertise' },
+  { title: 'Progresso', key: 'percentage' },
+  { title: 'Configurações', key: 'config' },
 ];
+
+async function fetchData() {
+  const response = await api.get('/dash/companyexpertiseusercountservice');
+  return response.data;
+}
+
+async function putData() {
+  const data = await fetchData();
+  let recentDevices = [];
+  data.forEach((item) => {
+    try {
+      item.companyState = decodeURIComponent(escape(item.companyState));
+    } catch (e) {}
+    recentDevices.push({
+      browser: item.companyName,
+      Certificação: item.CertificaçãoName,
+      expertise: item.expertiseName,
+      location: item.companyState,
+      percentage: item.completionPercentage,
+    });
+  });
+  return recentDevices;
+}
 
 const recentDevices = ref([]);
 
-async function putData() {
-  const response = await api.get('/company');
-
-  for(var key in response.data){
-    recentDevices.value.push(response.data[key]);
-  }
-}
-putData();
-
-// onMounted(async () => {
-//   recentDevices.value = await putData();
-// });
-
+onMounted(async () => {
+  recentDevices.value = await putData();
+});
 
 // Tab navigation
 const route = useRoute();
@@ -63,65 +77,6 @@ const tabs = [
     tab: 'security',
   },
 ];
-
-const name = ref('');
-const cnpj = ref('');
-const cep = ref('');
-const state = ref('');
-const city = ref('');
-const adress = ref('');
-const slogan = ref('');
-
-const handleCnpjInput = () => {
-  cnpj.value = validation_cnpj(cnpj.value.replace(/\D/g, ''));
-}
-
-const handleCEPInput = () => {
-  cep.value = format_validation_zip_code(cep.value.replace(/\D/g, ''));
-}
-
-const handleCnpjChange = async () => {
-  const response = await get_data_by_cnpj(cnpj.value.replace(/\D/g, ''));
-  name.value = response.nome;
-  state.value = response.uf;
-  cep.value = format_validation_zip_code(response.cep.replace(/\D/g, '')) 
-  city.value = response.municipio;
-  adress.value = response.logradouro;
-}
-
-const handleCEPChange = async () => {
-  const response = await get_address_by_cep(cep.value.replace(/\D/g, ''));
-  state.value = response.uf;
-  city.value = response.localidade;
-  adress.value = response.logradouro;
-}
-
-const states = [
-  'AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA',
-  'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN',
-  'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO'
-]
-
-const handleSaveCompany = async () => {
-  var cnpj_format = cnpj.value.replace(/\D/g, '');
-
-  const response = await api.post('/company/save', {
-    name: name.value,
-    cnpj: cnpj_format,
-    city: city.value,
-    address: adress.value,
-    state: state.value,
-    slogan: slogan.value,
-  })
-  if(response.status == 200){
-    alert('Empresa cadastrada com sucesso!');
-  }else{
-    alert(`Erro: ${response.status}`);
-  }
-}
-
-
-
 </script>
 
 <template>
@@ -139,51 +94,35 @@ const handleSaveCompany = async () => {
       <VWindowItem value="account">
         <VRow>
           <VCol cols="12">
-            <VCard title="Cadastro De Parceiro">
+            <VCard title="Cadastro De Tracks">
               <VDivider />
               <VCardText>
                 <!-- Form -->
                 <VForm class="mt-6">
                   <VRow>
+                    <!-- Nome Da Tracks -->
+                    <VCol md="6" cols="12">
+                      <VTextField
+                        placeholder="Nome Da Tracks"
+                        label="Nome Da Tracks"
+                        v-model="accountDataLocal.nomeTrack"
+                      />
+                    </VCol>
                     <!-- CNPJ -->
                     <VCol md="6" cols="12">
                       <VTextField
                         placeholder="CNPJ"
                         label="CNPJ"
-                        v-model="cnpj"
-                        @input="handleCnpjInput"
-                        @blur="handleCnpjChange"
-                        maxlength="18"
+                        v-model="accountDataLocal.cnpj"
                       />
                     </VCol>
-                     <!-- Nome Da Parceiro -->
-                     <VCol md="6" cols="12">
-                      <VTextField
-                        placeholder="Nome Da Parceiro"
-                        label="Nome Da Parceiro"
-                        v-model="name"
-                      />
-                    </VCol>
-                    <!-- CEP -->
-                    <VCol md="6" cols="12">
-                      <VTextField
-                        placeholder="CEP"
-                        label="CEP"
-                        v-model="cep"
-                        @input="handleCEPInput"
-                        @blur="handleCEPChange"
-                        maxlength="9"
-                      />
-                    </VCol>
-                    
                     <!-- Estado -->
                     <VCol md="6" cols="12">
                       <VSelect
                         placeholder="Estado"
                         label="Estado"
                         no-data-text="Nenhum estado disponível"
-                        v-model="state"
-                        :items="states"
+                        v-model="accountDataLocal.estado"
                       />
                     </VCol>
                     <!-- Cidade -->
@@ -192,7 +131,7 @@ const handleSaveCompany = async () => {
                         placeholder="Cidade"
                         label="Cidade"
                         no-data-text="Nenhuma cidade disponível"
-                        v-model="city"
+                        v-model="accountDataLocal.cidade"
                       />
                     </VCol>
                     <!-- Endereço -->
@@ -200,7 +139,7 @@ const handleSaveCompany = async () => {
                       <VTextField
                         placeholder="Endereço"
                         label="Endereço"
-                        v-model="adress"
+                        v-model="accountDataLocal.endereco"
                       />
                     </VCol>
                     <!-- Slogan -->
@@ -208,16 +147,14 @@ const handleSaveCompany = async () => {
                       <VTextField
                         placeholder="Forneça Um Slogan Para Empresa"
                         label="Slogan"
-                        v-model="slogan"
+                        v-model="accountDataLocal.slogan"
                       />
                     </VCol>
                     <!-- Form Actions -->
                     <VCol cols="12" class="d-flex flex-wrap gap-4">
-                      <VBtn
-                        @click="handleSaveCompany"
-                      >Cadastrar</VBtn>
+                      <VBtn>Save changes</VBtn>
                       <VBtn color="secondary" variant="tonal" type="reset" @click.prevent="resetForm">
-                        Limpar formulario
+                        Reset
                       </VBtn>
                     </VCol>
                   </VRow>
@@ -241,7 +178,7 @@ const handleSaveCompany = async () => {
                 :height="'600px'"
                 class="text-no-wrap rounded-0 text-sm"
               >
-                <template #item.name="{ item }">
+                <template #item.browser="{ item }">
                   <div class="d-flex">
                     <svg
                       class="oracle-icon"
@@ -257,11 +194,29 @@ const handleSaveCompany = async () => {
                       />
                     </svg>
                     <span class="text-high-emphasis text-base">
-                      {{ item.raw.name }}
+                      {{ item.raw.browser }}
                     </span>
                   </div>
                 </template>
-                
+                <template #item.percentage="{ item }">
+                  <div class="percentage">
+                    <span class="text-high-emphasis text-base">
+                      {{ Math.floor(item.raw.percentage) }}%
+                    </span>
+                    <div class="progress-bar-wrapper">
+                      <div
+                        class="progress-bar"
+                        :style="{ width: item.raw.percentage + '%' }"
+                      ></div>
+                    </div>
+                    <Button>
+                      <v-icon left>bxs-show</v-icon>
+                    </Button>
+                    <Button>
+                      <v-icon left>bxs-cog</v-icon>
+                    </Button>
+                  </div>
+                </template>
                 <template #bottom />
               </VDataTable>
             </VCard>

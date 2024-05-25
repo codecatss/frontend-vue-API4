@@ -17,6 +17,23 @@ const router = createRouter({
           component: () => import('../pages/CRUDCompany.vue'),
         },
         {
+          path: 'user',
+          component: () => import('../pages/CRUDUser.vue'),
+        },
+        {
+          path: 'tracks',
+          component: () => import('../pages/CRUDOPNTrack.vue'),
+        },
+        {
+          path: 'certification',
+          component: () => import('../pages/CRUDCertification.vue'),
+        },
+        {
+          path: 'expertise',
+          component: () => import('../pages/CRUDExpertise.vue'),
+        },
+        
+        {
           path: 'account-settings',
           component: () => import('../pages/account-settings.vue'),
         },

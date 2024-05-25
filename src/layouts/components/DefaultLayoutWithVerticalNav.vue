@@ -171,9 +171,9 @@ onMounted(() => {
     
       <VerticalNavLink
         :item="{
-          title: 'Usuários ',
+          title: 'Usuários',
           icon: 'bx-user-plus',
-          to: '/',
+          to: '/user',
         }"
       />
 
@@ -182,7 +182,7 @@ onMounted(() => {
         :item="{
           title: 'Tracks',
           icon: 'bx-add-to-queue',
-          to: '/',
+          to: '/tracks',
         }"
       />
 
@@ -190,15 +190,15 @@ onMounted(() => {
         :item="{
           title: 'Expertise',
           icon: 'bx-notepad',
-          to: '/',
+          to: '/expertise',
         }"
       />
 
       <VerticalNavLink
         :item="{
-          title: 'Workload',
+          title: 'Certification',
           icon: 'bx-brain',
-          to: '/',
+          to: '/certification',
         }"
       />
 

@@ -25,27 +25,28 @@ const recentDevicesHeaders = [
     title: 'Progresso',
     key: 'percentage',
   },
+  {
+    title: 'Configurações',
+    key: 'config',
+  },
 ]
-
 async function putData(){
   const data = await fetchData();
   
   let recentDevices = [];
 
   data.forEach((item) => {
-    try{
+    try {
       item.companyState = decodeURIComponent(escape(item.companyState));
     } catch (e) {
-      // do nothing;
-    };
+    }
     recentDevices.push({
       browser: item.companyName,
       track: item.trackName,
       expertise: item.expertiseName,
       location: item.companyState,
-      percentage: item.completionPercentage,
+      percentage: item.completionPercentage
     });
-  
   });
   return recentDevices;
 }
@@ -88,6 +89,13 @@ onMounted(async () => {
               <div class="progress-bar-wrapper">
                 <div class="progress-bar" :style="{ width: item.raw.percentage + '%' }"></div>
               </div>
+              
+              <Button>
+                <v-icon left>bxs-show</v-icon>
+              </Button>
+              <Button>
+                <v-icon left>bxs-cog</v-icon>
+              </Button>
             </div>
            
             
