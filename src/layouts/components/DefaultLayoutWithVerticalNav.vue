@@ -142,7 +142,7 @@ onMounted(() => {
 
       <VerticalNavLink
         :item="{
-          title: 'Dados Inválidos',
+          title: 'Dados Históricos',
           icon: 'bx-error-circle',
           to: '/historical',
         }"
