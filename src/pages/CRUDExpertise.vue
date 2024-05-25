@@ -24,33 +24,48 @@ const resetForm = () => {
 
 // Data and functions for the table
 const recentDevicesHeaders = [
-  { title: 'Nome do Certificação', key: 'browser' },
-  { title: 'Estado', key: 'location' },
-  { title: 'Expertise', key: 'expertise' },
-  { title: 'Progresso', key: 'percentage' },
-  { title: 'Configurações', key: 'config' },
+  { title: 'Nome da Expertise', key: 'browser' },
+  { title: 'Descrição', key: 'location' },
+  { title: 'Status', key: 'expertise' },
 ];
 
 async function fetchData() {
-  const response = await api.get('/dash/companyexpertiseusercountservice');
+  const response = await api.get('/expertise');
+
+  console.log("fetchData -> ", response.data);
+
   return response.data;
 }
+
+// async function putData() {
+//   const data = await fetchData();
+//   let recentDevices = [];
+//   data.forEach( item => {
+//     try {
+//       item.companyState = decodeURIComponent(escape(item.companyState));
+//     } catch (e) {}
+//     recentDevices.push({
+//       browser: item.companyName,
+//       Certificação: item.CertificaçãoName,
+//       expertise: item.expertiseName,
+//       location: item.companyState,
+//       percentage: item.completionPercentage,
+//     });
+//   });
+//   return recentDevices;
+// }
 
 async function putData() {
   const data = await fetchData();
   let recentDevices = [];
-  data.forEach((item) => {
-    try {
-      item.companyState = decodeURIComponent(escape(item.companyState));
-    } catch (e) {}
+  data.forEach( item => {
     recentDevices.push({
-      browser: item.companyName,
-      Certificação: item.CertificaçãoName,
-      expertise: item.expertiseName,
-      location: item.companyState,
-      percentage: item.completionPercentage,
+      browser: item.name,
+      expertise: item.status,
+      location: item.description,
     });
   });
+
   return recentDevices;
 }
 
@@ -204,7 +219,7 @@ const submitForm = async () => {
       <VWindowItem value="security">
         <VRow>
           <VCol cols="12">
-            <VCard title="Membros Do Programa OPN">
+            <VCard title="Expertises">
               <VDataTable
                 :headers="recentDevicesHeaders"
                 :items="recentDevices"
@@ -231,25 +246,6 @@ const submitForm = async () => {
                     <span class="text-high-emphasis text-base">
                       {{ item.raw.browser }}
                     </span>
-                  </div>
-                </template>
-                <template #item.percentage="{ item }">
-                  <div class="percentage">
-                    <span class="text-high-emphasis text-base">
-                      {{ Math.floor(item.raw.percentage) }}%
-                    </span>
-                    <div class="progress-bar-wrapper">
-                      <div
-                        class="progress-bar"
-                        :style="{ width: item.raw.percentage + '%' }"
-                      ></div>
-                    </div>
-                    <Button>
-                      <v-icon left>bxs-show</v-icon>
-                    </Button>
-                    <Button>
-                      <v-icon left>bxs-cog</v-icon>
-                    </Button>
                   </div>
                 </template>
                 <template #bottom />
