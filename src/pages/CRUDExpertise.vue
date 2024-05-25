@@ -81,9 +81,16 @@ const tabs = [
 
 const populateCertifications = async () => {
   try {
-    const response = await api.get("/certification");
+    const response = await api.get("/certification/withId");
+
+    console.log(response);
  
-    certifications.value = response.data.map(certification => certification.name);
+    certifications.value = response.data.map(certification => ({
+      id: certification.id,
+      name: certification.name,
+    }));
+
+    console.log(certifications.value);
   } catch (e) {
     console.error('Failed getting certification names', e)
   }
@@ -110,7 +117,7 @@ const submitForm = async () => {
   try {
     const response = await api.post("/expertise", expertiseDTO);
 
-    console.log('Response: ', response);
+    console.log('Response: ', response.data);
     resetForm();
   } catch (error) {
     console.error('Error: ', error)
@@ -171,6 +178,7 @@ const submitForm = async () => {
                     <VCol md="6" cols="12">
                       <VSelect
                         :items="certifications"
+                        item-title="name"
                         placeholder="Certificado"
                         label="Certificado"
                         no-data-text="Escolha uma opcao"
