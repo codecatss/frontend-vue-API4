@@ -4,7 +4,7 @@ import { useRoute } from 'vue-router';
 import { api } from '@/service/apiConfig.js';
 import { VDataTable } from 'vuetify/labs/VDataTable';
 import { get_address_by_cep, format_validation_zip_code } from '@/utils/via_cep'
-import { get_data_by_cnpj, validation_cnpj } from '@/utils/cnpj'
+import { get_data_by_cnpj, validation_cnpj} from '@/utils/cnpj'
 
 // Data and functions for the form
 const accountData = {
@@ -31,13 +31,10 @@ const recentDevicesHeaders = [
   { title: 'Status', key: 'status' },
 ];
 
-
-
 const recentDevices = ref([]);
 
 async function putData() {
   const response = await api.get('/company');
-  console.log(response.data);
 
   for(var key in response.data){
     recentDevices.value.push(response.data[key]);
@@ -69,11 +66,59 @@ const tabs = [
 
 const name = ref('');
 const cnpj = ref('');
+const cep = ref('');
 const state = ref('');
 const city = ref('');
 const adress = ref('');
 const slogan = ref('');
 
+const handleCnpjInput = () => {
+  cnpj.value = validation_cnpj(cnpj.value.replace(/\D/g, ''));
+}
+
+const handleCEPInput = () => {
+  cep.value = format_validation_zip_code(cep.value.replace(/\D/g, ''));
+}
+
+const handleCnpjChange = async () => {
+  const response = await get_data_by_cnpj(cnpj.value.replace(/\D/g, ''));
+  name.value = response.nome;
+  state.value = response.uf;
+  cep.value = format_validation_zip_code(response.cep.replace(/\D/g, '')) 
+  city.value = response.municipio;
+  adress.value = response.logradouro;
+}
+
+const handleCEPChange = async () => {
+  const response = await get_address_by_cep(cep.value.replace(/\D/g, ''));
+  state.value = response.uf;
+  city.value = response.localidade;
+  adress.value = response.logradouro;
+}
+
+const states = [
+  'AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA',
+  'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN',
+  'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO'
+]
+
+const handleSaveCompany = async () => {
+  var cnpj_format = cnpj.value.replace(/\D/g, '');
+
+  const response = await api.post('/company/save', {
+    name: name.value,
+    cnpj: cnpj_format,
+    city: city.value,
+    address: adress.value,
+    state: state.value,
+    slogan: slogan.value,
+  })
+  if(response.status == 200){
+    alert('Empresa cadastrada com sucesso!');
+  }else{
+    alert(`Erro: ${response.status}`);
+  }
+}
 
 
 
@@ -106,6 +151,9 @@ const slogan = ref('');
                         placeholder="CNPJ"
                         label="CNPJ"
                         v-model="cnpj"
+                        @input="handleCnpjInput"
+                        @blur="handleCnpjChange"
+                        maxlength="18"
                       />
                     </VCol>
                      <!-- Nome Da Parceiro -->
@@ -116,6 +164,18 @@ const slogan = ref('');
                         v-model="name"
                       />
                     </VCol>
+                    <!-- CEP -->
+                    <VCol md="6" cols="12">
+                      <VTextField
+                        placeholder="CEP"
+                        label="CEP"
+                        v-model="cep"
+                        @input="handleCEPInput"
+                        @blur="handleCEPChange"
+                        maxlength="9"
+                      />
+                    </VCol>
+                    
                     <!-- Estado -->
                     <VCol md="6" cols="12">
                       <VSelect
@@ -123,6 +183,7 @@ const slogan = ref('');
                         label="Estado"
                         no-data-text="Nenhum estado disponível"
                         v-model="state"
+                        :items="states"
                       />
                     </VCol>
                     <!-- Cidade -->
@@ -152,9 +213,11 @@ const slogan = ref('');
                     </VCol>
                     <!-- Form Actions -->
                     <VCol cols="12" class="d-flex flex-wrap gap-4">
-                      <VBtn>Save changes</VBtn>
+                      <VBtn
+                        @click="handleSaveCompany"
+                      >Cadastrar</VBtn>
                       <VBtn color="secondary" variant="tonal" type="reset" @click.prevent="resetForm">
-                        Reset
+                        Limpar formulario
                       </VBtn>
                     </VCol>
                   </VRow>
@@ -198,25 +261,7 @@ const slogan = ref('');
                     </span>
                   </div>
                 </template>
-                <!-- <template #item.percentage="{ item }">
-                  <div class="percentage">
-                    <span class="text-high-emphasis text-base">
-                      {{ Math.floor(item.raw.percentage) }}%
-                    </span>
-                    <div class="progress-bar-wrapper">
-                      <div
-                        class="progress-bar"
-                        :style="{ width: item.raw.percentage + '%' }"
-                      ></div>
-                    </div>
-                    <Button>
-                      <v-icon left>bxs-show</v-icon>
-                    </Button>
-                    <Button>
-                      <v-icon left>bxs-cog</v-icon>
-                    </Button>
-                  </div>
-                </template> -->
+                
                 <template #bottom />
               </VDataTable>
             </VCard>

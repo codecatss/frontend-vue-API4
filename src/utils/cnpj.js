@@ -20,7 +20,31 @@ function validation_cnpj(cnpj){
     return cnpjFormatted;
 }
 
+function formatCNPJ(input) {
+    // Remove caracteres não numéricos
+    let cnpj = input.replace(/\D/g, '');
+
+    // Adiciona os pontos, barras e traço de acordo com o tamanho do CNPJ
+    if (cnpj.length > 2) {
+        cnpj = cnpj.substring(0, 2) + '.' + cnpj.substring(2);
+    }
+    if (cnpj.length > 6) {
+        cnpj = cnpj.substring(0, 6) + '.' + cnpj.substring(6);
+    }
+    if (cnpj.length > 10) {
+        cnpj = cnpj.substring(0, 10) + '/' + cnpj.substring(10);
+    }
+    if (cnpj.length > 15) {
+        cnpj = cnpj.substring(0, 15) + '-' + cnpj.substring(15);
+    }
+
+    // Atualiza o valor do input
+    return cnpj;
+}
+
+
 export {
     get_data_by_cnpj,
+    formatCNPJ,
     validation_cnpj
 }
