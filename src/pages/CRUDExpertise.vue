@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { api } from '@/service/apiConfig.js';
 import { VDataTable } from 'vuetify/labs/VDataTable';
+import { createToaster } from "@meforma/vue-toaster";
 
 // Import form component
 import avatar1 from '@images/avatars/avatar-1.png';
@@ -35,6 +36,8 @@ const accountDataLocal = ref(structuredClone(accountData));
 const resetForm = () => {
   accountDataLocal.value = structuredClone(accountData);
 };
+
+const toaster = createToaster({ /* options */ });
 
 // Data and functions for the table
 const recentDevicesHeaders = [
@@ -120,9 +123,18 @@ const tabs = [
 
 const submitForm = async () => {
 
+  const nomeExpertise = accountDataLocal.value.nomeExpertise;
+  const descricao = accountDataLocal.value.descricao;
+
+  if (!nomeExpertise || !descricao) {
+    toaster.error("Todos os campos são obrigatórios.");
+
+    return;
+  }
+
   const expertiseDTO = {
-    name: accountDataLocal.value.nomeExpertise,
-    description: accountDataLocal.value.descricao,
+    name: nomeExpertise,
+    description: descricao,
     statusString: 'ACTIVE',
     status: 'ACTIVE',
     createAt: new Date().toISOString,
@@ -134,8 +146,11 @@ const submitForm = async () => {
     const response = await api.post("/expertise", expertiseDTO);
 
     resetForm();
+    toaster.success("A Expertise foi cadastrada com sucesso!");
+
   } catch (error) {
     console.error('Error: ', error)
+    toaster.error("Algo deu errado. Tente novamente.")
   };
   
 };
