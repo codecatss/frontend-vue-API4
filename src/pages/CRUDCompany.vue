@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, reactive, watchEffect } from 'vue';
 import { useRoute } from 'vue-router';
 import { api } from '@/service/apiConfig.js';
 import { VDataTable } from 'vuetify/labs/VDataTable';
@@ -16,11 +16,14 @@ const accountData = {
   slogan: ''
 };
 
-const accountDataLocal = ref(structuredClone(accountData));
+
+
+const accountDataLocal = reactive(structuredClone(accountData));
 
 const resetForm = () => {
-  accountDataLocal.value = structuredClone(accountData);
+  Object.assign(accountDataLocal, structuredClone(accountData));
 };
+
 
 // Data and functions for the table
 const recentDevicesHeaders = [
@@ -36,15 +39,12 @@ const recentDevices = ref([]);
 async function putData() {
   const response = await api.get('/company');
 
-  for(var key in response.data){
+  for (var key in response.data) {
     recentDevices.value.push(response.data[key]);
   }
 }
 putData();
 
-// onMounted(async () => {
-//   recentDevices.value = await putData();
-// });
 
 
 // Tab navigation
@@ -53,74 +53,133 @@ const activeTab = ref(route.params.tab || 'account');
 
 const tabs = [
   {
-    title: 'Criar Certificação',
+    title: 'Criar Parceiro',
     icon: 'bx-user',
     tab: 'account',
   },
   {
-    title: 'Tabela de Certificação',
+    title: 'Tabela de Parceiro',
     icon: 'mdi-store',
     tab: 'security',
   },
 ];
 
-const name = ref('');
-const cnpj = ref('');
-const cep = ref('');
-const state = ref('');
-const city = ref('');
-const adress = ref('');
-const slogan = ref('');
-
-const handleCnpjInput = () => {
-  cnpj.value = validation_cnpj(cnpj.value.replace(/\D/g, ''));
-}
-
-const handleCEPInput = () => {
-  cep.value = format_validation_zip_code(cep.value.replace(/\D/g, ''));
-}
-
-const handleCnpjChange = async () => {
-  const response = await get_data_by_cnpj(cnpj.value.replace(/\D/g, ''));
-  name.value = response.nome;
-  state.value = response.uf;
-  cep.value = format_validation_zip_code(response.cep.replace(/\D/g, '')) 
-  city.value = response.municipio;
-  adress.value = response.logradouro;
-}
-
-const handleCEPChange = async () => {
-  const response = await get_address_by_cep(cep.value.replace(/\D/g, ''));
-  state.value = response.uf;
-  city.value = response.localidade;
-  adress.value = response.logradouro;
-}
-
 const states = [
-  'AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA',
-  'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN',
-  'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO'
-]
+  {sigla: 'AC', nome: 'Acre'},
+  {sigla: 'AL', nome: 'Alagoas'},
+  {sigla: 'AP', nome: 'Amapá'},
+  {sigla: 'AM', nome: 'Amazonas'},
+  {sigla: 'BA', nome: 'Bahia'},
+  {sigla: 'CE', nome: 'Ceará'},
+  {sigla: 'DF', nome: 'Distrito Federal'},
+  {sigla: 'ES', nome: 'Espírito Santo'},
+  {sigla: 'GO', nome: 'Goiás'},
+  {sigla: 'MA', nome: 'Maranhão'},
+  {sigla: 'MT', nome: 'Mato Grosso'},
+  {sigla: 'MS', nome: 'Mato Grosso do Sul'},
+  {sigla: 'MG', nome: 'Minas Gerais'},
+  {sigla: 'PA', nome: 'Pará'},
+  {sigla: 'PB', nome: 'Paraíba'},
+  {sigla: 'PR', nome: 'Paraná'},
+  {sigla: 'PE', nome: 'Pernambuco'},
+  {sigla: 'PI', nome: 'Piauí'},
+  {sigla: 'RJ', nome: 'Rio de Janeiro'},
+  {sigla: 'RN', nome: 'Rio Grande do Norte'},
+  {sigla: 'RS', nome: 'Rio Grande do Sul'},
+  {sigla: 'RO', nome: 'Rondônia'},
+  {sigla: 'RR', nome: 'Roraima'},
+  {sigla: 'SC', nome: 'Santa Catarina'},
+  {sigla: 'SP', nome: 'São Paulo'},
+  {sigla: 'SE', nome: 'Sergipe'},
+  {sigla: 'TO', nome: 'Tocantins'},
+];
+  
+
+
+
+
+
 
 const handleSaveCompany = async () => {
-  var cnpj_format = cnpj.value.replace(/\D/g, '');
+  var cnpj_format = accountDataLocal.cnpj.replace(/\D/g, '');
 
   const response = await api.post('/company/save', {
-    name: name.value,
+    name: accountDataLocal.nomeTrack,
     cnpj: cnpj_format,
-    city: city.value,
-    address: adress.value,
-    state: state.value,
-    slogan: slogan.value,
+    city: accountDataLocal.cidade,
+    address: accountDataLocal.endereco,
+    state: accountDataLocal.estado,
+    slogan: accountDataLocal.slogan,
   })
-  if(response.status == 200){
+  if (response.status == 200) {
     alert('Empresa cadastrada com sucesso!');
-  }else{
+  } else {
     alert(`Erro: ${response.status}`);
   }
 }
 
 
+
+// Função para buscar cidades com base na sigla do estado selecionado
+// Função para buscar cidades com base na sigla do estado selecionado
+const fetchCitiesByState = async (stateSigla) => {
+  try {
+    console.log('Buscando cidades do estado:', stateSigla);
+    const estado = states.find(state => stateSigla == state.nome);
+    const siglaEstado = estado ? estado.sigla : null;
+    console.log('Sigla do estado:', siglaEstado)
+    if (siglaEstado) {
+      const response = await api.get(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${siglaEstado}/municipios`);
+      return response.data.map(city => city.nome);
+    } else {
+      console.error('Estado não encontrado:', stateSigla);
+      return [];
+    }
+  } catch (error) {
+    console.error('Erro ao buscar cidades:', error);
+    return [];
+  }
+};
+
+
+
+// Função para buscar dados do CNPJ
+watchEffect(() => {
+  if (accountDataLocal.cnpj.length === 14 && /^\d+$/.test(accountDataLocal.cnpj)) {
+    console.log('Buscando dados do CNPJ:', accountDataLocal.cnpj)
+    fetch(`https://api-publica.speedio.com.br/buscarcnpj?cnpj=${accountDataLocal.cnpj}`)
+      .then(response => response.json())
+      .then(data => {
+        console.log('Dados do CNPJ:', data)
+        // Verifica se a propriedade "UF" e "MUNICIPIO" existem nos dados
+        if (data["UF"] && data["MUNICIPIO"]) {
+          const estado = states.find(state => state.sigla == data["UF"]);
+          // Se existirem, atribui os valores aos campos correspondentes
+          accountDataLocal.nomeTrack = data["RAZAO SOCIAL"];
+          accountDataLocal.estado = estado.nome;
+          accountDataLocal.cidade = data["MUNICIPIO"];
+          // Preencher o input de endereço com o nome da rua
+          accountDataLocal.endereco = data["LOGRADOURO"];
+
+          // Atualizar a lista de cidades com base no estado atualizado
+          fetchCitiesByState(data["UF"]).then(cities => {
+            accountDataLocal.cities = cities;
+          });
+        } else {
+          // Se não existirem, limpa os campos correspondentes
+          accountDataLocal.nomeTrack = '';
+          accountDataLocal.estado = 'Selecione Um Estado';
+          accountDataLocal.cidade = 'Seleciona Uma Cidade';
+          accountDataLocal.endereco = '';
+        }
+        console.log(accountDataLocal)
+      })
+      .catch(error => {
+        console.error('Erro ao buscar dados do CNPJ:', error)
+      })
+      console.log(accountDataLocal)
+  }
+});
 
 </script>
 
@@ -148,51 +207,43 @@ const handleSaveCompany = async () => {
                     <!-- CNPJ -->
                     <VCol md="6" cols="12">
                       <VTextField
-                        placeholder="CNPJ"
-                        label="CNPJ"
-                        v-model="cnpj"
-                        @input="handleCnpjInput"
-                        @blur="handleCnpjChange"
-                        maxlength="18"
-                      />
+                      placeholder="CNPJ"
+                      label="CNPJ"
+                      v-model="accountDataLocal.cnpj"
+                      maxlength="18"
+                     
+                      v-mask="'########/####-##'"
+                    />
                     </VCol>
                      <!-- Nome Da Parceiro -->
                      <VCol md="6" cols="12">
                       <VTextField
                         placeholder="Nome Da Parceiro"
                         label="Nome Da Parceiro"
-                        v-model="name"
+                        v-model="accountDataLocal.nomeTrack"
                       />
                     </VCol>
-                    <!-- CEP -->
-                    <VCol md="6" cols="12">
-                      <VTextField
-                        placeholder="CEP"
-                        label="CEP"
-                        v-model="cep"
-                        @input="handleCEPInput"
-                        @blur="handleCEPChange"
-                        maxlength="9"
-                      />
-                    </VCol>
-                    
                     <!-- Estado -->
                     <VCol md="6" cols="12">
                       <VSelect
+                        v-model="accountDataLocal.estado"  
                         placeholder="Estado"
                         label="Estado"
                         no-data-text="Nenhum estado disponível"
-                        v-model="state"
-                        :items="states"
+                        :items="states.map(state => state.nome)"  
+                         
+
                       />
                     </VCol>
+
                     <!-- Cidade -->
                     <VCol md="6" cols="12">
                       <VSelect
                         placeholder="Cidade"
                         label="Cidade"
                         no-data-text="Nenhuma cidade disponível"
-                        v-model="city"
+                        v-model="accountDataLocal.cidade"
+                        :items="accountDataLocal.cities"
                       />
                     </VCol>
                     <!-- Endereço -->
@@ -200,7 +251,7 @@ const handleSaveCompany = async () => {
                       <VTextField
                         placeholder="Endereço"
                         label="Endereço"
-                        v-model="adress"
+                        v-model="accountDataLocal.endereco"
                       />
                     </VCol>
                     <!-- Slogan -->
@@ -208,7 +259,7 @@ const handleSaveCompany = async () => {
                       <VTextField
                         placeholder="Forneça Um Slogan Para Empresa"
                         label="Slogan"
-                        v-model="slogan"
+                        v-model="accountDataLocal.slogan"
                       />
                     </VCol>
                     <!-- Form Actions -->
