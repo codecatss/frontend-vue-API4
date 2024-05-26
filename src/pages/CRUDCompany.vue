@@ -3,8 +3,8 @@ import { ref, reactive, watchEffect, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { api } from '@/service/apiConfig.js';
 import { VDataTable } from 'vuetify/labs/VDataTable';
-import { get_address_by_cep, format_validation_zip_code } from '@/utils/via_cep'
-import { get_data_by_cnpj, validation_cnpj } from '@/utils/cnpj'
+import { get_address_by_cep, format_validation_zip_code } from '@/utils/via_cep';
+import { get_data_by_cnpj, validation_cnpj } from '@/utils/cnpj';
 
 // Data and functions for the form
 const accountData = {
@@ -35,6 +35,9 @@ const recentDevices = ref([]);
 
 async function putData() {
   const response = await api.get('/company');
+
+  // Limpar a lista antes de adicionar os novos itens
+  recentDevices.value = [];
 
   for (var key in response.data) {
     recentDevices.value.push(response.data[key]);
@@ -100,12 +103,14 @@ const handleSaveCompany = async () => {
     state: accountDataLocal.estado,
     slogan: accountDataLocal.slogan,
   });
+
   if (response.status == 200) {
     alert('Empresa cadastrada com sucesso!');
+    await putData();  // Atualiza a lista de empresas
   } else {
-    alert(`Erro: ${response.status}`);
+    alert('Erro ao cadastrar empresa!');
   }
-}
+};
 
 // Função para buscar cidades com base na sigla do estado selecionado
 const fetchCitiesByState = async (stateSigla) => {
@@ -113,7 +118,7 @@ const fetchCitiesByState = async (stateSigla) => {
     console.log('Buscando cidades do estado:', stateSigla);
     const estado = states.find(state => stateSigla == state.nome);
     const siglaEstado = estado ? estado.sigla : null;
-    console.log('Sigla do estado:', siglaEstado)
+    console.log('Sigla do estado:', siglaEstado);
     if (siglaEstado) {
       const response = await api.get(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${siglaEstado}/municipios`);
       return response.data.map(city => city.nome);
@@ -127,19 +132,14 @@ const fetchCitiesByState = async (stateSigla) => {
   }
 };
 
-
-
-
-
-
 // Função para buscar dados do CNPJ
 watchEffect(() => {
   if (accountDataLocal.cnpj.length === 14 && /^\d+$/.test(accountDataLocal.cnpj)) {
-    console.log('Buscando dados do CNPJ:', accountDataLocal.cnpj)
+    console.log('Buscando dados do CNPJ:', accountDataLocal.cnpj);
     fetch(`https://api-publica.speedio.com.br/buscarcnpj?cnpj=${accountDataLocal.cnpj}`)
       .then(response => response.json())
       .then(data => {
-        console.log('Dados do CNPJ:', data)
+        console.log('Dados do CNPJ:', data);
         // Verifica se a propriedade "UF" e "MUNICIPIO" existem nos dados
         if (data["UF"] && data["MUNICIPIO"]) {
           const estado = states.find(state => state.sigla == data["UF"]);
@@ -161,12 +161,12 @@ watchEffect(() => {
           accountDataLocal.cidade = 'Seleciona Uma Cidade';
           accountDataLocal.endereco = '';
         }
-        console.log(accountDataLocal)
+        console.log(accountDataLocal);
       })
       .catch(error => {
-        console.error('Erro ao buscar dados do CNPJ:', error)
-      })
-      console.log(accountDataLocal)
+        console.error('Erro ao buscar dados do CNPJ:', error);
+      });
+    console.log(accountDataLocal);
   }
 });
 
@@ -189,20 +189,12 @@ const formatCNPJ = (value) => {
 watch(() => accountDataLocal.cnpj, (newVal) => {
   accountDataLocal.cnpj = formatCNPJ(newVal);
 });
-
-
-
-
-
-
-
-
-
-
-
 </script>
 
 <template>
+  
+
+  
   <div>
     <VTabs v-model="activeTab" show-arrows>
       <VTab v-for="item in tabs" :key="item.icon" :value="item.tab">
@@ -238,6 +230,7 @@ watch(() => accountDataLocal.cnpj, (newVal) => {
                         placeholder="Nome Da Parceiro"
                         label="Nome Da Parceiro"
                         v-model="accountDataLocal.nomeTrack"
+                        readonly="readonly"
                       />
                     </VCol>
                     <!-- Estado -->
@@ -248,6 +241,7 @@ watch(() => accountDataLocal.cnpj, (newVal) => {
                         label="Estado"
                         no-data-text="Nenhum estado disponível"
                         :items="states.map(state => state.nome)"  
+                        readonly="readonly"
                       />
                     </VCol>
 
@@ -259,6 +253,7 @@ watch(() => accountDataLocal.cnpj, (newVal) => {
                         no-data-text="Nenhuma cidade disponível"
                         v-model="accountDataLocal.cidade"
                         :items="accountDataLocal.cities"
+                        readonly="readonly"
                       />
                     </VCol>
                     <!-- Endereço -->
@@ -267,6 +262,7 @@ watch(() => accountDataLocal.cnpj, (newVal) => {
                         placeholder="Endereço"
                         label="Endereço"
                         v-model="accountDataLocal.endereco"
+                        readonly="readonly"
                       />
                     </VCol>
                     <!-- Slogan -->
