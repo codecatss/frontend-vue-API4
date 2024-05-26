@@ -1,14 +1,59 @@
 <script setup>
+// eslint-disable-next-line import/no-unresolved
 import AuthProvider from '@/views/pages/authentication/AuthProvider.vue'
-import logo from '@images/logo.svg?raw'
+import { useRouter } from 'vue-router'
+// eslint-disable-next-line regex/invalid
+import axios from 'axios'
 
-const form = ref({
-  email: '',
-  password: '',
-  remember: false,
-})
+const router = useRouter()
 
+const email = ref('email')
+const password = ref('password')
 const isPasswordVisible = ref(false)
+const remember = ref()
+
+const loginError = ref(false)
+const loginErrorColor = ref('')
+
+const submitLogin = async () => {
+
+  const formData = new FormData()
+  
+  if (email.value === '' || password.value === '' || !/@.*\.com$/.test(email.value)){
+    loginError.value = true
+  }
+
+  formData.append('email', email.value)
+  formData.append('password', password.value)
+
+  try {
+    const response = await axios.post('http://localhost:8080/auth', formData)
+
+    if (response.status === 201) {
+
+      localStorage.setItem('token', response.data.token)
+      localStorage.setItem('userName', response.data.userName)
+      localStorage.setItem('userRole', response.data.userRole)
+
+      router.push('/dashboard')
+      
+    }
+
+    // if(response.status === 401) {
+    //   invalidCredentials = true
+    // }
+    // if(response.status === 404) {
+    //   userNotFound = true
+    // }
+
+  } catch (error) {
+    console.log(error)
+    loginError.value = true
+    loginErrorColor.value = 'error'
+  }
+
+  console.log("loginError: ", loginError.value)
+}
 </script>
 
 <template>
@@ -24,9 +69,11 @@ const isPasswordVisible = ref(false)
           </div>
         </template>
 
-        <VCardTitle class="text-2xl font-weight-bold">
+        <!-- 
+          <VCardTitle class="text-2xl font-weight-bold">
           Oracle Partner
-        </VCardTitle>
+          </VCardTitle>
+        -->
       </VCardItem>
 
       <VCardText class="pt-2">
@@ -36,14 +83,21 @@ const isPasswordVisible = ref(false)
         <p class="mb-0">
         </p>
       </VCardText>
-
+      
+      <VCardText
+        v-if="loginError"
+        :color="loginErrorColor"
+      >
+        <h2>Erro ao fazer login</h2>
+      </VCardText>
+      
       <VCardText>
-        <VForm @submit.prevent="$router.push('/')">
+        <VForm @submit.prevent="submitLogin">
           <VRow>
             <!-- email -->
             <VCol cols="12">
               <VTextField
-                v-model="form.email"
+                v-model="email"
                 autofocus
                 placeholder="johndoe@email.com"
                 label="Email"
@@ -54,7 +108,7 @@ const isPasswordVisible = ref(false)
             <!-- password -->
             <VCol cols="12">
               <VTextField
-                v-model="form.password"
+                v-model="password"
                 label="Password"
                 placeholder="············"
                 :type="isPasswordVisible ? 'text' : 'password'"
@@ -65,7 +119,7 @@ const isPasswordVisible = ref(false)
               <!-- remember me checkbox -->
               <div class="d-flex align-center justify-space-between flex-wrap mt-1 mb-4">
                 <VCheckbox
-                  v-model="form.remember"
+                  v-model="remember"
                   label="Remember me"
                 />
 

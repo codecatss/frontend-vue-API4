@@ -4,17 +4,12 @@ import { useRoute } from 'vue-router';
 import { api } from '@/service/apiConfig.js';
 import { VDataTable } from 'vuetify/labs/VDataTable';
 
-// Import form component
 import avatar1 from '@images/avatars/avatar-1.png';
 
-// Data and functions for the form
 const accountData = {
-  nomeTrack: '',
-  cnpj: '',
-  estado: 'Selecione Um Estado',
-  cidade: 'Seleciona Uma Cidade',
-  endereco: '',
-  slogan: ''
+  name: '',
+  description: '',
+  lifeTimeMonth: 'Selecione o tempo de vida da certificação',
 };
 
 const accountDataLocal = ref(structuredClone(accountData));
@@ -23,17 +18,16 @@ const resetForm = () => {
   accountDataLocal.value = structuredClone(accountData);
 };
 
-// Data and functions for the table
 const recentDevicesHeaders = [
-  { title: 'Nome do Certificação', key: 'browser' },
-  { title: 'Estado', key: 'location' },
-  { title: 'Expertise', key: 'expertise' },
-  { title: 'Progresso', key: 'percentage' },
-  { title: 'Configurações', key: 'config' },
+  { title: 'Nome da Certificação', key: 'browser' },
+  { title: 'Descrição', key: 'descricao' },
+  { title: 'Tempo de vida', key: 'lifeTime' },
+  { title: 'Criado em', key: 'created_at' },
+  { title: 'Tipo de ingestão', key: 'operation' },
 ];
 
 async function fetchData() {
-  const response = await api.get('/dash/companyexpertiseusercountservice');
+  const response = await api.get('/certification');
   return response.data;
 }
 
@@ -41,18 +35,33 @@ async function putData() {
   const data = await fetchData();
   let recentDevices = [];
   data.forEach((item) => {
-    try {
-      item.companyState = decodeURIComponent(escape(item.companyState));
-    } catch (e) {}
     recentDevices.push({
-      browser: item.companyName,
-      Certificação: item.CertificaçãoName,
-      expertise: item.expertiseName,
-      location: item.companyState,
-      percentage: item.completionPercentage,
+      browser: item.name,
+      descricao: item.description,
+      lifeTime: item.lifeTimeMonth,
+      operation: item.ingestionOperation,
+      created_at: item.createAt,
     });
   });
   return recentDevices;
+}
+
+async function getFormData() {
+  let formData = {};
+
+  for (const key in accountDataLocal.value) {
+    formData[key] = accountDataLocal.value[key];
+  }
+
+  formData['ingestionOperation'] = 'MANUAL';
+
+  return formData;
+
+}
+
+async function postData() {
+  const response = await api.post('/certification', await getFormData());
+  return response.data;
 }
 
 const recentDevices = ref([]);
@@ -61,7 +70,6 @@ onMounted(async () => {
   recentDevices.value = await putData();
 });
 
-// Tab navigation
 const route = useRoute();
 const activeTab = ref(route.params.tab || 'account');
 
@@ -94,65 +102,40 @@ const tabs = [
       <VWindowItem value="account">
         <VRow>
           <VCol cols="12">
-            <VCard title="Cadastro De Certification">
+            <VCard title="Cadastro De Certificações">
               <VDivider />
               <VCardText>
                 <!-- Form -->
                 <VForm class="mt-6">
                   <VRow>
-                    <!-- Nome Da Certification -->
                     <VCol md="6" cols="12">
                       <VTextField
-                        placeholder="Nome Da Certification"
-                        label="Nome Da Certification"
-                        v-model="accountDataLocal.nomeTrack"
+                        placeholder="Nome Da Certificação"
+                        label="Nome Da Certificação"
+                        v-model="accountDataLocal.name"
                       />
                     </VCol>
-                    <!-- CNPJ -->
                     <VCol md="6" cols="12">
                       <VTextField
-                        placeholder="CNPJ"
-                        label="CNPJ"
-                        v-model="accountDataLocal.cnpj"
+                        placeholder="Descrição"
+                        label="Descrição"
+                        v-model="accountDataLocal.description"
                       />
                     </VCol>
-                    <!-- Estado -->
-                    <VCol md="6" cols="12">
-                      <VSelect
-                        placeholder="Estado"
-                        label="Estado"
-                        no-data-text="Nenhum estado disponível"
-                        v-model="accountDataLocal.estado"
-                      />
-                    </VCol>
-                    <!-- Cidade -->
-                    <VCol md="6" cols="12">
-                      <VSelect
-                        placeholder="Cidade"
-                        label="Cidade"
-                        no-data-text="Nenhuma cidade disponível"
-                        v-model="accountDataLocal.cidade"
-                      />
-                    </VCol>
-                    <!-- Endereço -->
                     <VCol md="6" cols="12">
                       <VTextField
-                        placeholder="Endereço"
-                        label="Endereço"
-                        v-model="accountDataLocal.endereco"
-                      />
-                    </VCol>
-                    <!-- Slogan -->
-                    <VCol md="6" cols="12">
-                      <VTextField
-                        placeholder="Forneça Um Slogan Para Empresa"
-                        label="Slogan"
-                        v-model="accountDataLocal.slogan"
+                        placeholder="Tempo De Vida Da Certificação"
+                        label="Tempo De Vida Da Certificação"
+                        v-model="accountDataLocal.lifeTimeMonth"
+                        type="number"
+                        min="0"
+                        step="1"
+                        suffix=" meses"
                       />
                     </VCol>
                     <!-- Form Actions -->
                     <VCol cols="12" class="d-flex flex-wrap gap-4">
-                      <VBtn>Save changes</VBtn>
+                      <VBtn @click="postData">Save changes</VBtn>
                       <VBtn color="secondary" variant="tonal" type="reset" @click.prevent="resetForm">
                         Reset
                       </VBtn>
@@ -169,7 +152,7 @@ const tabs = [
       <VWindowItem value="security">
         <VRow>
           <VCol cols="12">
-            <VCard title="Membros Do Programa OPN">
+            <VCard title="Certificações">
               <VDataTable
                 :headers="recentDevicesHeaders"
                 :items="recentDevices"
@@ -198,17 +181,25 @@ const tabs = [
                     </span>
                   </div>
                 </template>
-                <template #item.percentage="{ item }">
-                  <div class="percentage">
+                <template #item.lifeTime="{ item }">
+                  <div class="lifeTime">
                     <span class="text-high-emphasis text-base">
-                      {{ Math.floor(item.raw.percentage) }}%
+                      {{ item.raw.lifeTime }} meses
                     </span>
-                    <div class="progress-bar-wrapper">
-                      <div
-                        class="progress-bar"
-                        :style="{ width: item.raw.percentage + '%' }"
-                      ></div>
-                    </div>
+                  </div>
+                </template>
+                <template #item.createAt="{ item }">
+                  <div class="created_at">
+                    <span class="text-high-emphasis text-base">
+                      {{ item.raw.createAt }}
+                    </span>
+                  </div>
+                </template>
+                <template #item.operation="{ item }">
+                  <div class="operation">
+                    <span class="text-high-emphasis text-base">
+                      {{ item.raw.operation }}
+                    </span>
                     <Button>
                       <v-icon left>bxs-show</v-icon>
                     </Button>
@@ -246,7 +237,7 @@ const tabs = [
   margin-right: 10px;
 }
 
-.percentage {
+.operation {
   display: flex;
   flex-direction: row;
   align-items: center;

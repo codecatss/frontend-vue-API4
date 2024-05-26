@@ -6,15 +6,14 @@ import { VDataTable } from 'vuetify/labs/VDataTable';
 
 // Import form component
 import avatar1 from '@images/avatars/avatar-1.png';
+import axios from 'axios';
 
 // Data and functions for the form
 const accountData = {
-  nomeTrack: '',
-  cnpj: '',
-  estado: 'Selecione Um Estado',
-  cidade: 'Seleciona Uma Cidade',
-  endereco: '',
-  slogan: ''
+  nomeExpertise: '',
+  descricao: '',
+  status: 'ACTIVE',
+  certificado: [],
 };
 
 const accountDataLocal = ref(structuredClone(accountData));
@@ -25,33 +24,48 @@ const resetForm = () => {
 
 // Data and functions for the table
 const recentDevicesHeaders = [
-  { title: 'Nome do Certificação', key: 'browser' },
-  { title: 'Estado', key: 'location' },
-  { title: 'Expertise', key: 'expertise' },
-  { title: 'Progresso', key: 'percentage' },
-  { title: 'Configurações', key: 'config' },
+  { title: 'Nome da Expertise', key: 'browser' },
+  { title: 'Descrição', key: 'location' },
+  { title: 'Status', key: 'expertise' },
 ];
 
 async function fetchData() {
-  const response = await api.get('/dash/companyexpertiseusercountservice');
+  const response = await api.get('/expertise');
+
+  console.log("fetchData -> ", response.data);
+
   return response.data;
 }
+
+// async function putData() {
+//   const data = await fetchData();
+//   let recentDevices = [];
+//   data.forEach( item => {
+//     try {
+//       item.companyState = decodeURIComponent(escape(item.companyState));
+//     } catch (e) {}
+//     recentDevices.push({
+//       browser: item.companyName,
+//       Certificação: item.CertificaçãoName,
+//       expertise: item.expertiseName,
+//       location: item.companyState,
+//       percentage: item.completionPercentage,
+//     });
+//   });
+//   return recentDevices;
+// }
 
 async function putData() {
   const data = await fetchData();
   let recentDevices = [];
-  data.forEach((item) => {
-    try {
-      item.companyState = decodeURIComponent(escape(item.companyState));
-    } catch (e) {}
+  data.forEach( item => {
     recentDevices.push({
-      browser: item.companyName,
-      Certificação: item.CertificaçãoName,
-      expertise: item.expertiseName,
-      location: item.companyState,
-      percentage: item.completionPercentage,
+      browser: item.name,
+      expertise: item.status,
+      location: item.description,
     });
   });
+
   return recentDevices;
 }
 
@@ -59,6 +73,8 @@ const recentDevices = ref([]);
 
 onMounted(async () => {
   recentDevices.value = await putData();
+  populateCertifications();
+  console.log(certifications);
 });
 
 // Tab navigation
@@ -67,16 +83,63 @@ const activeTab = ref(route.params.tab || 'account');
 
 const tabs = [
   {
-    title: 'Criar Certificação',
+    title: 'Criar Expertise',
     icon: 'bx-user',
     tab: 'account',
   },
   {
-    title: 'Tabela de Certificação',
+    title: 'Tabela de Expertise',
     icon: 'mdi-store',
     tab: 'security',
   },
 ];
+
+const populateCertifications = async () => {
+  try {
+    const response = await api.get("/certification/withId");
+
+    console.log(response);
+ 
+    certifications.value = response.data.map(certification => ({
+      id: certification.id,
+      name: certification.name,
+    }));
+
+    console.log(certifications.value);
+  } catch (e) {
+    console.error('Failed getting certification names', e)
+  }
+
+  return certifications;
+};
+
+const certifications = ref([]);
+
+const statuses = ['ACTIVE', 'INACTIVE'];
+
+const submitForm = async () => {
+
+  const expertiseDTO = {
+    name: accountDataLocal.value.nomeExpertise,
+    description: accountDataLocal.value.descricao,
+    statusString: accountDataLocal.value.status,
+    status: accountDataLocal.value.status,
+    createAt: new Date().toISOString,
+    updateAt: new Date().toISOString,
+    ingestionOperation: 'MANUAL',
+  };
+
+  try {
+    const response = await api.post("/expertise", expertiseDTO);
+
+    console.log('Response: ', response.data);
+    resetForm();
+  } catch (error) {
+    console.error('Error: ', error)
+  };
+  
+};
+
 </script>
 
 <template>
@@ -105,54 +168,41 @@ const tabs = [
                       <VTextField
                         placeholder="Nome Da Expertise"
                         label="Nome Da Expertise"
-                        v-model="accountDataLocal.nomeTrack"
+                        v-model="accountDataLocal.nomeExpertise"
                       />
                     </VCol>
-                    <!-- CNPJ -->
+                    <!-- Descrição -->
                     <VCol md="6" cols="12">
                       <VTextField
-                        placeholder="CNPJ"
-                        label="CNPJ"
-                        v-model="accountDataLocal.cnpj"
+                        placeholder="Descricao..."
+                        label="Descricao"
+                        v-model="accountDataLocal.descricao"
                       />
                     </VCol>
-                    <!-- Estado -->
+                    <!-- Status -->
                     <VCol md="6" cols="12">
                       <VSelect
-                        placeholder="Estado"
-                        label="Estado"
-                        no-data-text="Nenhum estado disponível"
-                        v-model="accountDataLocal.estado"
+                        :items="statuses"
+                        placeholder="Status"
+                        label="Status"
+                        no-data-text="Escolha uma opcao"
+                        v-model="accountDataLocal.status"
                       />
                     </VCol>
-                    <!-- Cidade -->
+                    <!-- Certificado -->
                     <VCol md="6" cols="12">
                       <VSelect
-                        placeholder="Cidade"
-                        label="Cidade"
-                        no-data-text="Nenhuma cidade disponível"
-                        v-model="accountDataLocal.cidade"
-                      />
-                    </VCol>
-                    <!-- Endereço -->
-                    <VCol md="6" cols="12">
-                      <VTextField
-                        placeholder="Endereço"
-                        label="Endereço"
-                        v-model="accountDataLocal.endereco"
-                      />
-                    </VCol>
-                    <!-- Slogan -->
-                    <VCol md="6" cols="12">
-                      <VTextField
-                        placeholder="Forneça Um Slogan Para Empresa"
-                        label="Slogan"
-                        v-model="accountDataLocal.slogan"
+                        :items="certifications"
+                        item-title="name"
+                        placeholder="Certificado"
+                        label="Certificado"
+                        no-data-text="Escolha uma opcao"
+                        v-model="accountDataLocal.certificado"
                       />
                     </VCol>
                     <!-- Form Actions -->
                     <VCol cols="12" class="d-flex flex-wrap gap-4">
-                      <VBtn>Save changes</VBtn>
+                      <VBtn @click.prevent="submitForm">Save changes</VBtn>
                       <VBtn color="secondary" variant="tonal" type="reset" @click.prevent="resetForm">
                         Reset
                       </VBtn>
@@ -169,7 +219,7 @@ const tabs = [
       <VWindowItem value="security">
         <VRow>
           <VCol cols="12">
-            <VCard title="Membros Do Programa OPN">
+            <VCard title="Expertises">
               <VDataTable
                 :headers="recentDevicesHeaders"
                 :items="recentDevices"
@@ -196,25 +246,6 @@ const tabs = [
                     <span class="text-high-emphasis text-base">
                       {{ item.raw.browser }}
                     </span>
-                  </div>
-                </template>
-                <template #item.percentage="{ item }">
-                  <div class="percentage">
-                    <span class="text-high-emphasis text-base">
-                      {{ Math.floor(item.raw.percentage) }}%
-                    </span>
-                    <div class="progress-bar-wrapper">
-                      <div
-                        class="progress-bar"
-                        :style="{ width: item.raw.percentage + '%' }"
-                      ></div>
-                    </div>
-                    <Button>
-                      <v-icon left>bxs-show</v-icon>
-                    </Button>
-                    <Button>
-                      <v-icon left>bxs-cog</v-icon>
-                    </Button>
                   </div>
                 </template>
                 <template #bottom />
