@@ -13,8 +13,7 @@ const accountData = {
   estado: 'Selecione Um Estado',
   cidade: 'Seleciona Uma Cidade',
   endereco: '',
-  slogan: '',
-  cities: [] // Adicionei cities aqui
+  slogan: ''
 };
 
 const accountDataLocal = reactive(structuredClone(accountData));
@@ -128,14 +127,10 @@ const fetchCitiesByState = async (stateSigla) => {
   }
 };
 
-// Monitora mudanças no estado selecionado e atualiza a lista de cidades
-watchEffect(async () => {
-  if (accountDataLocal.estado !== 'Selecione Um Estado') {
-    const cities = await fetchCitiesByState(accountDataLocal.estado);
-    accountDataLocal.cidade = ''; // Limpa a cidade selecionada ao trocar de estado
-    accountDataLocal.cities = cities;
-  }
-});
+
+
+
+
 
 // Função para buscar dados do CNPJ
 watchEffect(() => {
@@ -151,15 +146,14 @@ watchEffect(() => {
           // Se existirem, atribui os valores aos campos correspondentes
           accountDataLocal.nomeTrack = data["RAZAO SOCIAL"];
           accountDataLocal.estado = estado.nome;
-          
-          // Atualizar a lista de cidades com base no estado atualizado e definir a cidade após carregamento
-          fetchCitiesByState(data["UF"]).then(cities => {
-            accountDataLocal.cities = cities;
-            accountDataLocal.cidade = data["MUNICIPIO"];
-          });
-          
+          accountDataLocal.cidade = data["MUNICIPIO"];
           // Preencher o input de endereço com o nome da rua
           accountDataLocal.endereco = data["LOGRADOURO"];
+
+          // Atualizar a lista de cidades com base no estado atualizado
+          fetchCitiesByState(data["UF"]).then(cities => {
+            accountDataLocal.cities = cities;
+          });
         } else {
           // Se não existirem, limpa os campos correspondentes
           accountDataLocal.nomeTrack = '';
@@ -172,6 +166,7 @@ watchEffect(() => {
       .catch(error => {
         console.error('Erro ao buscar dados do CNPJ:', error)
       })
+      console.log(accountDataLocal)
   }
 });
 
@@ -194,6 +189,16 @@ const formatCNPJ = (value) => {
 watch(() => accountDataLocal.cnpj, (newVal) => {
   accountDataLocal.cnpj = formatCNPJ(newVal);
 });
+
+
+
+
+
+
+
+
+
+
 
 </script>
 
