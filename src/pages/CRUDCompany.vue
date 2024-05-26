@@ -1,10 +1,10 @@
 <script setup>
-import { ref, reactive, watchEffect } from 'vue';
+import { ref, reactive, watchEffect, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { api } from '@/service/apiConfig.js';
 import { VDataTable } from 'vuetify/labs/VDataTable';
 import { get_address_by_cep, format_validation_zip_code } from '@/utils/via_cep'
-import { get_data_by_cnpj, validation_cnpj} from '@/utils/cnpj'
+import { get_data_by_cnpj, validation_cnpj } from '@/utils/cnpj'
 
 // Data and functions for the form
 const accountData = {
@@ -13,17 +13,15 @@ const accountData = {
   estado: 'Selecione Um Estado',
   cidade: 'Seleciona Uma Cidade',
   endereco: '',
-  slogan: ''
+  slogan: '',
+  cities: [] // Adicionei cities aqui
 };
-
-
 
 const accountDataLocal = reactive(structuredClone(accountData));
 
 const resetForm = () => {
   Object.assign(accountDataLocal, structuredClone(accountData));
 };
-
 
 // Data and functions for the table
 const recentDevicesHeaders = [
@@ -45,8 +43,6 @@ async function putData() {
 }
 putData();
 
-
-
 // Tab navigation
 const route = useRoute();
 const activeTab = ref(route.params.tab || 'account');
@@ -65,40 +61,34 @@ const tabs = [
 ];
 
 const states = [
-  {sigla: 'AC', nome: 'Acre'},
-  {sigla: 'AL', nome: 'Alagoas'},
-  {sigla: 'AP', nome: 'Amapá'},
-  {sigla: 'AM', nome: 'Amazonas'},
-  {sigla: 'BA', nome: 'Bahia'},
-  {sigla: 'CE', nome: 'Ceará'},
-  {sigla: 'DF', nome: 'Distrito Federal'},
-  {sigla: 'ES', nome: 'Espírito Santo'},
-  {sigla: 'GO', nome: 'Goiás'},
-  {sigla: 'MA', nome: 'Maranhão'},
-  {sigla: 'MT', nome: 'Mato Grosso'},
-  {sigla: 'MS', nome: 'Mato Grosso do Sul'},
-  {sigla: 'MG', nome: 'Minas Gerais'},
-  {sigla: 'PA', nome: 'Pará'},
-  {sigla: 'PB', nome: 'Paraíba'},
-  {sigla: 'PR', nome: 'Paraná'},
-  {sigla: 'PE', nome: 'Pernambuco'},
-  {sigla: 'PI', nome: 'Piauí'},
-  {sigla: 'RJ', nome: 'Rio de Janeiro'},
-  {sigla: 'RN', nome: 'Rio Grande do Norte'},
-  {sigla: 'RS', nome: 'Rio Grande do Sul'},
-  {sigla: 'RO', nome: 'Rondônia'},
-  {sigla: 'RR', nome: 'Roraima'},
-  {sigla: 'SC', nome: 'Santa Catarina'},
-  {sigla: 'SP', nome: 'São Paulo'},
-  {sigla: 'SE', nome: 'Sergipe'},
-  {sigla: 'TO', nome: 'Tocantins'},
+  { sigla: 'AC', nome: 'Acre' },
+  { sigla: 'AL', nome: 'Alagoas' },
+  { sigla: 'AP', nome: 'Amapá' },
+  { sigla: 'AM', nome: 'Amazonas' },
+  { sigla: 'BA', nome: 'Bahia' },
+  { sigla: 'CE', nome: 'Ceará' },
+  { sigla: 'DF', nome: 'Distrito Federal' },
+  { sigla: 'ES', nome: 'Espírito Santo' },
+  { sigla: 'GO', nome: 'Goiás' },
+  { sigla: 'MA', nome: 'Maranhão' },
+  { sigla: 'MT', nome: 'Mato Grosso' },
+  { sigla: 'MS', nome: 'Mato Grosso do Sul' },
+  { sigla: 'MG', nome: 'Minas Gerais' },
+  { sigla: 'PA', nome: 'Pará' },
+  { sigla: 'PB', nome: 'Paraíba' },
+  { sigla: 'PR', nome: 'Paraná' },
+  { sigla: 'PE', nome: 'Pernambuco' },
+  { sigla: 'PI', nome: 'Piauí' },
+  { sigla: 'RJ', nome: 'Rio de Janeiro' },
+  { sigla: 'RN', nome: 'Rio Grande do Norte' },
+  { sigla: 'RS', nome: 'Rio Grande do Sul' },
+  { sigla: 'RO', nome: 'Rondônia' },
+  { sigla: 'RR', nome: 'Roraima' },
+  { sigla: 'SC', nome: 'Santa Catarina' },
+  { sigla: 'SP', nome: 'São Paulo' },
+  { sigla: 'SE', nome: 'Sergipe' },
+  { sigla: 'TO', nome: 'Tocantins' },
 ];
-  
-
-
-
-
-
 
 const handleSaveCompany = async () => {
   var cnpj_format = accountDataLocal.cnpj.replace(/\D/g, '');
@@ -110,7 +100,7 @@ const handleSaveCompany = async () => {
     address: accountDataLocal.endereco,
     state: accountDataLocal.estado,
     slogan: accountDataLocal.slogan,
-  })
+  });
   if (response.status == 200) {
     alert('Empresa cadastrada com sucesso!');
   } else {
@@ -118,9 +108,6 @@ const handleSaveCompany = async () => {
   }
 }
 
-
-
-// Função para buscar cidades com base na sigla do estado selecionado
 // Função para buscar cidades com base na sigla do estado selecionado
 const fetchCitiesByState = async (stateSigla) => {
   try {
@@ -141,7 +128,14 @@ const fetchCitiesByState = async (stateSigla) => {
   }
 };
 
-
+// Monitora mudanças no estado selecionado e atualiza a lista de cidades
+watchEffect(async () => {
+  if (accountDataLocal.estado !== 'Selecione Um Estado') {
+    const cities = await fetchCitiesByState(accountDataLocal.estado);
+    accountDataLocal.cidade = ''; // Limpa a cidade selecionada ao trocar de estado
+    accountDataLocal.cities = cities;
+  }
+});
 
 // Função para buscar dados do CNPJ
 watchEffect(() => {
@@ -157,14 +151,15 @@ watchEffect(() => {
           // Se existirem, atribui os valores aos campos correspondentes
           accountDataLocal.nomeTrack = data["RAZAO SOCIAL"];
           accountDataLocal.estado = estado.nome;
-          accountDataLocal.cidade = data["MUNICIPIO"];
-          // Preencher o input de endereço com o nome da rua
-          accountDataLocal.endereco = data["LOGRADOURO"];
-
-          // Atualizar a lista de cidades com base no estado atualizado
+          
+          // Atualizar a lista de cidades com base no estado atualizado e definir a cidade após carregamento
           fetchCitiesByState(data["UF"]).then(cities => {
             accountDataLocal.cities = cities;
+            accountDataLocal.cidade = data["MUNICIPIO"];
           });
+          
+          // Preencher o input de endereço com o nome da rua
+          accountDataLocal.endereco = data["LOGRADOURO"];
         } else {
           // Se não existirem, limpa os campos correspondentes
           accountDataLocal.nomeTrack = '';
@@ -177,8 +172,27 @@ watchEffect(() => {
       .catch(error => {
         console.error('Erro ao buscar dados do CNPJ:', error)
       })
-      console.log(accountDataLocal)
   }
+});
+
+// Função para aplicar a máscara ao CNPJ
+const formatCNPJ = (value) => {
+  // Remove qualquer caractere que não seja dígito
+  value = value.replace(/\D/g, '');
+
+  // Aplica a máscara ao valor
+  if (value.length > 14) value = value.substring(0, 14);
+  if (value.length > 12) value = value.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5');
+  else if (value.length > 8) value = value.replace(/^(\d{2})(\d{3})(\d{3})(\d{0,4})/, '$1.$2.$3/$4');
+  else if (value.length > 5) value = value.replace(/^(\d{2})(\d{3})(\d{0,3})/, '$1.$2.$3');
+  else if (value.length > 2) value = value.replace(/^(\d{2})(\d{0,3})/, '$1.$2');
+
+  return value;
+};
+
+// Watcher para aplicar a máscara ao CNPJ
+watch(() => accountDataLocal.cnpj, (newVal) => {
+  accountDataLocal.cnpj = formatCNPJ(newVal);
 });
 
 </script>
@@ -207,16 +221,14 @@ watchEffect(() => {
                     <!-- CNPJ -->
                     <VCol md="6" cols="12">
                       <VTextField
-                      placeholder="CNPJ"
-                      label="CNPJ"
-                      v-model="accountDataLocal.cnpj"
-                      maxlength="18"
-                     
-                      v-mask="'########/####-##'"
-                    />
+                        placeholder="CNPJ"
+                        label="CNPJ"
+                        v-model="accountDataLocal.cnpj"
+                        maxlength="18"
+                      />
                     </VCol>
-                     <!-- Nome Da Parceiro -->
-                     <VCol md="6" cols="12">
+                    <!-- Nome Da Parceiro -->
+                    <VCol md="6" cols="12">
                       <VTextField
                         placeholder="Nome Da Parceiro"
                         label="Nome Da Parceiro"
@@ -231,8 +243,6 @@ watchEffect(() => {
                         label="Estado"
                         no-data-text="Nenhum estado disponível"
                         :items="states.map(state => state.nome)"  
-                         
-
                       />
                     </VCol>
 
@@ -264,9 +274,7 @@ watchEffect(() => {
                     </VCol>
                     <!-- Form Actions -->
                     <VCol cols="12" class="d-flex flex-wrap gap-4">
-                      <VBtn
-                        @click="handleSaveCompany"
-                      >Cadastrar</VBtn>
+                      <VBtn @click="handleSaveCompany">Cadastrar</VBtn>
                       <VBtn color="secondary" variant="tonal" type="reset" @click.prevent="resetForm">
                         Limpar formulario
                       </VBtn>
@@ -312,7 +320,6 @@ watchEffect(() => {
                     </span>
                   </div>
                 </template>
-                
                 <template #bottom />
               </VDataTable>
             </VCard>
