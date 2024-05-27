@@ -1,5 +1,152 @@
+<template>
+  <div>
+    <VTabs v-model="activeTab" show-arrows>
+      <VTab v-for="item in tabs" :key="item.icon" :value="item.tab">
+        <VIcon size="20" start :icon="item.icon" />
+        {{ item.title }}
+      </VTab>
+    </VTabs>
+    <VDivider />
+
+    <VWindow v-model="activeTab" class="mt-5 disable-tab-transition">
+      <!-- Account -->
+      <VWindowItem value="account">
+        <VRow>
+          <VCol cols="12">
+            <VCard title="Cadastro De Parceiro">
+              <VDivider />
+              <VCardText>
+                <!-- Form -->
+                <VForm class="mt-6">
+                  <VRow>
+                    <!-- CNPJ -->
+                    <VCol md="6" cols="12">
+                      <VTextField
+                        placeholder="CNPJ"
+                        label="CNPJ"
+                        v-model="accountDataLocal.cnpj"
+                        maxlength="18"
+                      />
+                    </VCol>
+                    <!-- Nome Da Parceiro -->
+                    <VCol md="6" cols="12">
+                      <VTextField
+                        placeholder="Nome Da Parceiro"
+                        label="Nome Da Parceiro"
+                        v-model="accountDataLocal.nomeTrack"
+                        readonly="readonly"
+                      />
+                    </VCol>
+                    <!-- Estado -->
+                    <VCol md="6" cols="12">
+                      <VSelect
+                        v-model="accountDataLocal.estado"  
+                        placeholder="Estado"
+                        label="Estado"
+                        no-data-text="Nenhum estado disponível"
+                        :items="states.map(state => state.nome)"  
+                        readonly="readonly"
+                      />
+                    </VCol>
+
+                    <!-- Cidade -->
+                    <VCol md="6" cols="12">
+                      <VSelect
+                        placeholder="Cidade"
+                        label="Cidade"
+                        no-data-text="Nenhuma cidade disponível"
+                        v-model="accountDataLocal.cidade"
+                        :items="accountDataLocal.cities"
+                        readonly="readonly"
+                      />
+                    </VCol>
+                    <!-- Endereço -->
+                    <VCol md="6" cols="12">
+                      <VTextField
+                        placeholder="Endereço"
+                        label="Endereço"
+                        v-model="accountDataLocal.endereco"
+                        readonly="readonly"
+                      />
+                    </VCol>
+                    <!-- Slogan -->
+                    <VCol md="6" cols="12">
+                      <VTextField
+                        placeholder="Forneça Um Slogan Para Empresa"
+                        label="Slogan"
+                        v-model="accountDataLocal.slogan"
+                      />
+                    </VCol>
+                    <!-- Form Actions -->
+                    <VCol cols="12" class="d-flex flex-wrap gap-4">
+                      <VBtn @click="handleSaveCompany">Cadastrar</VBtn>
+                      <VBtn color="secondary" variant="tonal" type="reset" @click.prevent="resetForm">
+                        Limpar formulario
+                      </VBtn>
+                    </VCol>
+                  </VRow>
+                </VForm>
+              </VCardText>
+            </VCard>
+          </VCol>
+        </VRow>
+      </VWindowItem>
+
+      <!-- Security -->
+      <VWindowItem value="security">
+        <VRow>
+          <VCol cols="12">
+            <VCard title="Membros Do Programa OPN">
+              <VDataTable
+                :headers="recentDevicesHeaders"
+                :items="recentDevices"
+                :items-per-page="-1"
+                :fixed-header="true"
+                :height="'600px'"
+                class="text-no-wrap rounded-0 text-sm"
+              >
+                <template #item.browser="{ item }">
+                  <div class="d-flex">
+                    <svg
+                      class="oracle-icon"
+                      width="25px"
+                      height="25px"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fill="#F00"
+                        fill-rule="evenodd"
+                        d="M7.957359,18.9123664 C4.11670252,18.9123664 1,15.803458 1,11.9617373 C1,8.12000773 4.11670252,5 7.957359,5 L16.0437948,5 C19.8855156,5 23,8.12000773 23,11.9617373 C23,15.803458 19.8855156,18.9123664 16.0437948,18.9123664 L7.957359,18.9123664 L7.957359,18.9123664 Z M15.8639176,16.4585488 C18.352201,16.4585488 20.3674397,14.448858 20.3674397,11.9617373 C20.3674397,9.47460595 18.352201,7.45381934 15.8639176,7.45381934 L8.1360824,7.45381934 C5.64895285,7.45381934 3.63255855,9.47460595 3.63255855,11.9617373 C3.63255855,14.448858 5.64895285,16.4585488 8.1360824,16.4585488 L15.8639176,16.4585488 L15.8639176,16.4585488 Z"
+                      />
+                    </svg>
+                    <span class="text-high-emphasis text-base">
+                      {{ item.raw.browser }}
+                    </span>
+                  </div>
+                </template>
+                <template #item.config="{ item }">
+                  <div class="d-flex justify-center">
+                    <Button>
+                      <v-icon left>bxs-show</v-icon>
+                    </Button>
+                    <Button>
+                      <v-icon left>bxs-cog</v-icon>
+                    </Button>
+                  </div>
+                </template>
+                <template #bottom />
+              </VDataTable>
+            </VCard>
+          </VCol>
+        </VRow>
+      </VWindowItem>
+    </VWindow>
+  </div>
+</template>
+
 <script setup>
-import { ref, reactive, watchEffect, watch } from 'vue';
+import { ref, reactive, watchEffect, watch, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { api } from '@/service/apiConfig.js';
 import { VDataTable } from 'vuetify/labs/VDataTable';
@@ -22,28 +169,7 @@ const resetForm = () => {
   Object.assign(accountDataLocal, structuredClone(accountData));
 };
 
-// Data and functions for the table
-const recentDevicesHeaders = [
-  { title: 'Nome da Empresa', key: 'name' },
-  { title: 'Cidade', key: 'city' },
-  { title: 'UF', key: 'state' },
-  { title: 'OPN status', key: 'opnStatus' },
-  { title: 'Status', key: 'status' },
-];
-
 const recentDevices = ref([]);
-
-async function putData() {
-  const response = await api.get('/company');
-
-  // Limpar a lista antes de adicionar os novos itens
-  recentDevices.value = [];
-
-  for (var key in response.data) {
-    recentDevices.value.push(response.data[key]);
-  }
-}
-putData();
 
 // Tab navigation
 const route = useRoute();
@@ -189,147 +315,58 @@ const formatCNPJ = (value) => {
 watch(() => accountDataLocal.cnpj, (newVal) => {
   accountDataLocal.cnpj = formatCNPJ(newVal);
 });
+
+async function fetchData(){
+  const response = await api.get('/dash/companyexpertiseusercountservice')
+  return response.data
+}
+
+const recentDevicesHeaders = [
+  {
+    title: 'Nome do Parceiro',
+    key: 'browser',
+  },
+  {
+    title: 'Status De Membro',
+    key: 'sdm',
+  },
+  {
+    title: 'Tipo De Cadastro',
+    key: 'expertise',
+  },
+  {
+    title: 'Configurações',
+    key: 'config',
+  },
+]
+
+async function putData(){
+  const data = await fetchData();
+  
+  let recentDevices = [];
+
+  data.forEach((item) => {
+    try{
+      item.companyState = decodeURIComponent(escape(item.companyState));
+    } catch (e) {
+      // do nothing;
+    };
+    recentDevices.push({
+      browser: item.companyName,
+      track: item.trackName,
+      expertise: item.expertiseName,
+      location: item.companyState,
+      percentage: item.completionPercentage,
+    });
+  
+  });
+  return recentDevices;
+}
+
+onMounted(async () => {
+  recentDevices.value = await putData();
+});
 </script>
-
-<template>
-  
-
-  
-  <div>
-    <VTabs v-model="activeTab" show-arrows>
-      <VTab v-for="item in tabs" :key="item.icon" :value="item.tab">
-        <VIcon size="20" start :icon="item.icon" />
-        {{ item.title }}
-      </VTab>
-    </VTabs>
-    <VDivider />
-
-    <VWindow v-model="activeTab" class="mt-5 disable-tab-transition">
-      <!-- Account -->
-      <VWindowItem value="account">
-        <VRow>
-          <VCol cols="12">
-            <VCard title="Cadastro De Parceiro">
-              <VDivider />
-              <VCardText>
-                <!-- Form -->
-                <VForm class="mt-6">
-                  <VRow>
-                    <!-- CNPJ -->
-                    <VCol md="6" cols="12">
-                      <VTextField
-                        placeholder="CNPJ"
-                        label="CNPJ"
-                        v-model="accountDataLocal.cnpj"
-                        maxlength="18"
-                      />
-                    </VCol>
-                    <!-- Nome Da Parceiro -->
-                    <VCol md="6" cols="12">
-                      <VTextField
-                        placeholder="Nome Da Parceiro"
-                        label="Nome Da Parceiro"
-                        v-model="accountDataLocal.nomeTrack"
-                        readonly="readonly"
-                      />
-                    </VCol>
-                    <!-- Estado -->
-                    <VCol md="6" cols="12">
-                      <VSelect
-                        v-model="accountDataLocal.estado"  
-                        placeholder="Estado"
-                        label="Estado"
-                        no-data-text="Nenhum estado disponível"
-                        :items="states.map(state => state.nome)"  
-                        readonly="readonly"
-                      />
-                    </VCol>
-
-                    <!-- Cidade -->
-                    <VCol md="6" cols="12">
-                      <VSelect
-                        placeholder="Cidade"
-                        label="Cidade"
-                        no-data-text="Nenhuma cidade disponível"
-                        v-model="accountDataLocal.cidade"
-                        :items="accountDataLocal.cities"
-                        readonly="readonly"
-                      />
-                    </VCol>
-                    <!-- Endereço -->
-                    <VCol md="6" cols="12">
-                      <VTextField
-                        placeholder="Endereço"
-                        label="Endereço"
-                        v-model="accountDataLocal.endereco"
-                        readonly="readonly"
-                      />
-                    </VCol>
-                    <!-- Slogan -->
-                    <VCol md="6" cols="12">
-                      <VTextField
-                        placeholder="Forneça Um Slogan Para Empresa"
-                        label="Slogan"
-                        v-model="accountDataLocal.slogan"
-                      />
-                    </VCol>
-                    <!-- Form Actions -->
-                    <VCol cols="12" class="d-flex flex-wrap gap-4">
-                      <VBtn @click="handleSaveCompany">Cadastrar</VBtn>
-                      <VBtn color="secondary" variant="tonal" type="reset" @click.prevent="resetForm">
-                        Limpar formulario
-                      </VBtn>
-                    </VCol>
-                  </VRow>
-                </VForm>
-              </VCardText>
-            </VCard>
-          </VCol>
-        </VRow>
-      </VWindowItem>
-
-      <!-- Security -->
-      <VWindowItem value="security">
-        <VRow>
-          <VCol cols="12">
-            <VCard title="Membros Do Programa OPN">
-              <VDataTable
-                :headers="recentDevicesHeaders"
-                :items="recentDevices"
-                :items-per-page="-1"
-                :fixed-header="true"
-                :height="'600px'"
-                class="text-no-wrap rounded-0 text-sm"
-              >
-                <template #item.name="{ item }">
-                  <div class="d-flex">
-                    <svg
-                      class="oracle-icon"
-                      width="25px"
-                      height="25px"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fill="#F00"
-                        fill-rule="evenodd"
-                        d="M7.957359,18.9123664 C4.11670252,18.9123664 1,15.803458 1,11.9617373 C1,8.12000773 4.11670252,5 7.957359,5 L16.0437948,5 C19.8855156,5 23,8.12000773 23,11.9617373 C23,15.803458 19.8855156,18.9123664 16.0437948,18.9123664 L7.957359,18.9123664 L7.957359,18.9123664 Z M15.8639176,16.4585488 C18.352201,16.4585488 20.3674397,14.448858 20.3674397,11.9617373 C20.3674397,9.47460595 18.352201,7.45381934 15.8639176,7.45381934 L8.1360824,7.45381934 C5.64895285,7.45381934 3.63255855,9.47460595 3.63255855,11.9617373 C3.63255855,14.448858 5.64895285,16.4585488 8.1360824,16.4585488 L15.8639176,16.4585488 L15.8639176,16.4585488 Z"
-                      />
-                    </svg>
-                    <span class="text-high-emphasis text-base">
-                      {{ item.raw.name }}
-                    </span>
-                  </div>
-                </template>
-                <template #bottom />
-              </VDataTable>
-            </VCard>
-          </VCol>
-        </VRow>
-      </VWindowItem>
-    </VWindow>
-  </div>
-</template>
 
 <style scoped>
 .progress-bar-wrapper {
