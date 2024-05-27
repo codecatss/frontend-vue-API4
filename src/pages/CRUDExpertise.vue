@@ -3,24 +3,41 @@ import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { api } from '@/service/apiConfig.js';
 import { VDataTable } from 'vuetify/labs/VDataTable';
+import { createToaster } from "@meforma/vue-toaster";
 
 // Import form component
 import avatar1 from '@images/avatars/avatar-1.png';
-import axios from 'axios';
 
 // Data and functions for the form
 const accountData = {
   nomeExpertise: '',
   descricao: '',
-  status: 'ACTIVE',
-  certificado: [],
+
+  // status: 'ACTIVE',
+  // certificado: [],
 };
 
 const accountDataLocal = ref(structuredClone(accountData));
 
+// const selectedCertificationId = ref(null);
+
+// MÉTODO PARA GUARDAR OBJETO CERTIFICATION COM ID E NOME A PARTIR DO V-SELECT 
+
+// const onCertificationChange = () => {
+//   console.log("function start: ", accountDataLocal.value.certificado);
+
+//   accountDataLocal.value.certificado = certifications.value.find(
+//     certification => certification.id === selectedCertificationId.value,
+//   );
+
+//   console.log("function end: ", accountDataLocal.value.certificado);
+// };
+
 const resetForm = () => {
   accountDataLocal.value = structuredClone(accountData);
 };
+
+const toaster = createToaster({ /* options */ });
 
 // Data and functions for the table
 const recentDevicesHeaders = [
@@ -36,24 +53,6 @@ async function fetchData() {
 
   return response.data;
 }
-
-// async function putData() {
-//   const data = await fetchData();
-//   let recentDevices = [];
-//   data.forEach( item => {
-//     try {
-//       item.companyState = decodeURIComponent(escape(item.companyState));
-//     } catch (e) {}
-//     recentDevices.push({
-//       browser: item.companyName,
-//       Certificação: item.CertificaçãoName,
-//       expertise: item.expertiseName,
-//       location: item.companyState,
-//       percentage: item.completionPercentage,
-//     });
-//   });
-//   return recentDevices;
-// }
 
 async function putData() {
   const data = await fetchData();
@@ -73,8 +72,9 @@ const recentDevices = ref([]);
 
 onMounted(async () => {
   recentDevices.value = await putData();
-  populateCertifications();
-  console.log(certifications);
+
+  // populateCertifications();
+  // console.log(certifications);
 });
 
 // Tab navigation
@@ -94,36 +94,49 @@ const tabs = [
   },
 ];
 
-const populateCertifications = async () => {
-  try {
-    const response = await api.get("/certification/withId");
+// MÉTODO PARA POPULAR O V-SELECT COM AS CERTIFICATIONS
 
-    console.log(response);
+// const populateCertifications = async () => {
+//   try {
+//     const response = await api.get("/certification/withId");
+
+//     console.log(response);
  
-    certifications.value = response.data.map(certification => ({
-      id: certification.id,
-      name: certification.name,
-    }));
+//     certifications.value = response.data.map(certification => ({
+//       id: certification.id,
+//       name: certification.name,
+//     }));
 
-    console.log(certifications.value);
-  } catch (e) {
-    console.error('Failed getting certification names', e)
-  }
+//     console.log(certifications.value);
+//   } catch (e) {
+//     console.error('Failed getting certification names', e)
+//   }
 
-  return certifications;
-};
+//   return certifications;
+// };
 
-const certifications = ref([]);
+// const certifications = ref([]);
 
-const statuses = ['ACTIVE', 'INACTIVE'];
+// const statuses = ['ACTIVE', 'INACTIVE'];
+
+//console.log("ID DA CERTIFICATION: ", accountDataLocal.value.certificado.id);
 
 const submitForm = async () => {
 
+  const nomeExpertise = accountDataLocal.value.nomeExpertise;
+  const descricao = accountDataLocal.value.descricao;
+
+  if (!nomeExpertise || !descricao) {
+    toaster.error("Todos os campos são obrigatórios.");
+
+    return;
+  }
+
   const expertiseDTO = {
-    name: accountDataLocal.value.nomeExpertise,
-    description: accountDataLocal.value.descricao,
-    statusString: accountDataLocal.value.status,
-    status: accountDataLocal.value.status,
+    name: nomeExpertise,
+    description: descricao,
+    statusString: 'ACTIVE',
+    status: 'ACTIVE',
     createAt: new Date().toISOString,
     updateAt: new Date().toISOString,
     ingestionOperation: 'MANUAL',
@@ -132,10 +145,12 @@ const submitForm = async () => {
   try {
     const response = await api.post("/expertise", expertiseDTO);
 
-    console.log('Response: ', response.data);
     resetForm();
+    toaster.success("A Expertise foi cadastrada com sucesso!");
+
   } catch (error) {
     console.error('Error: ', error)
+    toaster.error("Algo deu errado. Tente novamente.")
   };
   
 };
@@ -180,7 +195,7 @@ const submitForm = async () => {
                       />
                     </VCol>
                     <!-- Status -->
-                    <VCol md="6" cols="12">
+                    <!-- <VCol md="6" cols="12">
                       <VSelect
                         :items="statuses"
                         placeholder="Status"
@@ -188,18 +203,20 @@ const submitForm = async () => {
                         no-data-text="Escolha uma opcao"
                         v-model="accountDataLocal.status"
                       />
-                    </VCol>
+                    </VCol> -->
                     <!-- Certificado -->
-                    <VCol md="6" cols="12">
+                    <!-- <VCol md="6" cols="12">
                       <VSelect
                         :items="certifications"
                         item-title="name"
+                        item-value="id" 
                         placeholder="Certificado"
                         label="Certificado"
                         no-data-text="Escolha uma opcao"
-                        v-model="accountDataLocal.certificado"
+                        v-model="selectedCertificationId"
+                        @update:model-value="onCertificationChange"
                       />
-                    </VCol>
+                    </VCol> -->
                     <!-- Form Actions -->
                     <VCol cols="12" class="d-flex flex-wrap gap-4">
                       <VBtn @click.prevent="submitForm">Save changes</VBtn>
