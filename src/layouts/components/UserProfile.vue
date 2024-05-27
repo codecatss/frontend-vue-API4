@@ -1,5 +1,23 @@
 <script setup>
+// eslint-disable-next-line import/no-unresolved
 import avatar1 from '@images/avatars/avatar-1.jpeg'
+import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+
+const userLabel = ref()
+const userRole = ref()
+
+const router = useRouter()
+
+onMounted(() => {
+  userLabel.value = localStorage.getItem('userName')
+  userRole.value = localStorage.getItem('userRole')
+})
+
+const logOut = async () => {
+  localStorage.clear()
+  router.push('/auth' )
+}
 </script>
 
 <template>
@@ -47,10 +65,15 @@ import avatar1 from '@images/avatars/avatar-1.jpeg'
               </VListItemAction>
             </template>
 
-            <VListItemTitle class="font-weight-semibold">
-              John Doe
+            <VListItemTitle
+              v-model="userLabel"
+              class="font-weight-semibold"
+            >
+              {{ userLabel }}
             </VListItemTitle>
-            <VListItemSubtitle>Admin</VListItemSubtitle>
+            <VListItemSubtitle v-model="userRole">
+              {{ userRole }}
+            </VListItemSubtitle>
           </VListItem>
           <VDivider class="my-2" />
 
@@ -80,20 +103,20 @@ import avatar1 from '@images/avatars/avatar-1.jpeg'
             <VListItemTitle>Configurações</VListItemTitle>
           </VListItem>
 
-<!--
-           👉 Preços 
-          <VListItem link>
+          <!--
+            👉 Preços 
+            <VListItem link>
             <template #prepend>
-              <VIcon
-                class="me-2"
-                icon="bx-dollar"
-                size="22"
-              />
+            <VIcon
+            class="me-2"
+            icon="bx-dollar"
+            size="22"
+            />
             </template>
 
             <VListItemTitle></VListItemTitle>
-          </VListItem>
--->
+            </VListItem>
+          -->
 
           <!-- 👉 Perguntas Frequentes -->
           <VListItem link>
@@ -112,7 +135,7 @@ import avatar1 from '@images/avatars/avatar-1.jpeg'
           <VDivider class="my-2" />
 
           <!-- 👉 Sair -->
-          <VListItem to="/login">
+          <VListItem @click="logOut">
             <template #prepend>
               <VIcon
                 class="me-2"

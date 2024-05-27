@@ -9,7 +9,7 @@
       >
         <VCardItem>
           <VCardTitle class="text-md-h5 text-primary">
-            Bem Vindo(a) de volta John! 🎉
+            {{bemVindo}}
           </VCardTitle>
         </VCardItem>
 
@@ -78,8 +78,18 @@
 import { useTheme } from 'vuetify'
 import illustrationJohnDark from '@images/cards/illustration-john-dark.png'
 import illustrationJohnLight from '@images/cards/illustration-john-light.png'
+
 import axios from 'axios'
-import { ref, computed } from 'vue'
+
+import { ref, computed, onMounted } from 'vue'
+
+let bemVindo = null
+
+onMounted(() => {
+  
+  bemVindo = 'Bem Vindo(a) de volta ' + localStorage.getItem('userName') + '!'
+
+})
 
 const { global } = useTheme()
 const illustrationJohn = computed(() => global.name.value === 'dark' ? illustrationJohnDark : illustrationJohnLight)
@@ -91,8 +101,9 @@ const snackbar = ref(false)
 const snackbarText = ref('')
 const snackbarColor = ref('')
 
-const onFileChange = (e) => {
-  
+
+const onFileChange = e => {
+
   file = e.target.files[0]
 
   if (!file.type.match('csv.*')) {

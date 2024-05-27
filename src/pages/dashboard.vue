@@ -18,7 +18,6 @@ import card from '@images/cards/credit-card-primary.png'
 import paypal from '@images/cards/paypal-error.png'
 import wallet from '@images/cards/wallet-info.png'
 import ProgressDeadline from '@/components/ProgressDeadline.vue'
-
 </script>
 
 <template>
@@ -28,8 +27,8 @@ import ProgressDeadline from '@/components/ProgressDeadline.vue'
       cols="12"
       md="8"
     >
-    <AnalyticsCongratulations  />
-      <AnalyticsTransactionsTop class="mt-3"/>
+      <AnalyticsCongratulations />
+      <AnalyticsTransactionsTop class="mt-3" />
     </VCol>
 
     <!-- 👉 BestStates -->
@@ -54,13 +53,13 @@ import ProgressDeadline from '@/components/ProgressDeadline.vue'
     </VCol>
 
     <VCol
-    cols="12"
-    md="4"
-    sm="6"
-    order="2"
-  >
-    <InfoExpertises />
-  </VCol>
+      cols="12"
+      md="4"
+      sm="6"
+      order="2"
+    >
+      <InfoExpertises />
+    </VCol>
     <!-- 👉 Tabs chart -->
     <VCol
       cols="12"
@@ -69,7 +68,7 @@ import ProgressDeadline from '@/components/ProgressDeadline.vue'
       order="3"
     >
       <ProgressCard />
-      <ProgressDeadline class="mt-3"/>
+      <ProgressDeadline class="mt-3" />
     </VCol>
 
     <!-- 👉 Transactions -->

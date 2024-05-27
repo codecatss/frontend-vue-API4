@@ -3,7 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    { path: '/', redirect: '/dashboard' },
+    { path: '/', redirect: '/auth' },
     {
       path: '/',
       component: () => import('../layouts/default.vue'),
@@ -12,6 +12,27 @@ const router = createRouter({
           path: 'dashboard',
           component: () => import('../pages/dashboard.vue'),
         },
+        {
+          path: 'company',
+          component: () => import('../pages/CRUDCompany.vue'),
+        },
+        {
+          path: 'user',
+          component: () => import('../pages/CRUDUser.vue'),
+        },
+        {
+          path: 'tracks',
+          component: () => import('../pages/CRUDOPNTrack.vue'),
+        },
+        {
+          path: 'certification',
+          component: () => import('../pages/CRUDCertification.vue'),
+        },
+        {
+          path: 'expertise',
+          component: () => import('../pages/CRUDExpertise.vue'),
+        },
+        
         {
           path: 'account-settings',
           component: () => import('../pages/account-settings.vue'),
@@ -36,6 +57,10 @@ const router = createRouter({
           path: 'form-layouts',
           component: () => import('../pages/form-layouts.vue'),
         },
+        {
+          path: 'historical',
+          component: () => import('../views/dashboard/Historical.vue'),
+        },
       ],
     },
     {
@@ -43,7 +68,7 @@ const router = createRouter({
       component: () => import('../layouts/blank.vue'),
       children: [
         {
-          path: 'login',
+          path: 'auth',
           component: () => import('../pages/login.vue'),
         },
         {
