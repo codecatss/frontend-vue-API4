@@ -127,7 +127,7 @@
                 </template>
                 <template #item.config="{ item }">
                   <div class="d-flex justify-center text-center mr-7">
-                    <VBtn icon style="margin-right: 10px;">
+                    <VBtn icon style="margin-right: 10px;" @click="printObject(item)">
                       <VIcon left small>bxs-show</VIcon>
                     </VBtn>
                     <VBtn icon style="margin-left: 10px;">
@@ -136,8 +136,10 @@
                   </div>
                 </template>
                 
+                
     
-            
+                
+
                 
                 <template #bottom />
               </VDataTable>
@@ -324,6 +326,28 @@ async function fetchData(){
   const response = await api.get('/company/companies')
   return response.data;
 }
+
+const printObject = (item) => {
+  if (Array.isArray(item.columns)) {
+    console.log("Columns:", item.columns);
+    const prototype = Object.getPrototypeOf(item.columns);
+    console.log("Prototype of columns:", prototype);
+    // Aqui você pode acessar as propriedades e métodos do protótipo, se necessário
+  } else if (typeof item.columns === 'object' && item.columns !== null) {
+    console.log("Columns:", item.columns);
+    const prototype = Object.getPrototypeOf(item.columns);
+    console.log("Prototype of columns:", prototype);
+    // Aqui você pode acessar as propriedades e métodos do protótipo, se necessário
+  } else {
+    console.log("Item.columns não é um array ou objeto válido.");
+  }
+
+  // Acessando a propriedade 'cnpj' através do Proxy
+  console.log("CNPJ:", item.raw.cnpj);
+};
+
+
+
 
 const recentDevicesHeaders = [
   {
