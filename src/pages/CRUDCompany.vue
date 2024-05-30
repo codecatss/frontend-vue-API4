@@ -105,7 +105,7 @@
                 :height="'600px'"
                 class="text-no-wrap rounded-0 text-sm"
               >
-                <template #item.browser="{ item }">
+                <template #item.nome="{ item }">
                   <div class="d-flex">
                     <svg
                       class="oracle-icon"
@@ -121,20 +121,24 @@
                       />
                     </svg>
                     <span class="text-high-emphasis text-base">
-                      {{ item.raw.browser }}
+                      {{ item.raw.nome }}
                     </span>
                   </div>
                 </template>
                 <template #item.config="{ item }">
-                  <div class="d-flex justify-center">
-                    <Button>
-                      <v-icon left>bxs-show</v-icon>
-                    </Button>
-                    <Button>
-                      <v-icon left>bxs-cog</v-icon>
-                    </Button>
+                  <div class="d-flex justify-center text-center mr-7">
+                    <VBtn icon style="margin-right: 10px;">
+                      <VIcon left small>bxs-show</VIcon>
+                    </VBtn>
+                    <VBtn icon style="margin-left: 10px;">
+                      <VIcon left small>bxs-cog</VIcon>
+                    </VBtn>
                   </div>
                 </template>
+                
+    
+            
+                
                 <template #bottom />
               </VDataTable>
             </VCard>
@@ -317,55 +321,66 @@ watch(() => accountDataLocal.cnpj, (newVal) => {
 });
 
 async function fetchData(){
-  const response = await api.get('/dash/companyexpertiseusercountservice')
-  return response.data
+  const response = await api.get('/company/companies')
+  return response.data;
 }
 
 const recentDevicesHeaders = [
   {
     title: 'Nome do Parceiro',
-    key: 'browser',
+    key: 'nome',
   },
   {
-    title: 'Status De Membro',
-    key: 'sdm',
+    title: 'CNPJ do Parceiro',
+    key: 'cnpj',
   },
   {
-    title: 'Tipo De Cadastro',
-    key: 'expertise',
+    title: 'Tipo De Ingestão',
+    key: 'ingestion',
   },
   {
-    title: 'Configurações',
+    title: 'Status',
+    key: 'status',
+  },
+  {
+    title: 'Slogan',
+    key: 'slogan',
+  },
+  {
+    title: '',
     key: 'config',
-  },
-]
+  
+  }
+];
 
 async function putData(){
   const data = await fetchData();
-  
-  let recentDevices = [];
+  const dataArray = Object.values(data);
+  console.log(data);
 
-  data.forEach((item) => {
-    try{
-      item.companyState = decodeURIComponent(escape(item.companyState));
-    } catch (e) {
-      // do nothing;
-    };
-    recentDevices.push({
-      browser: item.companyName,
-      track: item.trackName,
-      expertise: item.expertiseName,
-      location: item.companyState,
-      percentage: item.completionPercentage,
+  let formattedDevices = [];
+
+  dataArray.forEach((item) => {
+    if (item.status === 'ACTIVE') {
+       item.status = 'Ativo';
+    } else if (item.status === 'INACTIVE') {
+       item.status = 'Inativo';
+    }
+    formattedDevices.push({
+      nome: item.name,
+      cnpj: formatCNPJ(item.cnpj),  
+      status: item.status,
+      ingestion: item.ingestionOperation,
+      slogan: item.slogan,
     });
-  
   });
-  return recentDevices;
+  return formattedDevices;
 }
 
 onMounted(async () => {
   recentDevices.value = await putData();
 });
+
 </script>
 
 <style scoped>
@@ -393,4 +408,24 @@ onMounted(async () => {
   align-items: center;
   justify-content: center;
 }
+
+
+
+
+/* Estilo para borda verde */
+.active-border {
+  border: 2px solid green;
+}
+
+/* Estilo para borda vermelha */
+.inactive-border {
+  border: 2px solid red;
+}
+
+/* Classe para aplicar borda a todos os elementos */
+.border-indicator {
+  padding: 5px; /* Ajuste conforme necessário */
+  display: inline-block; /* Para permitir que a borda se ajuste ao conteúdo */
+}
+
 </style>
