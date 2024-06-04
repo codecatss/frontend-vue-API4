@@ -10,6 +10,8 @@ import AnalyticsTotalRevenue from '@/views/dashboard/AnalyticsTotalRevenue.vue'
 import AnalyticsTransactions from '@/views/dashboard/AnalyticsTransactions.vue'
 import AnalyticsTransactionsTop from '@/views/dashboard/AnalyticsTransactionsTop.vue'
 import BestStates from '@/views/dashboard/BestStates.vue'
+import GraphicBar from '@/views/dashboard/GraphicBar.vue'
+
 
 
 // 👉 Images
@@ -67,8 +69,7 @@ import ProgressDeadline from '@/components/ProgressDeadline.vue'
       sm="6"
       order="3"
     >
-      <ProgressCard />
-      <ProgressDeadline class="mt-3" />
+      <GraphicBar />
     </VCol>
 
     <!-- 👉 Transactions -->
