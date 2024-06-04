@@ -127,7 +127,7 @@
                 </template>
                 <template #item.config="{ item }">
                   <div class="d-flex justify-center text-center mr-7">
-                    <VBtn icon style="margin-right: 10px;" @click="printObject(item)">
+                    <VBtn icon style="margin-right: 10px;" @click="openModalWithCNPJ(item.raw.cnpj)">
                       <VIcon left small>bxs-show</VIcon>
                     </VBtn>
                     <VBtn icon style="margin-left: 10px;">
@@ -135,12 +135,6 @@
                     </VBtn>
                   </div>
                 </template>
-                
-                
-    
-                
-
-                
                 <template #bottom />
               </VDataTable>
             </VCard>
@@ -148,6 +142,27 @@
         </VRow>
       </VWindowItem>
     </VWindow>
+
+    <!-- Modal para exibir o CNPJ -->
+<!-- Modal para exibir o CNPJ -->
+<VDialog v-model="isModalOpen" max-width="400">
+  <VCard>
+    <VCardTitle>Atualizar Parceiro</VCardTitle>
+    <VCardText>
+      <VTextField v-model="accountDataLocal.nomeTrack" label="Nome"></VTextField>
+      <VTextField v-model="accountDataLocal.estado" label="Estado"></VTextField>
+      <VTextField v-model="accountDataLocal.cidade" label="Cidade"></VTextField>
+      <VTextField v-model="accountDataLocal.endereco" label="Endereço"></VTextField>
+      <VTextField v-model="accountDataLocal.slogan" label="Slogan"></VTextField>
+      <VSelect v-model="accountDataLocal.status" :items="['Ativo', 'Inativo']" label="Status"></VSelect>
+    </VCardText>
+    <VCardActions>
+      <VBtn @click="updatePartner">Atualizar Parceiro</VBtn>
+      <VBtn @click="isModalOpen = false">Fechar</VBtn>
+    </VCardActions>
+  </VCard>
+</VDialog>
+
   </div>
 </template>
 
@@ -405,7 +420,45 @@ onMounted(async () => {
   recentDevices.value = await putData();
 });
 
+
+
+// Modal control
+const isModalOpen = ref(false);
+const selectedCNPJ = ref('');
+
+
+const openModalWithCNPJ = async (cnpj) => {
+  const sanitizedCNPJ = cnpj.replace(/\D/g, '');
+
+  try {
+    const response = await fetch(`http://localhost:8080/company/${sanitizedCNPJ}`);
+    if (!response.ok) {
+      throw new Error(`Error fetching data: ${response.statusText}`);
+    }
+    const data = await response.json();
+
+    // Update the modal data with the fetched data
+    selectedCNPJ.value = data.cnpj;
+    accountDataLocal.nomeTrack = data.name;
+    accountDataLocal.estado = data.state;
+    accountDataLocal.cidade = data.city;
+    accountDataLocal.endereco = data.address;
+    accountDataLocal.slogan = data.slogan;
+    accountDataLocal.status = data.status
+
+    // Open the modal
+    isModalOpen.value = true;
+  } catch (error) {
+    console.error('Error fetching CNPJ data:', error);
+    alert('Erro ao buscar os dados do CNPJ. Por favor, tente novamente.');
+  }
+};
+
+
 </script>
+
+
+
 
 <style scoped>
 .progress-bar-wrapper {
@@ -433,9 +486,6 @@ onMounted(async () => {
   justify-content: center;
 }
 
-
-
-
 /* Estilo para borda verde */
 .active-border {
   border: 2px solid green;
@@ -451,5 +501,4 @@ onMounted(async () => {
   padding: 5px; /* Ajuste conforme necessário */
   display: inline-block; /* Para permitir que a borda se ajuste ao conteúdo */
 }
-
 </style>
