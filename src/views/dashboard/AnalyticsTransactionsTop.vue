@@ -14,7 +14,7 @@ onMounted(async () => {
   const response = await api.get("/dash")
   const data = response.data
   
-  console.log(data)
+  // console.log(data)
 
   growth.value = data.qtygrowth;
 

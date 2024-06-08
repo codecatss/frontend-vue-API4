@@ -49,7 +49,7 @@ const recentDevicesHeaders = [
 async function fetchData() {
   const response = await api.get('/expertise');
 
-  console.log("fetchData -> ", response.data);
+  // console.log("fetchData -> ", response.data);
 
   return response.data;
 }

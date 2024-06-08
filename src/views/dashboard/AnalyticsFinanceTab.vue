@@ -1,102 +1,93 @@
 <script setup>
 import VueApexCharts from 'vue3-apexcharts'
 import { useTheme } from 'vuetify'
+import axios from 'axios'
 import statsVerticalChart from '@images/cards/chart-success.png'
 import statsVerticalPaypal from '@images/cards/paypal-error.png'
 import statsVerticalWallet from '@images/cards/wallet-primary.png'
 import { hexToRgb } from '@layouts/utils'
+import { ref } from 'vue';
 
 const vuetifyTheme = useTheme()
 
-const series = {
-  income: [{
-    data: [
-      24,
-      21,
-      30,
-      22,
-      42,
-      26,
-      35,
-      29,
-      50,
-      100,
-      31,
-      50,
-      100,
-      
-    ],
-  }],
-  expenses: [{
-    data: [
-      24,
-      21,
-      30,
-      25,
-      42,
-      26,
-      35,
-      29,
-      50,
-      100,
-      31,
-      50,
-      100,
-      
-    ],
-  }],
-  profit: [{
-    data: [
-      24,
-      21,
-      30,
-      22,
-      42,
-      26,
-      35,
-      35,
-      45,
-      100,
-      31,
-      50,
-      100,
-      
-    ],
-  }],
-}
+const data = ref({
+  income: {
+    avatar: statsVerticalWallet,
+    title: 'Total Parceiros',
+    stats: 0,
+    profitLoss: 0,
+    profitLossAmount: 0,
+    compareToLastWeek: 0,
+  },
+  expenses: {
+    avatar: statsVerticalPaypal,
+    title: 'Expertises Iniciadas',
+    stats: 0,
+    profitLoss: 0,
+    profitLossAmount: 0,
+    compareToLastWeek: 0,
+  },
+  profit: {
+    avatar: statsVerticalChart,
+    title: 'Total De Abandonos',
+    stats: 0,
+    profitLoss: 0,
+    profitLossAmount: 0,
+    compareToLastWeek: 0,
+  },
+})
 
 const currentTab = ref('income')
 
-const tabData = computed(() => {
-  const data = {
-    income: {
-      avatar: statsVerticalWallet,
-      title: 'Total Parceiros',
-      stats: '308',
-      profitLoss: 65,
-      profitLossAmount: '18',
-      compareToLastWeek: '290',
-    },
-    expenses: {
-      avatar: statsVerticalPaypal,
-      title: 'Expertises Iniciadas',
-      stats: '367',
-      profitLoss: 27.8,
-      profitLossAmount: '5',
-      compareToLastWeek: '230',
-    },
-    profit: {
-      avatar: statsVerticalChart,
-      title: 'Total De Abandonos',
-      stats: '147',
-      profitLoss: -35.1,
-      profitLossAmount: '4',
-      compareToLastWeek: '176',
-    },
-  }
-  
-  return data[currentTab.value]
+// const tabData = ref(data.value[currentTab.value])
+
+const series = ref({
+  income: [{
+    data: [],
+  }],
+  expenses: [{
+    data: [],
+  }],
+  profit: [{
+    data: [],
+  }],
 })
+
+async function refreshData(tabName){
+  const dataFromDatabase = (await axios.get("http://localhost:8080/dash/finance-"+tabName)).data;
+
+  let stats = 0
+  let profitLossAmount = 0
+
+  console.log("Teste axios")
+
+  for(let i = 0; i < dataFromDatabase.length; i++){
+    let actualYear = dataFromDatabase[i][1];
+    let previousYear = dataFromDatabase[i][2];
+    stats += actualYear;
+    profitLossAmount += previousYear;
+    // data.value[tabName]["series"].push(actualYear)
+    series.value[tabName][0]["data"].push(actualYear)
+  }
+  data.value[tabName]["stats"] = stats;
+  data.value[tabName]["profitLoss"] = Math.round(((stats - profitLossAmount) / profitLossAmount) * 100)
+  data.value[tabName]["profitLossAmount"] = profitLossAmount;
+
+  console.log(series.value)
+
+  console.log("Fim do teste do axios")
+}
+
+refreshData('income')
+refreshData('expenses')
+refreshData('profit')
+
+
+const tabData = computed(() => {
+  return data.value[currentTab.value]
+})
+
+
 const chartConfig = computed(() => {
   const currentTheme = vuetifyTheme.current.value.colors
   const variableTheme = vuetifyTheme.current.value.variables
@@ -160,7 +151,7 @@ const chartConfig = computed(() => {
       axisTicks: { show: false },
       axisBorder: { show: false },
       categories: [
-        '',
+        // '',
         'Jan',
         'Feb',
         'Mar',
@@ -209,11 +200,12 @@ const chartConfig = computed(() => {
         seriesIndex: 0,
         fillColor: '#fff',
         strokeColor: currentTheme.primary,
-        dataPointIndex: series[currentTab.value][0].data.length - 1,
+        dataPointIndex: series.value[currentTab.value][0].data.length - 1,
       }],
     },
   }
 })
+
 
 </script>
 
@@ -275,19 +267,19 @@ const chartConfig = computed(() => {
     </VCardText>
 
     <VCardText class="d-flex align-center justify-center gap-3">
-      <VProgressCircular
+      <!-- <VProgressCircular
         size="45"
         :model-value="tabData.profitLoss"
       >
         <span class="text-xs text-medium-emphasis">{{ tabData.profitLossAmount }}</span>
-      </VProgressCircular>
+      </VProgressCircular> -->
 
       <div>
-        <h6 class="text-base font-weight-regular">
+        <!-- <h6 class="text-base font-weight-regular">
           <span class="text-capitalize">Somente</span>
           <span> essa semana</span>
-        </h6>
-        <span class="text-sm text-disabled">{{ tabData.compareToLastWeek }} Ano Passado</span>
+        </h6> -->
+        <span class="text-sm text-disabled"> Total ano passado: {{ tabData.profitLossAmount }}</span>
       </div>
     </VCardText>
   </VCard>
