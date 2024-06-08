@@ -12,7 +12,7 @@ onMounted(async () => {
   const response = await api.get("/dash/state-per-company")
   const data = response.data
 
-  console.log(data)
+  // console.log(data)
 
   const topThree = data.sort((a, b) => b.companyCount - a.companyCount).slice(0, 3)
   const others = data.slice(3)
