@@ -14,6 +14,8 @@ const accountData = {
 };
 
 const workloadData = ref({});
+const selectedWorkload = ref('Visualizar todas workloads');
+const partnerFilter = ref('Visualizar todos');
 
 async function fetchData() {
   const response = await api.get('/dash/companyexpertiseusercountservice');
@@ -67,11 +69,27 @@ const headers = [
   { text: 'Company Names', value: 'companyNames' }
 ];
 
+const sortedWorkloadNames = computed(() => {
+  return ['Visualizar todas workloads', ...Object.keys(workloadData.value).sort((a, b) => a.localeCompare(b))];
+});
+
 const tableItems = computed(() => {
-  return Object.keys(workloadData.value).map(workloadName => ({
+  let items = Object.keys(workloadData.value).map(workloadName => ({
     workloadName,
     companyNames: workloadData.value[workloadName]
   }));
+
+  if (selectedWorkload.value !== 'Visualizar todas workloads') {
+    items = items.filter(item => item.workloadName === selectedWorkload.value);
+  }
+
+  if (partnerFilter.value === 'Workloads com parceiros aptos') {
+    items = items.filter(item => item.companyNames.length > 0);
+  } else if (partnerFilter.value === 'Workloads sem parceiros aptos') {
+    items = items.filter(item => item.companyNames.length === 0);
+  }
+
+  return items.sort((a, b) => a.workloadName.localeCompare(b.workloadName));
 });
 
 const submitForm = async () => {
@@ -137,6 +155,26 @@ const submitForm = async () => {
                 <VCard>
                     <VCardTitle>Relação Workload - Empresa</VCardTitle>
                     <VCardText>
+                      <VRow>
+                            <VCol cols="6">
+                                <VSelect
+                                  class="filtro"
+                                  v-model="selectedWorkload"
+                                  :items="sortedWorkloadNames"
+                                  label="Select Workload"
+                                  dense
+                                />
+                            </VCol>
+                            <VCol cols="6">
+                                <VSelect
+                                  class="filtro"
+                                  v-model="partnerFilter"
+                                  :items="['Visualizar todos', 'Workloads com parceiros aptos', 'Workloads sem parceiros aptos']"
+                                  label="Filtrar por Parceiros"
+                                  dense
+                                />
+                            </VCol>
+                        </VRow>
                         <table class="elevation-1">
                             <thead>
                                 <tr>
@@ -145,14 +183,14 @@ const submitForm = async () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="(companies, workloadName) in workloadData" :key="workloadName">
-                                <td class="tableWorkload">{{ workloadName }}</td>
-                                <td class="tableCompany">
+                                <tr v-for="item in tableItems" :key="item.workloadName">
+                                  <td class="tableWorkload">{{ item.workloadName }}</td>
+                                  <td class="tableCompany">
                                     <ul>
-                                        <li class="nenhum" v-if="companies.length === 0">Nenhum parceiro está apto a realizar este workload.</li>
-                                        <li v-for="company in companies" :key="company">{{ company }}</li>
+                                      <li class="nenhum" v-if="item.companyNames.length === 0">Nenhum parceiro está apto a realizar este workload.</li>
+                                      <li v-for="company in item.companyNames" :key="company">{{ company }}</li>
                                     </ul>
-                                </td>
+                                  </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -234,4 +272,9 @@ ul {
     font-weight: 100;
 }
 
+.filtro {
+  padding-right: 0px !important;
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
 </style>
