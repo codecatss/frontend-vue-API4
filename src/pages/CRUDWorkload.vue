@@ -15,7 +15,7 @@ const accountData = {
 
 const workloadData = ref({});
 const selectedWorkload = ref('Visualizar todas workloads');
-const partnerFilter = ref('Visualizar todos');
+const partnerFilter = ref('Workloads com parceiros aptos');
 
 async function fetchData() {
   const response = await api.get('/dash/companyexpertiseusercountservice');
@@ -153,7 +153,7 @@ const submitForm = async () => {
         <VRow>
             <VCol cols="12">
                 <VCard>
-                    <VCardTitle>Relação Workload - Empresa</VCardTitle>
+                    <VCardTitle style="padding-top: 20px;">Relação Workload - Empresa</VCardTitle>
                     <VCardText>
                       <VRow>
                             <VCol cols="6">
@@ -246,7 +246,7 @@ th, td {
 }
 
 thead {
-  background-color: #565868;
+  background-color: #464b6d;
   color: rgb(231, 231, 231);
 }
 
