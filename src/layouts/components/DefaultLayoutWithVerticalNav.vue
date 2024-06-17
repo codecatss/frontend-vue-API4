@@ -4,6 +4,7 @@ import { useTheme } from 'vuetify'
 import VerticalNavSectionTitle from '@/@layouts/components/VerticalNavSectionTitle.vue'
 import VerticalNavLayout from '@layouts/components/VerticalNavLayout.vue'
 import VerticalNavLink from '@layouts/components/VerticalNavLink.vue'
+import { api } from '@/service/apiConfig.js';
 
 // Componentes
 import Footer from '@/layouts/components/Footer.vue'
@@ -39,6 +40,25 @@ const handleClickOutside = event => {
 onMounted(() => {
   document.addEventListener('click', handleClickOutside)
 })
+
+async function exportPdf(){
+  const response = await api.get('/dash/export/pdf', {
+    responseType: 'arraybuffer',
+  })
+    .then(response => {
+      const blob = new Blob([response.data], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.style.display = 'none'
+      a.href = url
+      a.download = 'arquivo.pdf'
+      document.body.appendChild(a)
+      a.click()
+      window.URL.revokeObjectURL(url)
+    }).catch(error => {
+      console.error('Erro ao baixar o PDF:', error)
+    })
+}
 </script>
 
 <template>
@@ -148,7 +168,13 @@ onMounted(() => {
         }"
       />
 
-
+      <VerticalNavLink
+        :item="{
+          title: 'Exportar PDF',
+          icon: 'bx-error-circle',
+        }"
+        @click="exportPdf"
+      />
 
       <!-- 👉 Páginas -->
       <VerticalNavSectionTitle
@@ -199,6 +225,14 @@ onMounted(() => {
           title: 'Certification',
           icon: 'bx-brain',
           to: '/certification',
+        }"
+      />
+
+      <VerticalNavLink
+        :item="{
+          title: 'Workload',
+          icon: 'bx-notepad',
+          to: '/workload',
         }"
       />
 
