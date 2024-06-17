@@ -228,6 +228,14 @@ async function exportPdf(){
         }"
       />
 
+      <VerticalNavLink
+        :item="{
+          title: 'Workload',
+          icon: 'bx-notepad',
+          to: '/workload',
+        }"
+      />
+
       <!--
         <VerticalNavLink
         :item="{

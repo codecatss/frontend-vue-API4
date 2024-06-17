@@ -32,6 +32,10 @@ const router = createRouter({
           path: 'expertise',
           component: () => import('../pages/CRUDExpertise.vue'),
         },
+        {
+          path: 'workload',
+          component: () => import('../pages/CRUDWorkload.vue'),
+        },
         
         {
           path: 'account-settings',
